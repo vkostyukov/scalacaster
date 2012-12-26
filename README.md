@@ -1,4 +1,4 @@
-scalacaster
+Scalacaster
 ===========
 
-Kit of classical algorithms and data structures examples in scala
+Since Fender Stratocaster is classical guitar, scalacaser is kit of classical algorithms and data structures examples in scala.
