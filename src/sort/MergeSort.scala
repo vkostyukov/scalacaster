@@ -1,6 +1,12 @@
 /**
  * This file is part fo Scalacaster project, https://github.com/vkostyukov/scalacaster
  * and written by Vladimir Kostyukov, http://vkostyukov.ru
+ *
+ * Merge Sort http://en.wikipedia.org/wiki/Quicksort
+ *
+ * Worst - O(n log n)
+ * Best - O(n log n)
+ * Average - O(n log n)
  */
 
 def mergesort(input: Array[Int]): Array[Int] = {
