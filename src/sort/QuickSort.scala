@@ -1,5 +1,5 @@
 /**
- * This file is part fo Scalacaster project, https://github.com/vkostyukov/scalacaster
+ * This file is part of Scalacaster project, https://github.com/vkostyukov/scalacaster
  * and written by Vladimir Kostyukov, http://vkostyukov.ru
  *
  * Quick Sort http://en.wikipedia.org/wiki/Quicksort
