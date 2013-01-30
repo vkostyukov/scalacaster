@@ -9,8 +9,8 @@
  * Average - O(n^2)
  */
 
-def bubblesort(input: Array[Int]): Array[Int] = {
-  var result = input.clone()
+def bubblesort(a: Array[Int]): Array[Int] = {
+  var result = a.clone()
   for (k <- 0 until result.length) {
     for (i <- 0 until result.length - k - 1) {
       if (result(i) > result(i + 1)) {

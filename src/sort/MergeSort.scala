@@ -9,17 +9,17 @@
  * Average - O(n log n)
  */
 
-def mergesort(input: Array[Int]): Array[Int] = {
-  if (input.length == 1) {
-    return input
+def mergesort(a: Array[Int]): Array[Int] = {
+  if (a.length == 1) {
+    return a
   }
 
-  val n = input.length / 2
+  val n = a.length / 2
 
-  val left = mergesort(input.slice(0, n))
-  val right = mergesort(input.slice(n, input.length))
+  val left = mergesort(a.slice(0, n))
+  val right = mergesort(a.slice(n, a.length))
 
-  var result: Array[Int] = new Array(input.length)
+  var result: Array[Int] = new Array(a.length)
 
   var i = 0
   var j = 0

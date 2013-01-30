@@ -9,7 +9,7 @@
  * Average - O(n^2)
  */
 
-def insertionsort(input: Array[Int]): Array[Int] = {
+def insertionsort(a: Array[Int]): Array[Int] = {
   null
 }
 
