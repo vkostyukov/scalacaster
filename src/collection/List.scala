@@ -17,11 +17,11 @@ abstract class List[+A] {
   def tail: List[A]
 
   def +>[B >: A](v: B): List[B] = // append
-    if (isEmpty) new NonEmptyList(v) 
-    else new NonEmptyList(head, tail +> v)
+    if (isEmpty) new Cons(v) 
+    else new Cons(head, tail +> v)
 
   def <+[B >: A](v: B): List[B] = // prepend
-    new NonEmptyList(v, this)
+    new Cons(v, this)
 
   def apply(i: Int): A = { // lookup
     var n = 0
@@ -42,18 +42,18 @@ abstract class List[+A] {
       if (s.isEmpty) d
       else loop(s.tail, d <+ head)
 
-    loop(this, NIL)
+    loop(this, Nill)
   }
 }
 
-object NIL extends List[Nothing] { // since 'Nil' already reserved 
+object Nill extends List[Nothing] { // since 'Nill' already reserved 
   def head: Nothing = throw new NoSuchElementException("Empty list.")
   def tail: List[Nothing] = throw new NoSuchElementException("Empty list.") 
 
   def isEmpty: Boolean = true
 }
 
-class NonEmptyList[A](h: A, t: List[A] = NIL) extends List[A] {
+class Cons[A](h: A, t: List[A] = Nill) extends List[A] {
   def head: A = h
   def tail: List[A] = t
 
@@ -62,7 +62,7 @@ class NonEmptyList[A](h: A, t: List[A] = NIL) extends List[A] {
 
 object List {
   def apply[B](vs: B*): List[B] = {
-    var r: List[B] = NIL
+    var r: List[B] = Nill
     for (v <- vs.reverse) r = r <+ v
     r
   }

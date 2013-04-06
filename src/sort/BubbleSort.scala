@@ -20,7 +20,7 @@ def bubblesort(a: Array[Int]): Array[Int] = {
       }
     }
   }
-  return result
+  result
 }
 
 assert { bubblesort(Array(5, 2, 1, 3, 4)).deep == Array(1, 2, 3, 4, 5).deep }
