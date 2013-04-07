@@ -7,11 +7,14 @@ This project is a try to agregate knowledge in algorithms and data structures in
 * Linked List `src/collection/List.scala`
 * Queue `src/collection/Queue.scala`
 * Stack `src/collection/Stack.scala`
+* [ROADMAP] Heap `src/collection/Heap.scala`
+* [ROADMAP] Hashtable `src/collection/Hashtable.scala`
 
 ##### Trees
 * Binary Search Tree `src/tree/Tree.scala`
 * [ROADMAP] Red-Black Tree `src/tree/RBTree.scala`
 * [ROADMAP] AVL Tree `src/tree/AVLTree.scala`
+* [ROADMAP] B-Tree ``src/tree/BTree.scala
 
 ##### Sorting Algorithms
 * Quick Sort `src/sort/QuickSort.scala`
@@ -23,6 +26,10 @@ This project is a try to agregate knowledge in algorithms and data structures in
 ##### Searching Algorithms
 * Selection (k-th order statistic) `src/search/Selection.scala`
 * [ROADMAP] Binary Search `src/search/BinarySearch.scala`
+
+##### Math
+* [ROADMAP] Big Arithmetic
+* [ROADMAP] Numbers theory
 
 ##### Dynamic Programming
 * Largest Increasing Subsequence `src/dp/LIS.scala`
