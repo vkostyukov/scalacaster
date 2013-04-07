@@ -21,7 +21,19 @@ abstract class Tree[+A <% Ordered[A]] {
     else if(x <= value) new Node(value, left.add(x), right)
     else new Node(value, left, right.add(x))
 
-  //def remove(x: A): Unit = ???
+  def remove[B >: A <% Ordered[B]](x: B): Tree[B] =
+    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    else if (x < value) new Node(value, left.remove(x), right)
+    else if (x > value) new Node(value, left, right.remove(x))
+    else {
+      if (left.isEmpty && right.isEmpty) Leaf
+      else if (left.isEmpty) right
+      else if (right.isEmpty) left
+      else {
+        val succ = successor(x)
+        new Node(succ, left, right.remove(succ))
+      }
+    }
 
   def contains[B >: A <% Ordered[B]](x: B): Boolean =
     if (isEmpty) false
