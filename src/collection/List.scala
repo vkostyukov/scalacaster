@@ -16,12 +16,12 @@ abstract class List[+A] {
   def head: A
   def tail: List[A]
 
-  def +>[B >: A](v: B): List[B] = // append
+  def +>[B >: A](x: B): List[B] = // append
     if (isEmpty) new Cons(v) 
-    else new Cons(head, tail +> v)
+    else new Cons(head, tail +> x)
 
-  def <+[B >: A](v: B): List[B] = // prepend
-    new Cons(v, this)
+  def <+[B >: A](x: B): List[B] = // prepend
+    new Cons(x, this)
 
   def apply(i: Int): A = { // lookup
     var n = 0
@@ -61,9 +61,9 @@ class Cons[A](h: A, t: List[A] = Nill) extends List[A] {
 }
 
 object List {
-  def apply[B](vs: B*): List[B] = {
-    var r: List[B] = Nill
-    for (v <- vs.reverse) r = r <+ v
+  def apply[A](xs: A*): List[A] = {
+    var r: List[A] = Nill
+    for (x <- xs.reverse) r = r <+ x
     r
   }
 }
