@@ -148,6 +148,8 @@ abstract class Tree[+A <% Ordered[A]] {
   // def takeSmallest(n: Int): List[A] = ???
 
   // def apply(n: Int): A = nthMin(n)
+
+  override def toString: String = ???
 }
 
 object Leaf extends Tree[Nothing] {
@@ -173,8 +175,14 @@ object Tree {
     r
   }
 
-  def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = ???
-}
+  def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = {
+    def loop(t: Tree[A], l: Int, r: Int): Tree[A] =
+      if (l == r) t
+        else {
+        val p = (l + r) / 2
+        loop(loop(t.add(a(p)), l, p), p + 1, r)
+      }
 
-var t = Tree(20, 10, 30, 15, 45, 50, 40)
-println(t.sum)
+    loop(Leaf, 0, a.length)
+  }
+}
