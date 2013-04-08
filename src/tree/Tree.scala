@@ -9,12 +9,23 @@
  * Remove - O(log n)
  *
  */
+
 abstract class Tree[+A <% Ordered[A]] {
   def value: A
   def left: Tree[A]
   def right: Tree[A]
 
   def isEmpty: Boolean
+
+  def isValid: Boolean =
+    if (isEmpty) true
+    else if (left.isEmpty && right.isEmpty) true
+    else if (left.isEmpty) right.value >= value && right.isValid
+    else if (right.isEmpty) left.value <= value && left.isValid
+    else left.value <= value && right.value >= value && left.isValid && right.isValid
+
+  def isBalanced: Boolean = 
+    math.abs(left.height - right.height) <= 1
 
   def add[B >: A <% Ordered[B]](x: B): Tree[B]  =
     if (isEmpty) new Node(x, Leaf, Leaf)
@@ -47,12 +58,26 @@ abstract class Tree[+A <% Ordered[A]] {
     else if (x > value) right.subtree(x)
     else this
 
+  def isSubtree[B >: A <% Ordered[B]](t: Tree[B]): Boolean = ???
+
   def walk(f: (A) => Unit): Unit = 
     if (!isEmpty) {
       left.walk(f)
       f(value)
       right.walk(f)
     }
+
+  // def fold[B >: A](n: B)(f: (B, B) => B): B = 
+  //   if (isEmpty) n
+  //   else f(f(value, left.fold(n)), right.fold(n))
+
+  // def sum(implicit num: math.Numeric[A]): A = 
+  //   if (isEmpty) num.zero
+  //   else num.plus(num.plus(left.sum, value), right.sum)
+
+  def size: Int =
+    if (isEmpty) 0
+    else 1 + left.size + right.size
 
   def min: A = 
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
@@ -63,6 +88,10 @@ abstract class Tree[+A <% Ordered[A]] {
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
     else if (right.isEmpty) value
     else right.max
+
+  def height: Int =
+    if (isEmpty) 0
+    else 1 + math.max(left.height, right.height)
 
   def successor[B >: A <% Ordered[B]](x: B): A = {
     var path: List[Tree[A]] = Nil
@@ -109,6 +138,14 @@ abstract class Tree[+A <% Ordered[A]] {
       else throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
     }
   }
+
+  // def nthMax(n: Int): A = ???
+  // def nthMin(n: Int): A = ???
+
+  // def takeLargest(n: Int): List[A] = ???
+  // def takeSmallest(n: Int): List[A] = ???
+
+  // def apply(n: Int): A = nthMin(n)
 }
 
 object Leaf extends Tree[Nothing] {
@@ -133,4 +170,11 @@ object Tree {
     for (x <- xs) r = r.add(x)
     r
   }
+
+  def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = ???
 }
+
+var t = Tree(20, 10, 30)
+println(t.height)
+println(t.isBalanced)
+println(t.isValid)
