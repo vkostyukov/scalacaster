@@ -141,15 +141,24 @@ abstract class Tree[+A <% Ordered[A]] {
     }
   }
 
-  // def nthMax(n: Int): A = ???
-  // def nthMin(n: Int): A = ???
+  def nthMax(n: Int): A = apply(size - n - 1)
+  def nthMin(n: Int): A = apply(n)
 
   // def takeLargest(n: Int): List[A] = ???
   // def takeSmallest(n: Int): List[A] = ???
 
-  // def apply(n: Int): A = nthMin(n)
+  def apply(n: Int): A = 
+    if (isEmpty) throw new NoSuchElementException("Tree doesn't contain a " + n + "th element.")
+    else {
+      val size = left.size
+      if (n < size) left.nthMin(n)
+      else if (n > size) right.nthMin(n - size - 1)
+      else this.value
+    }
 
-  override def toString: String = ???
+  override def toString: String = 
+    if (isEmpty) "."
+    else "{" + left + value + right + "}"
 }
 
 object Leaf extends Tree[Nothing] {
