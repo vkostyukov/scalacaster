@@ -14,7 +14,10 @@ This project is a try to agregate knowledge in algorithms and data structures in
 * Binary Search Tree `src/tree/Tree.scala`
 * [ROADMAP] Red-Black Tree `src/tree/RBTree.scala`
 * [ROADMAP] AVL Tree `src/tree/AVLTree.scala`
-* [ROADMAP] B-Tree ``src/tree/BTree.scala
+* [ROADMAP] B-Tree `src/tree/BTree.scala`
+
+##### Graphs
+* ... 
 
 ##### Sorting Algorithms
 * Quick Sort `src/sort/QuickSort.scala`
@@ -30,6 +33,10 @@ This project is a try to agregate knowledge in algorithms and data structures in
 ##### Math
 * [ROADMAP] Big Arithmetic
 * [ROADMAP] Numbers theory
+* [ROADMAP] Matrices
+
+##### Strings
+* ....
 
 ##### Dynamic Programming
 * Largest Increasing Subsequence `src/dp/LIS.scala`
