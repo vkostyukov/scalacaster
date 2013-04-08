@@ -60,20 +60,22 @@ abstract class Tree[+A <% Ordered[A]] {
 
   def isSubtree[B >: A <% Ordered[B]](t: Tree[B]): Boolean = ???
 
-  def walk(f: (A) => Unit): Unit = 
+  def foreach(f: (A) => Unit): Unit = 
     if (!isEmpty) {
-      left.walk(f)
+      left.foreach(f)
       f(value)
-      right.walk(f)
+      right.foreach(f)
     }
 
-  // def fold[B >: A](n: B)(f: (B, B) => B): B = 
-  //   if (isEmpty) n
-  //   else f(f(value, left.fold(n)), right.fold(n))
+  def fold[B](n: B)(op: (B, A) => B): B = {
+    def loop(t: Tree[A], a: B): B =
+      if (t.isEmpty) a
+      else loop(t.right, op(loop(t.left, a), t.value))
 
-  // def sum(implicit num: math.Numeric[A]): A = 
-  //   if (isEmpty) num.zero
-  //   else num.plus(num.plus(left.sum, value), right.sum)
+    loop(this, n)
+  }
+
+  def sum[B >: A](implicit num: Numeric[B]): B = fold(num.zero)(num.plus)
 
   def size: Int =
     if (isEmpty) 0
@@ -174,7 +176,5 @@ object Tree {
   def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = ???
 }
 
-var t = Tree(20, 10, 30)
-println(t.height)
-println(t.isBalanced)
-println(t.isValid)
+var t = Tree(20, 10, 30, 15, 45, 50, 40)
+println(t.sum)
