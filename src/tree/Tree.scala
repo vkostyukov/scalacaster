@@ -146,7 +146,16 @@ abstract class Tree[+A <% Ordered[A]] {
   def nthMin(n: Int): A = apply(n)
 
   // def takeLargest(n: Int): List[A] = ???
-  // def takeSmallest(n: Int): List[A] = ???
+
+  def takeSmallest(n: Int): List[A] = {
+    def loop(t: Tree[A], m: Int, l: List[A]): List[A] = 
+      if (m == 0) l
+      else {
+        loop(t.right, m - 1, t.value :: loop(t.left, m, l))
+      }
+
+    loop(this, n, Nil)
+  }
 
   def apply(n: Int): A = 
     if (isEmpty) throw new NoSuchElementException("Tree doesn't contain a " + n + "th element.")
@@ -204,3 +213,6 @@ object Tree {
     loop(Leaf, 0, a.length)
   }
 }
+
+var t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+println(t.takeSmallest(4))
