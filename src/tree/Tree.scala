@@ -97,49 +97,35 @@ abstract class Tree[+A <% Ordered[A]] {
     else 1 + math.max(left.height, right.height)
 
   def successor[B >: A <% Ordered[B]](x: B): A = {
-    var path: List[Tree[A]] = Nil
-    var these = this
-    while (!these.isEmpty && these.value != x) {
-      path = these :: path
-      if (x < these.value) these = these.left
-      else if (x > these.value) these = these.right
-    }
+    def forward(t: Tree[A], p: List[Tree[A]]): A =
+      if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+      else if (x < t.value) forward(t.left, t :: p)
+      else if (x > t.value) forward(t.right, t :: p)
+      else if (!t.right.isEmpty) t.right.min
+      else backward(t, p)
 
-    if (these.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    def backward(t: Tree[A], p: List[Tree[A]]): A = 
+      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
+      else if (t == p.head.right) backward(p.head, p.tail)
+      else p.head.value
 
-    if (!these.right.isEmpty) these.right.min
-    else {
-      while (!path.isEmpty && these == path.head.right) {
-        these = path.head
-        path = path.tail
-      }
-
-      if (!path.isEmpty) path.head.value
-      else throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
-    }
+    forward(this, Nil)
   }
 
   def predecessor[B >: A <% Ordered[B]](x: B): A = {
-    var path: List[Tree[A]] = Nil
-    var these = this
-    while (!these.isEmpty && these.value != x) {
-      path = these :: path
-      if (x < these.value) these = these.left
-      else if (x > these.value) these = these.right
-    }
+    def forward(t: Tree[A], p: List[Tree[A]]): A =
+      if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+      else if (x < t.value) forward(t.left, t :: p)
+      else if (x > t.value) forward(t.right, t :: p)
+      else if (!t.left.isEmpty) t.left.max
+      else backward(t, p)
 
-    if (these.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    def backward(t: Tree[A], p: List[Tree[A]]): A = 
+      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
+      else if (t == p.head.left) backward(p.head, p.tail)
+      else p.head.value
 
-    if (!these.left.isEmpty) these.left.max
-    else {
-      while (!path.isEmpty && these == path.head.left) {
-        these = path.head
-        path = path.tail
-      }
-
-      if (!path.isEmpty) path.head.value
-      else throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
-    }
+    forward(this, Nil)
   }
 
   def nthMax(n: Int): A = apply(size - n - 1)
@@ -225,3 +211,6 @@ object Tree {
     loop(Leaf, 0, a.length)
   }
 }
+
+var t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+println(t.predecessor(1))
