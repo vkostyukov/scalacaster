@@ -76,6 +76,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   def sum[B >: A](implicit num: Numeric[B]): B = fold(num.zero)(num.plus)
+  def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.mul)
 
   def size: Int =
     if (isEmpty) 0
@@ -159,6 +160,14 @@ abstract class Tree[+A <% Ordered[A]] {
   override def toString: String = 
     if (isEmpty) "."
     else "{" + left + value + right + "}"
+
+  def toList: List[A] = {
+    def loop(t: Tree[A], l: List[A]): List[A] = 
+      if (t.isEmpty) l
+      else loop(t.left, t.value :: loop(t.right, l))
+
+    loop(this, Nil)
+  }
 }
 
 object Leaf extends Tree[Nothing] {
