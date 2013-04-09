@@ -121,7 +121,7 @@ abstract class Tree[+A <% Ordered[A]] {
       else backward(t, p)
 
     def backward(t: Tree[A], p: List[Tree[A]]): A = 
-      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
+      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an predecessor.")
       else if (t == p.head.left) backward(p.head, p.tail)
       else p.head.value
 
