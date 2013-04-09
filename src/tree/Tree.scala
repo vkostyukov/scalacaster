@@ -76,7 +76,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   def sum[B >: A](implicit num: Numeric[B]): B = fold(num.zero)(num.plus)
-  def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.mul)
+  def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.times)
 
   def size: Int =
     if (isEmpty) 0
@@ -145,16 +145,28 @@ abstract class Tree[+A <% Ordered[A]] {
   def nthMax(n: Int): A = apply(size - n - 1)
   def nthMin(n: Int): A = apply(n)
 
-  // def takeLargest(n: Int): List[A] = ???
-
-  def takeSmallest(n: Int): List[A] = {
-    def loop(t: Tree[A], m: Int, l: List[A]): List[A] = 
-      if (m == 0) l
+  def takeLargest(n: Int): List[A] = {
+    def loop(t: Tree[A], l: List[A]): List[A] = 
+      if (t.isEmpty || l.size == n) l
       else {
-        loop(t.right, m - 1, t.value :: loop(t.left, m, l))
+        val ll = loop(t.right, l)
+        if (ll.size == n) ll
+        else loop(t.left, t.value :: ll)
       }
 
-    loop(this, n, Nil)
+    loop(this, Nil).reverse
+  }
+
+  def takeSmallest(n: Int): List[A] = {
+    def loop(t: Tree[A], l: List[A]): List[A] = 
+      if (t.isEmpty || l.size == n) l
+      else {
+        val ll = loop(t.left, l)
+        if (ll.size == n) ll
+        else loop(t.right, t.value :: ll)
+      }
+
+    loop(this, Nil).reverse
   }
 
   def apply(n: Int): A = 
@@ -213,6 +225,3 @@ object Tree {
     loop(Leaf, 0, a.length)
   }
 }
-
-var t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
-println(t.takeSmallest(4))
