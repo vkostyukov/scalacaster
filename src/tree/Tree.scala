@@ -58,7 +58,14 @@ abstract class Tree[+A <% Ordered[A]] {
     else if (x > value) right.subtree(x)
     else this
 
-  def isSubtree[B >: A <% Ordered[B]](t: Tree[B]): Boolean = ???
+  def isSubtree[B >: A <% Ordered[B]](t: Tree[B]): Boolean = {
+    def loop(a: Tree[B], b: Tree[B]): Boolean = 
+      if (a.isEmpty && b.isEmpty) true
+      else if (a.isEmpty || b.isEmpty) false
+      else a.value == b.value && loop(a.left, b.left) && loop(a.right, b.right)
+
+    loop(subtree(t.value), t)
+  }
 
   def foreach(f: (A) => Unit): Unit = 
     if (!isEmpty) {
@@ -211,6 +218,3 @@ object Tree {
     loop(Leaf, 0, a.length)
   }
 }
-
-var t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
-println(t.predecessor(1))
