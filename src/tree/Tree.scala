@@ -27,10 +27,11 @@ abstract class Tree[+A <% Ordered[A]] {
   def isBalanced: Boolean = 
     math.abs(left.height - right.height) <= 1
 
-  def add[B >: A <% Ordered[B]](x: B): Tree[B]  =
+  def add[B >: A <% Ordered[B]](x: B): Tree[B] =
     if (isEmpty) new Node(x, Leaf, Leaf)
-    else if(x <= value) new Node(value, left.add(x), right)
-    else new Node(value, left, right.add(x))
+    else if (x < value) new Node(value, left.add(x), right)
+    else if (x > value) new Node(value, left, right.add(x))
+    else this
 
   def remove[B >: A <% Ordered[B]](x: B): Tree[B] =
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
@@ -103,6 +104,12 @@ abstract class Tree[+A <% Ordered[A]] {
     if (isEmpty) 0
     else 1 + math.max(left.height, right.height)
 
+  def depth[B >: A <% Ordered[B]](x: B): Int =
+    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    else if (x < value) 1 + left.depth(x)
+    else if (x > value) 1 + right.depth(x)
+    else 0
+
   def successor[B >: A <% Ordered[B]](x: B): A = {
     def forward(t: Tree[A], p: List[Tree[A]]): A =
       if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
@@ -134,6 +141,29 @@ abstract class Tree[+A <% Ordered[A]] {
 
     forward(this, Nil)
   }
+
+  def ancestor[B >: A <% Ordered[B]](x: B, y: B): A = {
+    def loop(a: List[Tree[A]], b: List[Tree[A]]): A = 
+      if (a.tail.isEmpty && b.tail.isEmpty) a.head.value
+      else if (a.tail.isEmpty) a.head.value
+      else if (b.tail.isEmpty) b.head.value
+      else if (a.tail.head == b.tail.head) loop(a.tail, b.tail)
+      else a.head.value
+
+    loop(path(x), path(y))
+  }
+
+  def path[B >: A <% Ordered[B]](x: B): List[Tree[A]] = 
+    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    else if (x < value) this :: left.path(x)
+    else if (x > value) this :: right.path(x)
+    else List(this)
+
+  def trace[B >: A <% Ordered[B]](x: B): List[A] = 
+    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    else if (x < value) this.value :: left.trace(x)
+    else if (x > value) this.value :: right.trace(x)
+    else List(this.value)
 
   def nthMax(n: Int): A = apply(size - n - 1)
   def nthMin(n: Int): A = apply(n)
