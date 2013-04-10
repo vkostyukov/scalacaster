@@ -104,6 +104,3 @@ object List {
     r
   }
 }
-
-var l = List(1, 2, 3, 4, 5)
-println(l)
