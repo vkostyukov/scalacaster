@@ -16,37 +16,38 @@ abstract class List[+A] {
   def head: A
   def tail: List[A]
 
-  def +>[B >: A](x: B): List[B] = // append
+  def append[B >: A](x: B): List[B] =
     if (isEmpty) new Cons(v) 
-    else new Cons(head, tail +> x)
+    else new Cons(head, tail.append(x))
 
-  def <+[B >: A](x: B): List[B] = // prepend
+  def prepend[B >: A](x: B): List[B] = 
     new Cons(x, this)
 
-  def apply(i: Int): A = { // lookup
-    var n = 0
-    var these = this
-    while (n < i && !these.isEmpty) {
-      n += 1
-      these = these.tail
-    }
-    if (n != i)
-      throw new NoSuchElementException("Index out of the bounds.")
-    else these.head
+  def apply(n: Int): A = {
+    def loop(l: List[A], m: Int): List[A] = 
+      if (l.isEmpty) throw new NoSuchElementException("Index out of the bounds.")
+      else if (m == 0) l
+      else loop(l.tail, m - 1)
+
+    loop(this, n)
   }
 
   def isEmpty: Boolean
 
-  def reverse: List[A] = { // brief example of tail recursion
+  def reverse: List[A] = { 
     def loop(s: List[A], d: List[A]): List[A] = 
       if (s.isEmpty) d
-      else loop(s.tail, d <+ head)
+      else loop(s.tail, d.prepend(head))
 
     loop(this, Nill)
   }
+
+  def length: Int = 
+    if (isEmpty) 0 
+    else 1 + tail.length
 }
 
-object Nill extends List[Nothing] { // since 'Nill' already reserved 
+object Nill extends List[Nothing] { // since 'Nil' already reserved 
   def head: Nothing = throw new NoSuchElementException("Empty list.")
   def tail: List[Nothing] = throw new NoSuchElementException("Empty list.") 
 
