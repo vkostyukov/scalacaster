@@ -83,6 +83,10 @@ abstract class Tree[+A <% Ordered[A]] {
     loop(this, n)
   }
 
+  def map[B <% Ordered[B]](f: (A) => B): Tree[B] = 
+    if (isEmpty) Leaf
+    else new Node(f(value), left.map(f), right.map(f))
+
   def sum[B >: A](implicit num: Numeric[B]): B = fold(num.zero)(num.plus)
   def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.times)
 

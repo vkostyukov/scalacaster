@@ -30,14 +30,10 @@ abstract class List[+A] {
     else if (x != head) new Cons(head, tail.remove(x))
     else tail
 
-  def apply(n: Int): A = {
-    def loop(l: List[A], m: Int): A = 
-      if (l.isEmpty) throw new NoSuchElementException("Index out of the bounds.")
-      else if (m == 0) l.head
-      else loop(l.tail, m - 1)
-
-    loop(this, n)
-  }
+  def apply(n: Int): A =
+    if (isEmpty) throw new NoSuchElementException("Index out of the bounds.")
+    else if (n == 0) head
+    else tail(n - 1)
 
   def contains[B >: A](x: B): Boolean = 
     if (isEmpty) false
@@ -58,13 +54,27 @@ abstract class List[+A] {
     loop(this, n)
   }
 
+  def map[B >: A](f: (A) => B): List[B] = 
+    if (isEmpty) this
+    else tail.map(f).prepend(f(head))
+
   def sum[B >: A](implicit num: Numeric[B]): B = fold(num.zero)(num.plus)
   def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.times)
+
+  def min[B >: A](implicit ordering: Ordering[B]): B = 
+    if (isEmpty) throw new NoSuchElementException("Nill.min")
+    else if (tail.isEmpty) head
+    else ordering.min(head, tail.min(ordering))
+
+  def max[B >: A](implicit ordering: Ordering[B]): B = 
+    if (isEmpty) throw new NoSuchElementException("Nill.max")
+    else if (tail.isEmpty) head
+    else ordering.max(head, tail.max(ordering))
 
   def reverse: List[A] = { 
     def loop(s: List[A], d: List[A]): List[A] = 
       if (s.isEmpty) d
-      else loop(s.tail, d.prepend(head))
+      else loop(s.tail, d.prepend(s.head))
 
     loop(this, Nill)
   }
@@ -84,8 +94,8 @@ abstract class List[+A] {
 }
 
 object Nill extends List[Nothing] { // since 'Nil' already reserved 
-  def head: Nothing = throw new NoSuchElementException("Empty list.")
-  def tail: List[Nothing] = throw new NoSuchElementException("Empty list.") 
+  def head: Nothing = throw new NoSuchElementException("Nill.head")
+  def tail: List[Nothing] = throw new NoSuchElementException("Nill.tail") 
 
   def isEmpty: Boolean = true
 }
