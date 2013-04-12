@@ -53,10 +53,10 @@ abstract class Tree[+A <% Ordered[A]] {
       if (t.isEmpty) 0
       else {
         val l = loop(t.left)
-        if (l == -1) false
+        if (l == -1) -1
         else {
           val r = loop(t.right)
-          if (r == -1) false
+          if (r == -1) -1
           else if (math.abs(l - r) > 1) -1
           else 1 + math.max(l, r)
         }
@@ -457,19 +457,17 @@ object Tree {
   /**
    * Creates a new tree from given sorted array 'a'.
    *
-   * TODO: The time compexity could be O(n)
-   *
-   * Time - O(n log n)
+   * Time - O(n)
    * Space - O(log n)
    */
   def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = {
-    def loop(t: Tree[A], l: Int, r: Int): Tree[A] =
-      if (l == r) t
+    def loop(l: Int, r: Int): Tree[A] =
+      if (l == r) Leaf
         else {
         val p = (l + r) / 2
-        loop(loop(t.add(a(p)), l, p), p + 1, r)
+        new Node(a(p), loop(l, p), loop(p + 1, r))
       }
 
-    loop(Leaf, 0, a.length)
+    loop(0, a.length)
   }
 }
