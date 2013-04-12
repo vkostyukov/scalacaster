@@ -27,8 +27,9 @@ This project is a try to agregate knowledge in algorithms and data structures in
 * Selection Sort `src/sort/SelectionSort.scala`
 
 ##### Searching Algorithms
-* Selection (k-th order statistic) `src/search/Selection.scala`
-* [ROADMAP] Binary Search `src/search/BinarySearch.scala`
+* Selection Search (k-th order statistic) `src/search/SelectionSearch.scala`
+* Binary Search `src/search/BinarySearch.scala`
+* Linear Search `src/search/LinearSearch.scala`
 
 ##### Math
 * [ROADMAP] Big Arithmetic
