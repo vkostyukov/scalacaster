@@ -27,6 +27,9 @@ abstract class Tree[+A <% Ordered[A]] {
    */
   def right: Tree[A]
 
+  /**
+   * Checks whether this tree is empty or not.
+   */
   def isEmpty: Boolean
 
   /**
@@ -66,7 +69,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
-   * Adds a new element 'x' into this tree.
+   * Adds the element 'x' into this tree.
    *
    * Time - O(log n)
    * Space - O(log n)

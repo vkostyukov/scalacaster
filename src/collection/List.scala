@@ -24,6 +24,9 @@ abstract class List[+A] {
    */
   def tail: List[A]
 
+  /**
+   * Checks whether this list is empty or not.
+   */
   def isEmpty: Boolean
 
   /**
@@ -209,7 +212,7 @@ class Cons[A](h: A, t: List[A] = Nill) extends List[A] {
 object List {
 
   /**
-   * Creates a new list from the 'xs' sequence.
+   * Creates a new list from given 'xs' sequence.
    *
    * Time - O(n)
    * Space - O(1)
