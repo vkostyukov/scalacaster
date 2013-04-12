@@ -11,12 +11,30 @@
  */
 
 abstract class Tree[+A <% Ordered[A]] {
+
+  /**
+   * The value of this tree.
+   */
   def value: A
+
+  /**
+   * The left child of this tree.
+   */
   def left: Tree[A]
+
+  /**
+   * The right child of this tree.
+   */
   def right: Tree[A]
 
   def isEmpty: Boolean
 
+  /**
+   * Checks whether this tree is a binary search tree or not.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def isValid: Boolean =
     if (isEmpty) true
     else if (left.isEmpty && right.isEmpty) true
@@ -24,15 +42,47 @@ abstract class Tree[+A <% Ordered[A]] {
     else if (right.isEmpty) left.value <= value && left.isValid
     else left.value <= value && right.value >= value && left.isValid && right.isValid
 
-  def isBalanced: Boolean = 
-    math.abs(left.height - right.height) <= 1
+  /**
+   * Checks whether this tree is balanced or not.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def isBalanced: Boolean = {
+    def loop(t: Tree[A]): Int = 
+      if (t.isEmpty) 0
+      else {
+        val l = loop(t.left)
+        if (l == -1) false
+        else {
+          val r = loop(t.right)
+          if (r == -1) false
+          else if (math.abs(l - r) > 1) -1
+          else 1 + math.max(l, r)
+        }
+      }
 
+    !(loop(this) == -1)
+  }
+
+  /**
+   * Adds a new element 'x' into this tree.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def add[B >: A <% Ordered[B]](x: B): Tree[B] =
     if (isEmpty) new Node(x, Leaf, Leaf)
     else if (x < value) new Node(value, left.add(x), right)
     else if (x > value) new Node(value, left, right.add(x))
     else this
 
+  /**
+   * Removes the element 'x' from this tree.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def remove[B >: A <% Ordered[B]](x: B): Tree[B] =
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
     else if (x < value) new Node(value, left.remove(x), right)
@@ -47,18 +97,36 @@ abstract class Tree[+A <% Ordered[A]] {
       }
     }
 
+  /**
+   * Checks whether this tree contains element 'x' or not.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def contains[B >: A <% Ordered[B]](x: B): Boolean =
     if (isEmpty) false
     else if (x < value) left.contains(x)
     else if (x > value) right.contains(x)
     else true
 
+  /**
+   * Returns the sumbtree of this tree with root element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def subtree[B >: A <% Ordered[B]](x: B): Tree[B] =
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
     else if (x < value) left.subtree(x)
     else if (x > value) right.subtree(x)
     else this
 
+  /**
+   * Checks whether the 't' tree is a subtree of this tree.
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
   def isSubtree[B >: A <% Ordered[B]](t: Tree[B]): Boolean = {
     def loop(a: Tree[B], b: Tree[B]): Boolean = 
       if (a.isEmpty && b.isEmpty) true
@@ -68,6 +136,12 @@ abstract class Tree[+A <% Ordered[A]] {
     loop(subtree(t.value), t)
   }
 
+  /**
+   * Applies the 'f' function to the each element of this tree.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def foreach(f: (A) => Unit): Unit = 
     if (!isEmpty) {
       left.foreach(f)
@@ -75,6 +149,12 @@ abstract class Tree[+A <% Ordered[A]] {
       right.foreach(f)
     }
 
+  /**
+   * Combines all elements of this tree into value.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def fold[B](n: B)(op: (B, A) => B): B = {
     def loop(t: Tree[A], a: B): B =
       if (t.isEmpty) a
@@ -83,37 +163,92 @@ abstract class Tree[+A <% Ordered[A]] {
     loop(this, n)
   }
 
+  /**
+   * Creates a new tree by mapping this tree to the 'f' function.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def map[B <% Ordered[B]](f: (A) => B): Tree[B] = 
     if (isEmpty) Leaf
     else new Node(f(value), left.map(f), right.map(f))
 
+  /**
+   * Calculates the sum of all elements of this tree.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def sum[B >: A](implicit num: Numeric[B]): B = fold(num.zero)(num.plus)
+
+  /**
+   * Calculates the product of all elements of this list.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.times)
 
+  /**
+   * Calculates the size of this tree.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def size: Int =
     if (isEmpty) 0
     else 1 + left.size + right.size
 
+  /**
+   * Searches for the minimal element of this tree.
+   * 
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def min: A = 
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
     else if (left.isEmpty) value
     else left.min
 
+  /**
+   * Searches for the maximal element of this tree.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def max: A = 
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
     else if (right.isEmpty) value
     else right.max
 
+  /**
+   * Calculates the height of this tree.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def height: Int =
     if (isEmpty) 0
     else 1 + math.max(left.height, right.height)
 
+  /**
+   * Calculates the depth for given element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def depth[B >: A <% Ordered[B]](x: B): Int =
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
     else if (x < value) 1 + left.depth(x)
     else if (x > value) 1 + right.depth(x)
     else 0
 
+  /**
+   * Searches for the successor of given element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def successor[B >: A <% Ordered[B]](x: B): A = {
     def forward(t: Tree[A], p: List[Tree[A]]): A =
       if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
@@ -123,13 +258,19 @@ abstract class Tree[+A <% Ordered[A]] {
       else backward(t, p)
 
     def backward(t: Tree[A], p: List[Tree[A]]): A = 
-      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an accessor.")
+      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an successor.")
       else if (t == p.head.right) backward(p.head, p.tail)
       else p.head.value
 
     forward(this, Nil)
   }
 
+  /**
+   * Searches for the predecessor of given element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def predecessor[B >: A <% Ordered[B]](x: B): A = {
     def forward(t: Tree[A], p: List[Tree[A]]): A =
       if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
@@ -146,6 +287,12 @@ abstract class Tree[+A <% Ordered[A]] {
     forward(this, Nil)
   }
 
+  /**
+   * Searches for the first common ancestor of two given elements 'x' and 'y'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def ancestor[B >: A <% Ordered[B]](x: B, y: B): A = {
     def loop(a: List[Tree[A]], b: List[Tree[A]]): A = 
       if (a.tail.isEmpty && b.tail.isEmpty) a.head.value
@@ -157,21 +304,54 @@ abstract class Tree[+A <% Ordered[A]] {
     loop(path(x), path(y))
   }
 
+  /**
+   * Calculates the path for given element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def path[B >: A <% Ordered[B]](x: B): List[Tree[A]] = 
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
     else if (x < value) this :: left.path(x)
     else if (x > value) this :: right.path(x)
     else List(this)
 
+  /**
+   * Calculates the trace for given element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def trace[B >: A <% Ordered[B]](x: B): List[A] = 
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
     else if (x < value) this.value :: left.trace(x)
     else if (x > value) this.value :: right.trace(x)
     else List(this.value)
 
+  /**
+   * Searches for the n-th maximum element of this tree.
+   *
+   * Time - O(n log n)
+   * Time - O(log n)
+   */
   def nthMax(n: Int): A = apply(size - n - 1)
+
+  /**
+   * Searches fot the n-tn minimum element of this tree.
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
   def nthMin(n: Int): A = apply(n)
 
+  /**
+   * Constructs the list of 'n' largest elements of this tree.
+   *
+   * TODO: the time complexity could be O(n)
+   *
+   * Time - O(n^2)
+   * Space - O(log n)
+   */
   def takeLargest(n: Int): List[A] = {
     def loop(t: Tree[A], l: List[A]): List[A] = 
       if (t.isEmpty || l.size == n) l
@@ -184,6 +364,14 @@ abstract class Tree[+A <% Ordered[A]] {
     loop(this, Nil).reverse
   }
 
+  /**
+   * Constructs the list of 'n' smallest elements of this list.
+   *
+   * TODO: the time complexity could be O(n)
+   *
+   * Time - O(n^2)
+   * Space - O(log n)
+   */
   def takeSmallest(n: Int): List[A] = {
     def loop(t: Tree[A], l: List[A]): List[A] = 
       if (t.isEmpty || l.size == n) l
@@ -196,19 +384,37 @@ abstract class Tree[+A <% Ordered[A]] {
     loop(this, Nil).reverse
   }
 
+  /**
+   * Searches for the n-th element of this list.
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
   def apply(n: Int): A = 
     if (isEmpty) throw new NoSuchElementException("Tree doesn't contain a " + n + "th element.")
     else {
       val size = left.size
-      if (n < size) left.nthMin(n)
-      else if (n > size) right.nthMin(n - size - 1)
+      if (n < size) left(n)
+      else if (n > size) right(n - size - 1)
       else this.value
     }
 
+  /**
+   * Converts this tree into the string representation.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   override def toString: String = 
     if (isEmpty) "."
     else "{" + left + value + right + "}"
 
+  /**
+   * Converts this tree into linked list.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
   def toList: List[A] = {
     def loop(t: Tree[A], l: List[A]): List[A] = 
       if (t.isEmpty) l
@@ -235,12 +441,27 @@ class Node[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A]) extends Tree[A] {
 }
 
 object Tree {
+
+  /**
+   * Creates a new tree from given sequence 'xs'.
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
   def apply[A <% Ordered[A]](xs: A*): Tree[A] = {
     var r: Tree[A] = Leaf
     for (x <- xs) r = r.add(x)
     r
   }
 
+  /**
+   * Creates a new tree from given sorted array 'a'.
+   *
+   * TODO: The time compexity could be O(n)
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
   def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = {
     def loop(t: Tree[A], l: Int, r: Int): Tree[A] =
       if (l == r) t

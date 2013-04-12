@@ -16,17 +16,11 @@ abstract class List[+A] {
 
   /**
    * The head of this list.
-   *
-   * Time - O(1)
-   * Space - O(1)
    */
   def head: A
 
   /**
    * The tail of this list.
-   *
-   * Time - O(1)
-   * Space - O(1)
    */
   def tail: List[A]
 
