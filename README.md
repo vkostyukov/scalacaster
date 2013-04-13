@@ -9,12 +9,11 @@ This project is a try to agregate knowledge in algorithms and data structures in
 * Stack `src/collection/Stack.scala`
 * [ROADMAP] Heap `src/collection/Heap.scala`
 * [ROADMAP] Hashtable `src/collection/Hashtable.scala`
+* [ROADMAP] Set `src/collection/Set.scala`
 
 ##### Trees
 * Binary Search Tree `src/tree/Tree.scala`
 * [ROADMAP] Red-Black Tree `src/tree/RBTree.scala`
-* [ROADMAP] AVL Tree `src/tree/AVLTree.scala`
-* [ROADMAP] B-Tree `src/tree/BTree.scala`
 
 ##### Graphs
 * ... 

@@ -8,7 +8,6 @@
  * Best - O(1)
  * Average - O(n)
  *
- * Space - O(n)
  */
 
 def binarysearch[T](a: Array[T], k: T): Int = {

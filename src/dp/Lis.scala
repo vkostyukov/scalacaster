@@ -23,7 +23,7 @@ def lis(s: Seq[Int]): Seq[Int] = {
     }
   }
 
-  var r: List[Int] = Nil    
+  var r: List[Int] = Nil
   var i = l.indexOf(l.max)
   while (i != -1) {
     r = s(i) :: r
@@ -32,5 +32,3 @@ def lis(s: Seq[Int]): Seq[Int] = {
 
   return r
 }
-
-println(lis(List(1, 5, 4, 6, 7, 2, 3, 8)))
