@@ -11,49 +11,80 @@
  */
 
 abstract class List[+A] {
-  def head: A
-  def tail: List[A]
-  def isEmpty: Boolean
-
-  def <+[B >: A](v: B): List[B] = new NonEmptyList(v, this)
-  def r: List[A] = {
-    def loop(s: List[A], d: List[A]): List[A] = {
-      if (s.isEmpty) d
-      else loop(s.tail, d <+ s.head)
+  def reverse: List[A] = {
+    def loop(s: List[A], d: List[A]): List[A] = s match {
+      case Nill => d
+      case Cons(h, t) => loop(t, new Cons(h, d))
     }
 
-    loop(this, NIL)
+    loop(this, Nill)
   }
 }
 
-object NIL extends List[Nothing] { // since 'Nil' already reserved 
-  def head: Nothing = throw new NoSuchElementException("Empty queue.")
-  def tail: List[Nothing] = throw new NoSuchElementException("Empty queue.")
+case object Nill extends List[Nothing]
+case class Cons[A](head: A, tail: List[A]) extends List[A]
 
-  def isEmpty: Boolean = true
-}
+class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
 
-class NonEmptyList[A](h: A, t: List[A] = NIL) extends List[A] {
-  def head: A = h
-  def tail: List[A] = t
-
-  def isEmpty: Boolean = false
-}
-
-class Queue[+A](val in: List[A] = NIL, val out: List[A] = NIL) {
-
-  def isEmpty: Boolean = in.isEmpty && out.isEmpty
-
-  def dequeue: (A, Queue[A]) = out match {
-    case NIL if (!in.isEmpty) => val r = in.r; (r.head, new Queue(NIL, r.tail))
-    case o: List[A] => (o.head, new Queue(in, o.tail))
-    case _ => throw new NoSuchElementException("Empty queue.")
+  /**
+   * Check whether this queue is empty or not.
+   */
+  def isEmpty: Boolean = (in, out) match {
+    case (Nill, Nill) => true
+    case (_, _) => false
   }
 
-  def enqueue[B >: A](v: B): Queue[B] = new Queue(in <+ v, out)
+  /**
+   * Dequeues the first element from this queue.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def dequeue: (A, Queue[A]) = (in, out) match {
+    case (_, Cons(h, t)) => (h, new Queue(in, t))
+    case (_, _) => in.reverse match {
+      case Cons(h, t) => (h, new Queue(Nill, t))
+      case Nill => throw new NoSuchElementException("Empty queue.")
+    }
+  }
 
-  def front: A = 
-    if (!out.isEmpty) out.head 
-    else if (!in.isEmpty) in.r.head 
-    else throw new NoSuchElementException("Empty queue.")
+  /**
+   * Enqueues given element 'x' into the end of this queue.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def enqueue[B >: A](x: B): Queue[B] = new Queue(new Cons(x, in), out)
+
+  /**
+   * Returns the first element of this queue.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def front: A = (in, out) match {
+    case (_, Cons(h, t)) => h
+    case (_, _) => in.reverse match {
+      case Cons(h, t) => h
+      case Nill => throw new NoSuchElementException("Empty queue.")
+    }
+  }
+}
+
+object Queue {
+
+  /**
+   * Creates a new queue fromm given 'xs' sequence.
+   *
+   * Time - O(n)
+   * Space - O(1)
+   *
+   */
+  def apply[A](xs: A*): Queue[A] = {
+    var r: Queue[A] = new Queue()
+    for (x <- xs) {
+      r = r.enqueue(x)
+    }
+    r
+  }
 }
