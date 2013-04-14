@@ -7,7 +7,6 @@
  * Worst - O(n)
  * Best - O(1)
  * Average - O(n)
- *
  */
 
 def linearsearch[T](a: Array[T], k: T): Int = {

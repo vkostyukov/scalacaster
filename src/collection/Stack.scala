@@ -7,7 +7,6 @@
  * Push - O(1)
  * Top - O(1)
  * Pop - O(1)
-
  */
 
 abstract class Stack[+A] {
@@ -50,7 +49,7 @@ object EmptyStack extends Stack[Nothing] {
   def isEmpty: Boolean = true
 }
 
-class NonEmptyStack[A](t: A, r: Stack[A] = NIL) extends Stack[A] {
+class NonEmptyStack[A](t: A, r: Stack[A] = EmptyStack) extends Stack[A] {
   def top: A = t
   def rest: Stack[A] = r
 

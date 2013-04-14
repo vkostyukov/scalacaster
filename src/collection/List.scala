@@ -9,7 +9,6 @@
  * Head - O(1)
  * Tail - O(1)
  * Lookup - O(n)
- *
  */
 
 abstract class List[+A] {

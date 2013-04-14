@@ -7,7 +7,6 @@
  * Insert - O(log n)
  * Lookup - O(log n)  
  * Remove - O(log n)
- *
  */
 
 abstract class Tree[+A <% Ordered[A]] {

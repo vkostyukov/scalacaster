@@ -7,7 +7,6 @@
  * Enqueue - O(1)
  * Dequeue - O(1)
  * Front - O(1)
- *
  */
 
 abstract class List[+A] {
@@ -78,7 +77,6 @@ object Queue {
    *
    * Time - O(n)
    * Space - O(1)
-   *
    */
   def apply[A](xs: A*): Queue[A] = {
     var r: Queue[A] = new Queue()
