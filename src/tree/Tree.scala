@@ -68,7 +68,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
-   * Adds the element 'x' into this tree.
+   * Adds given element 'x' into this tree.
    *
    * Time - O(log n)
    * Space - O(log n)
@@ -80,7 +80,7 @@ abstract class Tree[+A <% Ordered[A]] {
     else this
 
   /**
-   * Removes the element 'x' from this tree.
+   * Removes given element 'x' from this tree.
    *
    * Time - O(log n)
    * Space - O(log n)
