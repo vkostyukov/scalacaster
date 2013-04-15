@@ -9,37 +9,20 @@
  * Average - O(n log n)
  */
 
-def mergesort(a: Array[Int]): Array[Int] = {
-  if (a.length == 1) {
-    return a
-  }
+def mergesort[T <% Ordered[T]](a: Array[T])(implicit mainfest: Manifest[T]): Array[T] = {
+  
+  def sort(b: Array[T]): Array[T] = 
+    if (b.length == 1) b
+    else merge(sort(b.slice(0, b.length / 2)), sort(b.slice(b.length / 2, b.length)), 
+               0, 0, 0, new Array[T](b.length))
 
-  val n = a.length / 2
+  def merge(l: Array[T], r: Array[T], i: Int, j: Int, k: Int, p: Array[T]): Array[T] = 
+    if(i < l.length && j < r.length)
+      if (l(i) < r(j)) { p(k) = l(i); merge(l, r, i + 1, j, k + 1, p) }
+      else { p(k) = r(j); merge(l, r, i, j + 1, k + 1, p) }
+    else if (i < l.length) { p(k) = l(i); merge(l, r, i + 1, j, k + 1, p) }
+    else if (j < r.length) { p(k) = r(j); merge(l, r, i, j + 1, k + 1, p) }
+    else p
 
-  val left = mergesort(a.slice(0, n))
-  val right = mergesort(a.slice(n, a.length))
-
-  var result: Array[Int] = new Array(a.length)
-
-  var i = 0
-  var j = 0
-  result.indices foreach { k =>
-    if (i == left.length) {
-      result(k) = right(j)
-      j += 1
-    } else if (j == right.length) {
-      result(k) = left(i)
-      i += 1
-    } else if (left(i) > right(j)) {
-      result(k) = right(j)
-      j += 1
-    } else {
-      result(k) = left(i)
-      i += 1
-    }
-  }
-
-  return result
+  sort(a)
 }
-
-assert { mergesort(Array(5, 2, 1, 3, 4)).deep == Array(1, 2, 3, 4, 5).deep }
