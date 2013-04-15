@@ -76,9 +76,9 @@ abstract class RBTree[+A <% Ordered[A]] {
    * Space - O(???)
    */
   private def balancedAdd[B >: A <% Ordered[B]](x: B): RBTree[B] = 
-    if (isEmpty) new RedNode(x)
-    else if (x < value) balanceLeft(this, left.balancedAdd(x), right)
-    else if (x > value) balanceRight(this, left, right.balancedAdd(x))
+    if (isEmpty) RedTree(x)
+    else if (x < value) balance(this, left.balancedAdd(x), right)
+    else if (x > value) balance(this, left, right.balancedAdd(x))
     else this
 
   /**
@@ -90,20 +90,23 @@ abstract class RBTree[+A <% Ordered[A]] {
   private def balancedRemove[B >: A <% Ordered[B]](x: B): RBTree[B] = ???
 
   /**
-   * Performs the left rotation of given tree 't'.
+   * Performs the balancing of given tree 't'.
    *
    * Time - O(1)
    * Space - O(1)
    */
-  private def balanceLeft[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] = ???
-
-  /**
-   * Performs the rigth rotation of given tree 't'.
-   *
-   * Time - O(1)
-   * Space - O(1)
-   */
-  private def balanceRight[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] = ???
+  private def balance[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] =
+    if (!t.isEmpty && t.isBlack)
+      if (!l.isEmpty && l.isRed)
+        if (!l.left.isEmpty && l.left.isRed) RedTree(l.value, BlackTree(l.left.value, l.left.left, l.left.right), BlackTree(t.value, l.right, r))
+        else if (!l.right.isEmpty && l.right.isRed) RedTree(l.right.value, BlackTree(l.value, l.left, l.right.left), BlackTree(t.value, l.right.right, r))
+        else t
+      else if (!r.isEmpty && r.isRed)
+        if (!r.left.isEmpty && r.left.isRed) RedTree(r.left.value, BlackTree(t.value, l, r.left.left), BlackTree(r.value, r.left.right, r.right))
+        else if (!r.right.isEmpty && r.right.isRed) RedTree(r.value, BlackTree(t.value, l, r.left), BlackTree(r.right.value, r.right.left, r.right.right))
+        else t
+      else t
+    else t
 
   /**
    * Converts this node into black one.
@@ -164,4 +167,26 @@ object RBTree {
     for (x <- xs) r = r.add(x)
     r
   }
+}
+
+object RedTree {
+
+  /**
+   * Creates a new red-tree with given element 'x' and children 'l' and 'r'.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def apply[A <% Ordered[A]](x: A, l: RBTree[A] = Leaf, r: RBTree[A] = Leaf): RBTree[A] = new RedNode(x, l, r)
+}
+
+object BlackTree {
+
+  /**
+   * Creates a new black-tree with given element 'x' and children 'l' and 'r'.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def apply[A <% Ordered[A]](x: A, l: RBTree[A] = Leaf, r: RBTree[A] = Leaf): RBTree[A] = new BlackNode(x, l, r)
 }
