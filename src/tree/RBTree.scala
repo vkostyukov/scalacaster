@@ -77,8 +77,8 @@ abstract class RBTree[+A <% Ordered[A]] {
    */
   private def balancedAdd[B >: A <% Ordered[B]](x: B): RBTree[B] = 
     if (isEmpty) new RedNode(x)
-    else if (x < value) balanceLeft(this, left.add(x), right)
-    else if (x > value) balanceRight(this, left, right.add(x))
+    else if (x < value) balanceLeft(this, left.balancedAdd(x), right)
+    else if (x > value) balanceRight(this, left, right.balancedAdd(x))
     else this
 
   /**
@@ -144,6 +144,14 @@ object Leaf extends RBTree[Nothing] {
 }
 
 object RBTree {
+
+  /**
+   * Returns an empty red-black tree instance.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+   def empty[A]: RBTree[A] = Leaf
 
   /**
    * Creates a new red-black tree from given 'xs' sequence.

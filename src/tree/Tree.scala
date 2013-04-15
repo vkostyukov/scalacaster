@@ -74,9 +74,9 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def add[B >: A <% Ordered[B]](x: B): Tree[B] =
-    if (isEmpty) new Node(x, Leaf, Leaf)
-    else if (x < value) new Node(value, left.add(x), right)
-    else if (x > value) new Node(value, left, right.add(x))
+    if (isEmpty) Tree(x)
+    else if (x < value) Tree(value, left.add(x), right)
+    else if (x > value) Tree(value, left, right.add(x))
     else this
 
   /**
@@ -87,15 +87,15 @@ abstract class Tree[+A <% Ordered[A]] {
    */
   def remove[B >: A <% Ordered[B]](x: B): Tree[B] =
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
-    else if (x < value) new Node(value, left.remove(x), right)
-    else if (x > value) new Node(value, left, right.remove(x))
+    else if (x < value) Tree(value, left.remove(x), right)
+    else if (x > value) Tree(value, left, right.remove(x))
     else {
-      if (left.isEmpty && right.isEmpty) Leaf
+      if (left.isEmpty && right.isEmpty) Tree.empty
       else if (left.isEmpty) right
       else if (right.isEmpty) left
       else {
         val succ = successor(x)
-        new Node(succ, left, right.remove(succ))
+        Tree(succ, left, right.remove(succ))
       }
     }
 
@@ -172,8 +172,8 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def map[B <% Ordered[B]](f: (A) => B): Tree[B] = 
-    if (isEmpty) Leaf
-    else new Node(f(value), left.map(f), right.map(f))
+    if (isEmpty) Tree.empty
+    else Tree(f(value), left.map(f), right.map(f))
 
   /**
    * Calculates the sum of all elements of this tree.
@@ -443,6 +443,23 @@ class Node[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A]) extends Tree[A] {
 }
 
 object Tree {
+
+  /**
+   * Returns an empty tree instance.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def empty[A]: Tree[A] = Leaf
+
+  /**
+   * Creates a singleton tree for given element 'x'.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def apply[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf): Tree[A] = 
+    new Node(x, l, r)
 
   /**
    * Creates a new tree from given sequence 'xs'.

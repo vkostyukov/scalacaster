@@ -211,6 +211,14 @@ class Cons[A](h: A, t: List[A] = Nill) extends List[A] {
 object List {
 
   /**
+   * Returns an empty list instance.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def empty[A: List[A] = Nill
+
+  /**
    * Creates a new list from given 'xs' sequence.
    *
    * Time - O(n)

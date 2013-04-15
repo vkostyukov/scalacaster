@@ -73,6 +73,14 @@ class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
 object Queue {
 
   /**
+   * Creates a new empty queue.
+   * 
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def empty[A]: Queue[A] = new Queue()
+
+  /**
    * Creates a new queue fromm given 'xs' sequence.
    *
    * Time - O(n)

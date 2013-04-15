@@ -59,6 +59,14 @@ class NonEmptyStack[A](t: A, r: Stack[A] = EmptyStack) extends Stack[A] {
 object Stack {
 
    /**
+    * Returns an empty stack instance.
+    *
+    * Time - O(1)
+    * Space - O(1)
+    */
+   def empty[A]: Stack[A] = EmptyStack
+
+   /**
     * Creates a new stack from given 'xs' sequence.
     *
     * Time - O(n)
