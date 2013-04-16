@@ -307,6 +307,38 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
+   * Searches for the lower bound element of given 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def lowerBound[B >: A <% Ordered[B]](x: B): A =
+    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    else if (x < value)
+      if (!left.isEmpty) left.lowerBound(x)
+      else value
+    else if (x > value)
+      if (!right.isEmpty) { val v = right.lowerBound(x); if (v > x) value else v }
+      else value
+    else value
+
+  /**
+   * Searches for the upper bound element of given 'x'.
+   *
+   * Time - O(log n)
+   * Time - O(log n)
+   */
+  def upperBound[B >: A <% Ordered[B]](x: B): A = 
+    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    else if (x < value)
+      if (!left.isEmpty) { val v = left.upperBound(x); if (v < x) value else v }
+      else value
+    else if (x > value)
+      if (!right.isEmpty) right.upperBound(x)
+      else value
+    else value
+
+  /**
    * Calculates the path for given element 'x'.
    *
    * Time - O(log n)
