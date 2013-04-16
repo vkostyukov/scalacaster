@@ -72,8 +72,8 @@ abstract class RBTree[+A <% Ordered[A]] {
   /**
    * Balanced version of "add" method.
    *
-   * Time - O(???)
-   * Space - O(???)
+   * Time - O(log n)
+   * Space - O(log n)
    */
   private def balancedAdd[B >: A <% Ordered[B]](x: B): RBTree[B] = 
     if (isEmpty) RedTree(x)
@@ -84,8 +84,8 @@ abstract class RBTree[+A <% Ordered[A]] {
   /**
    * Balanced version of "remove" method.
    *
-   * Time - O(???)
-   * Space - O(???)
+   * Time - O(log n)
+   * Space - O(log n)
    */
   private def balancedRemove[B >: A <% Ordered[B]](x: B): RBTree[B] = ???
 
@@ -98,15 +98,19 @@ abstract class RBTree[+A <% Ordered[A]] {
   private def balance[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] =
     if (!t.isEmpty && t.isBlack)
       if (!l.isEmpty && l.isRed)
-        if (!l.left.isEmpty && l.left.isRed) RedTree(l.value, BlackTree(l.left.value, l.left.left, l.left.right), BlackTree(t.value, l.right, r))
-        else if (!l.right.isEmpty && l.right.isRed) RedTree(l.right.value, BlackTree(l.value, l.left, l.right.left), BlackTree(t.value, l.right.right, r))
-        else t
+        if (!l.left.isEmpty && l.left.isRed) 
+          RedTree(l.value, BlackTree(l.left.value, l.left.left, l.left.right), BlackTree(t.value, l.right, r))
+        else if (!l.right.isEmpty && l.right.isRed) 
+          RedTree(l.right.value, BlackTree(l.value, l.left, l.right.left), BlackTree(t.value, l.right.right, r))
+        else mkTree(t, l, r)
       else if (!r.isEmpty && r.isRed)
-        if (!r.left.isEmpty && r.left.isRed) RedTree(r.left.value, BlackTree(t.value, l, r.left.left), BlackTree(r.value, r.left.right, r.right))
-        else if (!r.right.isEmpty && r.right.isRed) RedTree(r.value, BlackTree(t.value, l, r.left), BlackTree(r.right.value, r.right.left, r.right.right))
-        else t
-      else t
-    else t
+        if (!r.left.isEmpty && r.left.isRed) 
+          RedTree(r.left.value, BlackTree(t.value, l, r.left.left), BlackTree(r.value, r.left.right, r.right))
+        else if (!r.right.isEmpty && r.right.isRed) 
+          RedTree(r.value, BlackTree(t.value, l, r.left), BlackTree(r.right.value, r.right.left, r.right.right))
+        else mkTree(t, l, r)
+      else mkTree(t, l, r)
+    else mkTree(t, l, r)
 
   /**
    * Converts this node into black one.
@@ -116,7 +120,28 @@ abstract class RBTree[+A <% Ordered[A]] {
    */
   private def blacken: RBTree[A] = 
     if (isBlack) this
-    else new BlackNode(value, left, right)
+    else BlackTree(value, left, right)
+
+  /**
+   * Copies a given tree 't' and children into new node.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  private def mkTree[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] = 
+    if (t.isBlack) BlackTree(t.value, l, r)
+    else RedTree(t.value, l, r)
+
+  /**
+   * Convertes this tree into the string representation.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  override def toString(): String = 
+    if (isEmpty) "."
+    else if (isRed) "r{" + left + value + right + "}"
+    else "b{" + left + value + right + "}"
 }
 
 class RedNode[A <% Ordered[A]](v: A, l: RBTree[A] = Leaf, r: RBTree[A] = Leaf) extends RBTree[A] {
