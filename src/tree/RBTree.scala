@@ -70,6 +70,62 @@ abstract class RBTree[+A <% Ordered[A]] {
     else true
 
   /**
+   * Returns the sumbtree of this tree with root element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def subtree[B >: A <% Ordered[B]](x: B): Tree[B] =
+    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    else if (x < value) left.subtree(x)
+    else if (x > value) right.subtree(x)
+    else this
+
+    /**
+   * Searches for the minimal element of this tree.
+   * 
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def min: A = 
+    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    else if (left.isEmpty) value
+    else left.min
+
+  /**
+   * Searches for the maximal element of this tree.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def max: A = 
+    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    else if (right.isEmpty) value
+    else right.max
+
+  /**
+   * Calculates the height of this tree.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def height: Int =
+    if (isEmpty) 0
+    else 1 + math.max(left.height, right.height)
+
+  /**
+   * Calculates the depth for given element 'x'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def depth[B >: A <% Ordered[B]](x: B): Int =
+    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    else if (x < value) 1 + left.depth(x)
+    else if (x > value) 1 + right.depth(x)
+    else 0
+
+  /**
    * Balanced version of "add" method.
    *
    * Time - O(log n)
@@ -123,7 +179,7 @@ abstract class RBTree[+A <% Ordered[A]] {
     else BlackTree(value, left, right)
 
   /**
-   * Copies a given tree 't' and children into new node.
+   * Copies a given tree 't' and children 'l' and 'r' into new node.
    *
    * Time - O(1)
    * Space - O(1)
