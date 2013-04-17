@@ -35,8 +35,8 @@ abstract class List[+A] {
    * Space - O(n)
    */ 
   def append[B >: A](x: B): List[B] =
-    if (isEmpty) new Cons(x) 
-    else new Cons(head, tail.append(x))
+    if (isEmpty) List(x)
+    else List(head, tail.append(x))
 
   /**
    * Prepends the element 'x' to this list. 
@@ -44,8 +44,17 @@ abstract class List[+A] {
    * Time - O(1)
    * Space - O(1)
    */
-  def prepend[B >: A](x: B): List[B] = 
-    new Cons(x, this)
+  def prepend[B >: A](x: B): List[B] = List(x, this)
+
+  /**
+   * Concatenates this list with given 'xs' list.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def concat[B >: A](xs: List[B]): List[B] = 
+    if (isEmpty) xs
+    else tail.concat(xs).prepend(head)
 
   /**
    * Removes the element 'x' from the list.
@@ -55,7 +64,7 @@ abstract class List[+A] {
    */
   def remove[B >: A](x: B): List[B] = 
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this list.")
-    else if (x != head) new Cons(head, tail.remove(x))
+    else if (x != head) List(head, tail.remove(x))
     else tail
 
   /**
@@ -216,7 +225,15 @@ object List {
    * Time - O(1)
    * Space - O(1)
    */
-  def empty[A: List[A] = Nill
+  def empty[A]: List[A] = Nill
+
+  /**
+   * Creates a new list from given head 'h' and tail 't'.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def apply[A](h: A, t: List[A] = Nill): List[A] = new Cons(h, t)
 
   /**
    * Creates a new list from given 'xs' sequence.
