@@ -7,7 +7,55 @@
  * Insert - O(log n)
  * Lookup - O(log n)  
  * Remove - O(log n)
- */
+ *
+ * -Notes-
+ *
+ * This is an implementation of Okasaki's red-black tree introduced in his fantastic book
+ * "Purely Functional Data Structures and Alorightms". Here is the short link to article:
+ * 
+ *            www.ccs.neu.edu/course/cs3500wc/jfp99redblack.pdf
+ *
+ * As well, as Okasaki's tree this implementation doesn't contain a 'remove()' method, 
+ * since it totally madness to understand and write such code. There is one CS hero, 
+ * who handled that task - Matt Might. He described a new approach of removing node 
+ * from red-balck tree by using additional node colors (double balck, negate black) 
+ * and new phase - 'bubbling'. Anyway, these things are a bit more then 'just-for-fun' 
+ * package. Here is the link to Matt's research:
+ *
+ *              http://matt.might.net/articles/red-black-delete/
+ *
+ * Chris Okasaki said in his blog that removing is akward operation for functional 
+ * data structures due to percistance. What does 'remove' mean in a functional world? 
+ * It means that the client wants to get a new collection without one element. In functional 
+ * settings we can store both states of collection - without element 'x' (before insertion) 
+ * and with 'x' (after instertion). So, when the removing is requered for 'x' the prevoius 
+ * state of collection can be used instead.
+ *
+ * Anyway, red-black trees is a great data structure with fantastic running time 
+ * algorithms, but it's implemnetation is so complicated that you might use simple 
+ * BST instead. This is why, Robert Sedgewick invented left-leaning red-balck trees as
+ * simple (in terms of implementation) replacement for red-black trees. Here is his 
+ * awesome trees description:
+ * 
+ *               http://www.cs.princeton.edu/~rs/talks/LLRB/LLRB.pdf
+ *
+ * There are also two ways to improve current implementation. First of them - modify
+ * 'balance()' method to expect violations only along the search path. Second - use 
+ * 'two-way-comparsion' that is invented by Anre Andersonin method 'contains()'. 
+ * Here is the explanation of this idea:
+ *
+ *                  http://user.it.uu.se/~arnea/ps/searchproc.pdf
+ *
+ * This tree implementation doesn't inherit loads a useful methods from binary serach  
+ * tree (see 'src/tree/Tree.scala') since is not necessary to have these methods in 
+ * both trees (it also brokes DRY principle). The main goal of this project - is to
+ * provide a clear functional approaches of implementation functional data structures,
+ * not to provide a completelly stable collections and algorithms framework. 
+ *
+ *
+ * PS: I would be happy, if someone decided to add Matt's 'remove()' method into this
+ *     implementation.
+ */ 
 
 abstract class RBTree[+A <% Ordered[A]] {
 
@@ -50,14 +98,6 @@ abstract class RBTree[+A <% Ordered[A]] {
   def add[B >: A <% Ordered[B]](x: B): RBTree[B] = balancedAdd(x).blacken
 
   /**
-   * Removes given element 'x' from this tree.
-   *
-   * Time - O(log n)
-   * Space - O(log n)
-   */
-  def remove[B >: A <% Ordered[B]](x: B): RBTree[B] = balancedRemove(x).blacken
-
-  /**
    * Checks whether this tree contans element 'x' or not.
    *
    * Time - O(n)
@@ -70,103 +110,34 @@ abstract class RBTree[+A <% Ordered[A]] {
     else true
 
   /**
-   * Returns the sumbtree of this tree with root element 'x'.
-   *
-   * Time - O(log n)
-   * Space - O(log n)
-   */
-  def subtree[B >: A <% Ordered[B]](x: B): Tree[B] =
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
-    else if (x < value) left.subtree(x)
-    else if (x > value) right.subtree(x)
-    else this
-
-    /**
-   * Searches for the minimal element of this tree.
-   * 
-   * Time - O(log n)
-   * Space - O(log n)
-   */
-  def min: A = 
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
-    else if (left.isEmpty) value
-    else left.min
-
-  /**
-   * Searches for the maximal element of this tree.
-   *
-   * Time - O(log n)
-   * Space - O(log n)
-   */
-  def max: A = 
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
-    else if (right.isEmpty) value
-    else right.max
-
-  /**
-   * Calculates the height of this tree.
-   *
-   * Time - O(n)
-   * Space - O(log n)
-   */
-  def height: Int =
-    if (isEmpty) 0
-    else 1 + math.max(left.height, right.height)
-
-  /**
-   * Calculates the depth for given element 'x'.
-   *
-   * Time - O(log n)
-   * Space - O(log n)
-   */
-  def depth[B >: A <% Ordered[B]](x: B): Int =
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
-    else if (x < value) 1 + left.depth(x)
-    else if (x > value) 1 + right.depth(x)
-    else 0
-
-  /**
    * Balanced version of "add" method.
    *
    * Time - O(log n)
    * Space - O(log n)
    */
-  private def balancedAdd[B >: A <% Ordered[B]](x: B): RBTree[B] = 
+  private def balancedAdd[B >: A <% Ordered[B]](x: B): RBTree[B] = {
+    def balance[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] =
+      if (!t.isEmpty && t.isBlack)
+        if (!l.isEmpty && l.isRed)
+          if (!l.left.isEmpty && l.left.isRed) 
+            RedTree(l.value, BlackTree(l.left.value, l.left.left, l.left.right), BlackTree(t.value, l.right, r))
+          else if (!l.right.isEmpty && l.right.isRed) 
+            RedTree(l.right.value, BlackTree(l.value, l.left, l.right.left), BlackTree(t.value, l.right.right, r))
+          else mkTree(t, l, r)
+        else if (!r.isEmpty && r.isRed)
+          if (!r.left.isEmpty && r.left.isRed) 
+            RedTree(r.left.value, BlackTree(t.value, l, r.left.left), BlackTree(r.value, r.left.right, r.right))
+          else if (!r.right.isEmpty && r.right.isRed) 
+            RedTree(r.value, BlackTree(t.value, l, r.left), BlackTree(r.right.value, r.right.left, r.right.right))
+          else mkTree(t, l, r)
+        else mkTree(t, l, r)
+      else mkTree(t, l, r)
+
     if (isEmpty) RedTree(x)
     else if (x < value) balance(this, left.balancedAdd(x), right)
     else if (x > value) balance(this, left, right.balancedAdd(x))
     else this
-
-  /**
-   * Balanced version of "remove" method.
-   *
-   * Time - O(log n)
-   * Space - O(log n)
-   */
-  private def balancedRemove[B >: A <% Ordered[B]](x: B): RBTree[B] = ???
-
-  /**
-   * Performs the balancing of given tree 't'.
-   *
-   * Time - O(1)
-   * Space - O(1)
-   */
-  private def balance[B >: A <% Ordered[B]](t: RBTree[B], l: RBTree[B], r: RBTree[B]): RBTree[B] =
-    if (!t.isEmpty && t.isBlack)
-      if (!l.isEmpty && l.isRed)
-        if (!l.left.isEmpty && l.left.isRed) 
-          RedTree(l.value, BlackTree(l.left.value, l.left.left, l.left.right), BlackTree(t.value, l.right, r))
-        else if (!l.right.isEmpty && l.right.isRed) 
-          RedTree(l.right.value, BlackTree(l.value, l.left, l.right.left), BlackTree(t.value, l.right.right, r))
-        else mkTree(t, l, r)
-      else if (!r.isEmpty && r.isRed)
-        if (!r.left.isEmpty && r.left.isRed) 
-          RedTree(r.left.value, BlackTree(t.value, l, r.left.left), BlackTree(r.value, r.left.right, r.right))
-        else if (!r.right.isEmpty && r.right.isRed) 
-          RedTree(r.value, BlackTree(t.value, l, r.left), BlackTree(r.right.value, r.right.left, r.right.right))
-        else mkTree(t, l, r)
-      else mkTree(t, l, r)
-    else mkTree(t, l, r)
+  }
 
   /**
    * Converts this node into black one.
