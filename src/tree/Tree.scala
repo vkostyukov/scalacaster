@@ -381,9 +381,9 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Constructs the list of 'n' largest elements of this tree.
    *
-   * TODO: the time complexity could be O(n)
+   * Note: We suppose that list.size runs in O(1).
    *
-   * Time - O(n^2)
+   * Time - O(n)
    * Space - O(log n)
    */
   def takeLargest(n: Int): List[A] = {
@@ -401,9 +401,9 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Constructs the list of 'n' smallest elements of this list.
    *
-   * TODO: the time complexity could be O(n)
+   * Note: We suppose that list.size runs in O(1).
    *
-   * Time - O(n^2)
+   * Time - O(n)
    * Space - O(log n)
    */
   def takeSmallest(n: Int): List[A] = {
