@@ -94,7 +94,7 @@ abstract class Tree[+A <% Ordered[A]] {
       else if (left.isEmpty) right
       else if (right.isEmpty) left
       else {
-        val succ = successor(x)
+        val succ = right.min
         Tree(succ, left, right.remove(succ))
       }
     }
@@ -323,6 +323,18 @@ abstract class Tree[+A <% Ordered[A]] {
     else value
 
   /**
+   * Calculates the number of elements that less or equal to given 'x'.
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
+  def rank[B >: A <% Ordered[B]](x: B): Int =
+    if (isEmpty) 0
+    else if (x < value) left.rank(x)
+    else if (x > value) 1 + left.size + right.rank(x)
+    else left.size
+
+  /**
    * Searches for the upper bound element of given 'x'.
    *
    * Time - O(log n)
@@ -430,7 +442,7 @@ abstract class Tree[+A <% Ordered[A]] {
       val size = left.size
       if (n < size) left(n)
       else if (n > size) right(n - size - 1)
-      else this.value
+      else value
     }
 
   /**
@@ -514,7 +526,7 @@ object Tree {
   def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = {
     def loop(l: Int, r: Int): Tree[A] =
       if (l == r) Leaf
-        else {
+      else {
         val p = (l + r) / 2
         new Node(a(p), loop(l, p), loop(p + 1, r))
       }
