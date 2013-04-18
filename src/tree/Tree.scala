@@ -7,6 +7,13 @@
  * Insert - O(log n)
  * Lookup - O(log n)  
  * Remove - O(log n)
+ *
+ * -Notes-
+ *
+ * This is an efficient implementation of binary search tree. This tree garantees
+ * O(log n) running time for ordered operations like 'nthMin', 'nthMax' and 'rank'.
+ * The main idea here - is use additional node field that stores size of tree rotted
+ * at this node. This allows to get the size of tree in O(1) instead of linear time.
  */
 
 abstract class Tree[+A <% Ordered[A]] {
@@ -30,6 +37,11 @@ abstract class Tree[+A <% Ordered[A]] {
    * Checks whether this tree is empty or not.
    */
   def isEmpty: Boolean
+
+  /**
+   * The size of this tree.
+   */
+  def size: Int
 
   /**
    * Checks whether this tree is a binary search tree or not.
@@ -192,16 +204,6 @@ abstract class Tree[+A <% Ordered[A]] {
   def product[B >: A](implicit num: Numeric[B]): B = fold(num.one)(num.times)
 
   /**
-   * Calculates the size of this tree.
-   *
-   * Time - O(n)
-   * Space - O(log n)
-   */
-  def size: Int =
-    if (isEmpty) 0
-    else 1 + left.size + right.size
-
-  /**
    * Searches for the minimal element of this tree.
    * 
    * Time - O(log n)
@@ -325,7 +327,7 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Calculates the number of elements that less or equal to given 'x'.
    *
-   * Time - O(n log n)
+   * Time - O(log n)
    * Space - O(log n)
    */
   def rank[B >: A <% Ordered[B]](x: B): Int =
@@ -377,7 +379,7 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Searches for the n-th maximum element of this tree.
    *
-   * Time - O(n log n)
+   * Time - O(log n)
    * Time - O(log n)
    */
   def nthMax(n: Int): A = apply(size - n - 1)
@@ -385,7 +387,7 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Searches fot the n-tn minimum element of this tree.
    *
-   * Time - O(n log n)
+   * Time - O(log n)
    * Space - O(log n)
    */
   def nthMin(n: Int): A = apply(n)
@@ -433,7 +435,7 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Searches for the n-th element of this list.
    *
-   * Time - O(n log n)
+   * Time - O(log n)
    * Space - O(log n)
    */
   def apply(n: Int): A = 
@@ -474,14 +476,16 @@ object Leaf extends Tree[Nothing] {
   def value: Nothing = throw new NoSuchElementException("Leaf.value")
   def left: Tree[Nothing] = throw new NoSuchElementException("Leaf.left")
   def right: Tree[Nothing] = throw new NoSuchElementException("Leaf.right")
+  def size: Int = 0
 
   def isEmpty: Boolean = true
 }
 
-class Node[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A]) extends Tree[A] {
+class Node[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A], s: Int) extends Tree[A] {
   def value: A = v
   def left: Tree[A] = l
   def right: Tree[A] = r
+  def size: Int = s
 
   def isEmpty: Boolean = false
 }
@@ -503,7 +507,7 @@ object Tree {
    * Space - O(1)
    */
   def apply[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf): Tree[A] = 
-    new Node(x, l, r)
+    new Node(x, l, r, l.size + r.size + 1)
 
   /**
    * Creates a new tree from given sequence 'xs'.
@@ -512,7 +516,7 @@ object Tree {
    * Space - O(log n)
    */
   def apply[A <% Ordered[A]](xs: A*): Tree[A] = {
-    var r: Tree[A] = Leaf
+    var r: Tree[A] = Tree.empty
     for (x <- xs) r = r.add(x)
     r
   }
@@ -525,10 +529,10 @@ object Tree {
    */
   def fromSortedArray[A <% Ordered[A]](a: Array[A]): Tree[A] = {
     def loop(l: Int, r: Int): Tree[A] =
-      if (l == r) Leaf
+      if (l == r) Tree.empty
       else {
         val p = (l + r) / 2
-        new Node(a(p), loop(l, p), loop(p + 1, r))
+        Tree(a(p), loop(l, p), loop(p + 1, r))
       }
 
     loop(0, a.length)
