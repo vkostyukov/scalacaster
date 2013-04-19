@@ -138,6 +138,17 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Checks whether the 't' tree is a subtree of this tree.
    *
+   * NOTE: This task can be done in O(n + m) running time 
+   * by using the following algorithm:
+   *
+   * 1. convert this tree into string representation using pre-order and in-order walks - O(n)
+   * 2. convert other tree into string representation using pre-order and in-order walks - O(m)
+   * 3. check whether second in-order string is substring of the first in-order string - O(log n)
+   * 3. check whether second pre-order string is substring of the first pre-order string - O(log n)
+   *
+   * HINT: 'isSubstring' checking can be done with suffix-tree in O(m) but requeres O(n) time for
+   *       it's building. 
+   *
    * Time - O(n log n)
    * Space - O(log n)
    */
@@ -148,6 +159,28 @@ abstract class Tree[+A <% Ordered[A]] {
       else a.value == b.value && loop(a.left, b.left) && loop(a.right, b.right)
 
     loop(subtree(t.value), t)
+  }
+
+  /**
+   * Merges this tree with given 't' tree.
+   *
+   * NOTE: This taks can be done in O(n + m) running time by using 
+   * the following algorithm:
+   *
+   * 1. convert this tree into list - O(n)
+   * 2. convert other tree into list - (m)
+   * 3. merge these list into one - O(n + m)
+   * 4. build a new tree from sorted list - O(n + m)
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
+  def merge[B >: A Ordered[B]](t: Tree[B]): Tree[B] = {
+    def loop(s: Tree[A], d: Tree[A]): Tree[A] = 
+      if (s.isEmpty) d
+      else loop(s.right, loop(s.left, d.add(s.value)))
+
+    loop(this, t)
   }
 
   /**
