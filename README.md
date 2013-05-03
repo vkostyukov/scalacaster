@@ -7,7 +7,7 @@ This project is a try to agregate knowledge in algorithms and data structures in
 * Linked List `src/collection/List.scala`
 * Queue `src/collection/Queue.scala`
 * Stack `src/collection/Stack.scala`
-* [ROADMAP] Heap (priority queue, binomial heap) `src/collection/Heap.scala`
+* Heap `src/collection/Heap.scala`
 * [ROADMAP] Hashtable `src/collection/Hashtable.scala`
 
 ##### Trees

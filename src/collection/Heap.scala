@@ -5,13 +5,31 @@
  * Heap http://en.wikipedia.org/wiki/Heap_(data_structure)
  * Binary Heap http://en.wikipedia.org/wiki/Binary_heap
  *
- * Find Min - O(1)
- * Remove Min - O(log n)
- * Add - O(log n)
+ * Min - O(1)
+ * Remove - O(log n)
+ * Insert - O(log n)
  * Merge - O(n)
  *
  * -Notes-
  * 
+ * This is an effecient implementation of binary heap that grantees O(log n) running
+ * time for insert/remove operations.
+ *
+ * There are two invariants of binary heaps:
+ *
+ * 1) Shape-property - the heap - is a complete binary tree.
+ * 2) Heap-property - children's elements should be less or equal to parent's.
+ *
+ * These invariants complete by two main ideas. The first thing is there are (2^n - 1)
+ * nodes in a complete binary tree. This can be used in insertion for choosing right
+ * search path. To garantee O(log n) insertion running time two node parameters can be
+ * used - 'height' and 'size'. So, the condition looks like following:
+ *
+ *               node.size < math.pow(2, node.height) - 1
+ *
+ * The second thing is bubbling that goes up to search path and swapping nodes to
+ * correspond heap property.
+ *
  */
 
 abstract class Heap[+A <% Ordered[A]] {
