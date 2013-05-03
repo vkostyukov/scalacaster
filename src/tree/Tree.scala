@@ -514,7 +514,7 @@ object Leaf extends Tree[Nothing] {
   def isEmpty: Boolean = true
 }
 
-class Node[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A], s: Int) extends Tree[A] {
+class Branch[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A], s: Int) extends Tree[A] {
   def value: A = v
   def left: Tree[A] = l
   def right: Tree[A] = r
@@ -540,7 +540,7 @@ object Tree {
    * Space - O(1)
    */
   def apply[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf): Tree[A] = 
-    new Node(x, l, r, l.size + r.size + 1)
+    new Branch(x, l, r, l.size + r.size + 1)
 
   /**
    * Creates a new tree from given sequence 'xs'.
