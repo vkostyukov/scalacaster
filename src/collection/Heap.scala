@@ -70,34 +70,28 @@ abstract class Heap[+A <% Ordered[A]] {
    * Time - O(log n)
    * Space - O(log n)
    */
-  def insert[B >: A <% Ordered[B]](x: B): Heap[B] =
+  def insert[B >: A <% Ordered[B]](x: B): Heap[B] = {
+    def bubbleUp[B >: A <% Ordered[B]](x: B, l: Heap[B], r: Heap[B]): Heap[B] = 
+      if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
+      else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
+      else Heap(x, l, r)
+
     if (isEmpty) Heap(x)
-    else if (left.isEmpty) bubbleLeft(min, Heap(x), right)
-    else if (right.isEmpty) bubbleRight(min, left, Heap(x))
-    else if (left.size < math.pow(2, left.height) - 1) bubbleLeft(min, left.insert(x), right)
-    else if (right.size < math.pow(2, right.height) - 1) bubbleRight(min, left, right.insert(x))
-    else if (right.height < left.height) bubbleRight(min, left, right.insert(x))
-    else bubbleLeft(min, left.insert(x), right)
+    else if (left.size < math.pow(2, left.height) - 1) bubbleUp(min, left.insert(x), right)
+    else if (right.size < math.pow(2, right.height) - 1) bubbleUp(min, left, right.insert(x))
+    else if (right.height < left.height) bubbleUp(min, left, right.insert(x))
+    else bubbleUp(min, left.insert(x), right)
+  }
 
   /**
-   * Bubbles just inserted element 'x' up to left heap.
+   * Removes minumum element from this heap.
    *
-   * Time - O(1)
-   * Space - O(1)
+   * Time - O(log n)
+   * Space - O(log n)
    */
-  private[this] def bubbleLeft[B >: A <% Ordered[B]](x: B, l: Heap[B], r: Heap[B]): Heap[B] = 
-    if (l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
-    else Heap(x, l, r)
-
-  /**
-   * Bubbles just inserted element 'x' up to right heap.
-   *
-   * Time - O(1)
-   * Space - O(1)
-   */
-  private[this] def bubbleRight[B >: A <% Ordered[B]](x: B, l: Heap[B], r: Heap[B]): Heap[B] =
-    if (r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
-    else Heap(x, l, r)
+  // def remove: A = {
+  //   def bubbleDown = ???
+  // }
 }
 
 class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
