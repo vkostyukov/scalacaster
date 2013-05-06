@@ -163,22 +163,33 @@ object Heap {
    */
   def apply[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
     new Branch(x, l, r, l.size + r.size + 1, math.max(l.height, r.height) + 1)
+
+
+  /**
+   * Creates a new heap from given sorted array 'a'.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def fromSortedArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
+    def loop(i: Int): Heap[A] = 
+      if (i < a.length) Heap(a(i), loop(2 * i + 1), loop(2 * i + 2))
+      else Heap.empty
+
+    loop(0)
+  }
+
+  /**
+   * Creates a new heap from given array 'a'.
+   *
+   * Time - O(n log n)
+   * Space - O(log n)
+   */
+  def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
+    var r: Heap[A] = Heap.empty
+    for (x <- a) r = r.insert(x)
+    r
+  }
 }
 
-// var h: Heap[Int] = Heap.empty
-// h = h.insert(10)
-// h = h.insert(20)
-// h = h.insert(30)
-// h = h.insert(40)
-// h = h.insert(50)
-// h = h.insert(60)
-// h = h.insert(70)
-
-// h = h.remove
-// println(h.min)
-// println(h.left.min)
-// println(h.right.min)
-// println(h.left.left.min)
-// println(h.left.right.min)
-// println(h.right.left.min)
-
+// var h = Heap.fromSortedArray(Array(10, 20, 30, 40, 50, 60, 70))
