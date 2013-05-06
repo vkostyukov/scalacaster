@@ -17,8 +17,8 @@
  *
  * There are two invariants of binary heaps:
  *
- * 1) Shape-property - the heap - is a complete binary tree.
- * 2) Heap-property - children's elements should be less or equal to parent's.
+ * 1. Shape-property - the heap - is a complete binary tree.
+ * 2. Heap-property - children's elements should be less or equal to parent's.
  *
  * These invariants complete by two main ideas. The first thing is there are (2^n - 1)
  * nodes in a complete binary tree. This can be used in insertion for choosing right
@@ -30,6 +30,14 @@
  * The second thing is bubbling that goes up to search path and swapping nodes to
  * correspond heap property.
  *
+ * Removal it is always pain in the neck. There are three phases of removal minimum
+ * element from binary heap:
+ *
+ * 1. Find latest inserted node. 
+ * 2. Replace root value with this node's value.
+ * 3. Fix all heap property violations by bubbling root element down.
+ *
+ * These can be done in O(log n) time.
  */
 
 abstract class Heap[+A <% Ordered[A]] {
@@ -89,9 +97,34 @@ abstract class Heap[+A <% Ordered[A]] {
    * Time - O(log n)
    * Space - O(log n)
    */
-  // def remove: A = {
-  //   def bubbleDown = ???
-  // }
+  def remove: Heap[A] = {
+    def removeLastInserted(h: Heap[A]): (A, Heap[A]) =
+      if (h.left.isEmpty && h.right.isEmpty) (h.min, Heap.empty)
+      else if (h.left.size < math.pow(2, h.left.height) - 1) {
+        val (ll, hh) = removeLastInserted(h.left)
+        (ll, Heap(h.min, hh, h.right))
+      } else if (h.right.size < math.pow(2, h.right.height) - 1) {
+        val (ll, hh) = removeLastInserted(h.right)
+        (ll, Heap(h.min, h.left, hh))
+      } else if (h.right.height < h.left.height) { 
+        val (ll, hh) = removeLastInserted(h.left)
+        (ll, Heap(h.min, hh, h.right))
+      } else {
+        val (ll, hh) = removeLastInserted(h.right)
+        (ll, Heap(h.min, h.left, hh))
+      }
+
+    def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
+      if (!h.left.isEmpty && h.left.min < h.min) Heap(h.left.min, bubbleDown(Heap(h.min, h.left.left, h.left.right)), h.right)
+      else if (!h.right.isEmpty && h.right.min < h.min) Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
+      else h
+
+    if (isEmpty) throw new NoSuchElementException("Empty heap.")
+    else {
+      val (l, h) = removeLastInserted(this)
+      bubbleDown(Heap(l, h.left, h.right))
+    }
+  }
 }
 
 class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
@@ -132,19 +165,20 @@ object Heap {
     new Branch(x, l, r, l.size + r.size + 1, math.max(l.height, r.height) + 1)
 }
 
-var h: Heap[Int] = Heap.empty
-h = h.insert(10)
-h = h.insert(20)
-h = h.insert(30)
-h = h.insert(40)
-h = h.insert(50)
-h = h.insert(60)
-h = h.insert(70)
+// var h: Heap[Int] = Heap.empty
+// h = h.insert(10)
+// h = h.insert(20)
+// h = h.insert(30)
+// h = h.insert(40)
+// h = h.insert(50)
+// h = h.insert(60)
+// h = h.insert(70)
 
-println(h.min)
-println(h.left.min)
-println(h.right.min)
-println(h.left.left.min)
-println(h.left.right.min)
-println(h.right.left.min)
-println(h.right.right.min)
+// h = h.remove
+// println(h.min)
+// println(h.left.min)
+// println(h.right.min)
+// println(h.left.left.min)
+// println(h.left.right.min)
+// println(h.right.left.min)
+
