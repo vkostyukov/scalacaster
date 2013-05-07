@@ -38,6 +38,12 @@
  * 3. Fix all heap property violations by bubbling root element down.
  *
  * These can be done in O(log n) time.
+ *
+ * Heap construction can be performed in O(n) time by using following approach:
+ *
+ * 1. Insert all items into the heap satisfy 'shape invariant'.
+ * 2. Fix all violations of 'heap invariant' by bubbling nodes up.
+ *
  */
 
 abstract class Heap[+A <% Ordered[A]] {
@@ -125,6 +131,14 @@ abstract class Heap[+A <% Ordered[A]] {
       bubbleDown(Heap(l, h.left, h.right))
     }
   }
+
+  /**
+   * Merges this heap with given 'that' heap.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def merge[B >: A <% Ordered[B]](that: Heap[B]): Heap[B] = ???
 }
 
 class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
@@ -182,14 +196,21 @@ object Heap {
   /**
    * Creates a new heap from given array 'a'.
    *
-   * Time - O(n log n)
+   * Time - O(n)
    * Space - O(log n)
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
-    var r: Heap[A] = Heap.empty
-    for (x <- a) r = r.insert(x)
-    r
+    def bubbleUp[B >: A <% Ordered[B]](x: B, l: Heap[B], r: Heap[B]): Heap[B] = 
+      if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
+      else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
+      else Heap(x, l, r)
+
+    def loop(i: Int): Heap[A] = 
+      if (i < a.length) bubbleUp(a(i), loop(2 * i + 1), loop(2 * i + 2))
+      else Heap.empty
+
+    loop(0)
   }
 }
 
-// var h = Heap.fromSortedArray(Array(10, 20, 30, 40, 50, 60, 70))
+// var h = Heap.fromArray(Array(40, 30, 70, 10, 20, 50, 60))
