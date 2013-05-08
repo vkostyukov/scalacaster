@@ -111,11 +111,6 @@ abstract class Heap[+A <% Ordered[A]] {
     def bubbleRightUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
       Heap(r.min, l, Heap(x, r.left, r.right))
 
-    def shiftSearchPatchUp[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
-      if (h.left.isEmpty && h.right.isEmpty) Heap.empty
-      else if (h.right.isEmpty || h.left.min < h.right.min) Heap(h.min, shiftUp(h.left), h.right)
-      else Heap(h.min, h.left, shiftUp(h.right))
-
     def shiftUp[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
       if (h.left.isEmpty && h.right.isEmpty) Heap.empty
       else if (h.right.isEmpty || h.left.min < h.right.min) Heap(h.left.min, shiftUp(h.left), h.right)
@@ -133,7 +128,11 @@ abstract class Heap[+A <% Ordered[A]] {
         bubbleRightUp(h.min, h.left, replaceRootWithLastInserted(h.right))
 
     if (isEmpty) throw new NoSuchElementException("Empty heap.")
-    else bubbleDown(shiftSearchPatchUp(replaceRootWithLastInserted(this)))
+    else {
+      val h = replaceRootWithLastInserted(this)
+      val hh = shiftUp(h)
+      bubbleDown(Heap(h.min, hh.left, hh.right))
+    }
   }
 
   /**
@@ -210,7 +209,6 @@ object Heap {
    *
    * Time - O(n)
    * Space - O(log n)
-   * !!!!
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
@@ -232,13 +230,4 @@ object Heap {
     else Heap(x, l, r)
 }
 
-var h = Heap.fromSortedArray(Array(10, 20, 30, 40, 50, 60, 70))
-
-h = h.remove2
-println(h.min)
-println(h.left.min)
-println(h.right.min)
-println(h.left.left.min)
-println(h.left.right.min)
-println(h.right.left.min)
-
+// var h = Heap.fromSortedArray(Array(10, 20, 30, 40, 50, 60, 70))
