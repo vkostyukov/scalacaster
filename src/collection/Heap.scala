@@ -98,32 +98,42 @@ abstract class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def remove: Heap[A] = {
-    def removeLastInserted(h: Heap[A]): (A, Heap[A]) =
-      if (h.left.isEmpty && h.right.isEmpty) (h.min, Heap.empty)
-      else if (h.left.size < math.pow(2, h.left.height) - 1) {
-        val (ll, hh) = removeLastInserted(h.left)
-        (ll, Heap(h.min, hh, h.right))
-      } else if (h.right.size < math.pow(2, h.right.height) - 1) {
-        val (ll, hh) = removeLastInserted(h.right)
-        (ll, Heap(h.min, h.left, hh))
-      } else if (h.right.height < h.left.height) { 
-        val (ll, hh) = removeLastInserted(h.left)
-        (ll, Heap(h.min, hh, h.right))
-      } else {
-        val (ll, hh) = removeLastInserted(h.right)
-        (ll, Heap(h.min, h.left, hh))
-      }
-
     def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
-      if (!h.left.isEmpty && h.left.min < h.min) Heap(h.left.min, bubbleDown(Heap(h.min, h.left.left, h.left.right)), h.right)
-      else if (!h.right.isEmpty && h.right.min < h.min) Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
+      if (!h.left.isEmpty && h.left.min < h.min) 
+        Heap(h.left.min, bubbleDown(Heap(h.min, h.left.left, h.left.right)), h.right)
+      else if (!h.right.isEmpty && h.right.min < h.min) 
+        Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
       else h
 
+    def bubbleLeftUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
+      Heap(l.min, Heap(x, l.left, l.right), r)
+
+    def bubbleRightUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
+      Heap(r.min, l, Heap(x, r.left, r.right))
+
+    def shiftSearchPatchUp[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
+      if (h.left.isEmpty && h.right.isEmpty) Heap.empty
+      else if (h.right.isEmpty || h.left.min < h.right.min) Heap(h.min, shiftUp(h.left), h.right)
+      else Heap(h.min, h.left, shiftUp(h.right))
+
+    def shiftUp[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
+      if (h.left.isEmpty && h.right.isEmpty) Heap.empty
+      else if (h.right.isEmpty || h.left.min < h.right.min) Heap(h.left.min, shiftUp(h.left), h.right)
+      else Heap(h.right.min, h.left, shiftUp(h.right))
+
+    def replaceRootWithLastInserted(h: Heap[A]): Heap[A] =
+      if (h.left.isEmpty && h.right.isEmpty) h
+      else if (h.left.size < math.pow(2, h.left.height) - 1)
+        bubbleLeftUp(h.min, replaceRootWithLastInserted(h.left), h.right)
+      else if (h.right.size < math.pow(2, h.right.height) - 1)
+        bubbleRightUp(h.min, h.left, replaceRootWithLastInserted(h.right))
+      else if (h.right.height < h.left.height)
+        bubbleLeftUp(h.min, replaceRootWithLastInserted(h.left), h.right)
+      else
+        bubbleRightUp(h.min, h.left, replaceRootWithLastInserted(h.right))
+
     if (isEmpty) throw new NoSuchElementException("Empty heap.")
-    else {
-      val (l, h) = removeLastInserted(this)
-      bubbleDown(Heap(l, h.left, h.right))
-    }
+    else bubbleDown(shiftSearchPatchUp(replaceRootWithLastInserted(this)))
   }
 
   /**
@@ -200,6 +210,7 @@ object Heap {
    *
    * Time - O(n)
    * Space - O(log n)
+   * !!!!
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
@@ -221,4 +232,13 @@ object Heap {
     else Heap(x, l, r)
 }
 
-// var h = Heap.fromArray(Array(40, 30, 70, 10, 20, 50, 60))
+var h = Heap.fromSortedArray(Array(10, 20, 30, 40, 50, 60, 70))
+
+h = h.remove2
+println(h.min)
+println(h.left.min)
+println(h.right.min)
+println(h.left.left.min)
+println(h.left.right.min)
+println(h.right.left.min)
+

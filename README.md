@@ -24,6 +24,7 @@ This project is a try to agregate knowledge in algorithms and data structures in
 ##### Sorting Algorithms
 * Quick Sort `src/sort/QuickSort.scala`
 * Merge Sort `src/sort/MergeSort.scala`
+* Heap Sort `src/sort/HeapSort.scala`
 * Bubble Sort `src/sort/BubbleSort.scala`
 * Insertion Sort `src/sort/InsertionSort.scala`
 * Selection Sort `src/sort/SelectionSort.scala`
