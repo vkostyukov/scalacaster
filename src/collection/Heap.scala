@@ -116,20 +116,20 @@ abstract class Heap[+A <% Ordered[A]] {
       else if (h.right.isEmpty || h.left.min < h.right.min) Heap(h.left.min, shiftUp(h.left), h.right)
       else Heap(h.right.min, h.left, shiftUp(h.right))
 
-    def replaceRootWithLastInserted(h: Heap[A]): Heap[A] =
+    def bubbleUpLastInserted(h: Heap[A]): Heap[A] =
       if (h.left.isEmpty && h.right.isEmpty) h
       else if (h.left.size < math.pow(2, h.left.height) - 1)
-        bubbleLeftUp(h.min, replaceRootWithLastInserted(h.left), h.right)
+        bubbleLeftUp(h.min, bubbleUpLastInserted(h.left), h.right)
       else if (h.right.size < math.pow(2, h.right.height) - 1)
-        bubbleRightUp(h.min, h.left, replaceRootWithLastInserted(h.right))
+        bubbleRightUp(h.min, h.left, bubbleUpLastInserted(h.right))
       else if (h.right.height < h.left.height)
-        bubbleLeftUp(h.min, replaceRootWithLastInserted(h.left), h.right)
+        bubbleLeftUp(h.min, bubbleUpLastInserted(h.left), h.right)
       else
-        bubbleRightUp(h.min, h.left, replaceRootWithLastInserted(h.right))
+        bubbleRightUp(h.min, h.left, bubbleUpLastInserted(h.right))
 
     if (isEmpty) throw new NoSuchElementException("Empty heap.")
     else {
-      val h = replaceRootWithLastInserted(this)
+      val h = bubbleUpLastInserted(this)
       val hh = shiftUp(h)
       bubbleDown(Heap(h.min, hh.left, hh.right))
     }
@@ -229,5 +229,3 @@ object Heap {
     else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
     else Heap(x, l, r)
 }
-
-// var h = Heap.fromSortedArray(Array(10, 20, 30, 40, 50, 60, 70))
