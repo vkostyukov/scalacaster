@@ -41,7 +41,7 @@
  *
  * Heap construction can be performed in O(n) time by using following approach:
  *
- * 1. Insert all items into the heap satisfy 'shape invariant'.
+ * 1. Insert all items into the heap to satisfy 'shape invariant'.
  * 2. Fix all violations of 'heap invariant' by bubbling nodes up.
  *
  */
@@ -84,18 +84,12 @@ abstract class Heap[+A <% Ordered[A]] {
    * Time - O(log n)
    * Space - O(log n)
    */
-  def insert[B >: A <% Ordered[B]](x: B): Heap[B] = {
-    def bubbleUp[B >: A <% Ordered[B]](x: B, l: Heap[B], r: Heap[B]): Heap[B] = 
-      if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
-      else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
-      else Heap(x, l, r)
-
+  def insert[B >: A <% Ordered[B]](x: B): Heap[B] =
     if (isEmpty) Heap(x)
-    else if (left.size < math.pow(2, left.height) - 1) bubbleUp(min, left.insert(x), right)
-    else if (right.size < math.pow(2, right.height) - 1) bubbleUp(min, left, right.insert(x))
-    else if (right.height < left.height) bubbleUp(min, left, right.insert(x))
-    else bubbleUp(min, left.insert(x), right)
-  }
+    else if (left.size < math.pow(2, left.height) - 1) Heap.bubbleUp(min, left.insert(x), right)
+    else if (right.size < math.pow(2, right.height) - 1) Heap.bubbleUp(min, left, right.insert(x))
+    else if (right.height < left.height) Heap.bubbleUp(min, left, right.insert(x))
+    else Heap.bubbleUp(min, left.insert(x), right)
 
   /**
    * Removes minumum element from this heap.
@@ -135,10 +129,18 @@ abstract class Heap[+A <% Ordered[A]] {
   /**
    * Merges this heap with given 'that' heap.
    *
-   * Time - O(n)
+   * NOTES: Merge can be done in O(n + m) running time by using followin ideas:
+   *
+   * 1. All values from 'that' heap should be insterted to satisfy shape-property.
+   * 2. After each instertion new values should be bubbled up to satisfy heap property.
+   *
+   * Time - O(n log n)
    * Space - O(log n)
    */
-  def merge[B >: A <% Ordered[B]](that: Heap[B]): Heap[B] = ???
+  def merge[B >: A <% Ordered[B]](that: Heap[B]): Heap[B] = 
+    if (that.isEmpty) this
+    else if (this.isEmpty) that
+    else insert(that.min).merge(that.left).merge(that.right)
 }
 
 class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
@@ -200,17 +202,23 @@ object Heap {
    * Space - O(log n)
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
-    def bubbleUp[B >: A <% Ordered[B]](x: B, l: Heap[B], r: Heap[B]): Heap[B] = 
-      if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
-      else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
-      else Heap(x, l, r)
-
     def loop(i: Int): Heap[A] = 
       if (i < a.length) bubbleUp(a(i), loop(2 * i + 1), loop(2 * i + 2))
       else Heap.empty
 
     loop(0)
   }
+
+  /**
+   * Bubbles given 'l' or 'r' heaps up and build a new a heap.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  private[Heap] def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
+    if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
+    else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
+    else Heap(x, l, r)
 }
 
 // var h = Heap.fromArray(Array(40, 30, 70, 10, 20, 50, 60))
