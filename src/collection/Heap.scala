@@ -98,37 +98,34 @@ abstract class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def remove: Heap[A] = {
-    def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] = (h.left, h.right) match {
-      case (Branch(x, _, _, _, _), Branch(y, l, r, _, _)) if (y < x && h.min > y) =>
-        Heap(y, h.left, bubbleDown(Heap(h.min, l, r)))
-      case (Branch(x, l, r, _, _) , _) if (h.min > x) => 
-        Heap(x, bubbleDown(Heap(h.min, l, r)), h.right)
-      case (_, _) => h
-    }
+    def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
+      if (!h.right.isEmpty && (h.right.min < h.left.min) && (h.min > h.right.min))
+        Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
+      else if (!h.left.isEmpty && (h.min > h.left.min))
+        Heap(h.left.min, Heap(h.min, h.left.left, h.left.right), h.right)
+      else h
 
-    def bubblen[A <% Ordered[A]](h: Heap[A]): Heap[A] = h match {
-      case Bubble(m, b) => Heap(m, b.left, b.right)
-      case _ => h
-    }
+    def bubbleLeftUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
+      if (l.isEmpty) Heap(x, l, r)
+      else Heap(l.min, Heap(x, l.left, l.right), r)
 
-    def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = (l, r) match {
-      case (Bubble(m, b), r) => Heap.bubble(m, Heap(x, b, r))
-      case (l, Bubble(m, b)) => Heap.bubble(m, Heap(x, l, b))
-    }
+    def bubbleRightUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
+      if (r.isEmpty) Heap(x, l, r)
+      else Heap(r.min, l, Heap(x, r.left, r.right))
 
     def bubbleUpLastInserted(h: Heap[A]): Heap[A] = 
-      if (h.left.isEmpty) Heap.bubble(h.min)
+      if (h.left.isEmpty) Heap.empty
       else if (h.left.size < math.pow(2, h.left.height) - 1) 
-        bubbleUp(h.min, bubbleUpLastInserted(h.left), h.right)
+        bubbleLeftUp(h.left.min, bubbleUpLastInserted(h.left), h.right)
       else if (h.right.size < math.pow(2, h.right.height) - 1)
-        bubbleUp(h.min, h.left, bubbleUpLastInserted(h.right))
+        bubbleRightUp(h.right.min, h.left, bubbleUpLastInserted(h.right))
       else if (h.right.height < h.left.height)
-        bubbleUp(h.min, bubbleUpLastInserted(h.left), h.right)
+        bubbleLeftUp(h.left.min, bubbleUpLastInserted(h.left), h.right)
       else
-        bubbleUp(h.min, h.left, bubbleUpLastInserted(h.right))
+        bubbleRightUp(h.right.min, h.left, bubbleUpLastInserted(h.right))
 
     if (isEmpty) throw new NoSuchElementException("Empty heap.")
-    else bubbleDown(bubblen(bubbleUpLastInserted(this)))
+    else bubbleDown(bubbleUpLastInserted(this))
   }
 
   /**
@@ -148,7 +145,7 @@ abstract class Heap[+A <% Ordered[A]] {
     else insert(that.min).merge(that.left).merge(that.right)
 }
 
-case class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
+class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
   def min: A = m
   def left: Heap[A] = l
   def right: Heap[A] = r
@@ -157,16 +154,7 @@ case class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int)
   def isEmpty: Boolean = false
 }
 
-case class Bubble[A <% Ordered[A]](m: A, b: Heap[A]) extends Heap[A] {
-  def min: A = m
-  def left: Heap[A] = b.left
-  def right: Heap[A] = b.right
-  def size: Int = b.size
-  def height: Int = b.height
-  def isEmpty: Boolean = false
-}
-
-case object Leaf extends Heap[Nothing] {
+object Leaf extends Heap[Nothing] {
   def min: Nothing = throw new NoSuchElementException("Leaf.min")
   def left: Heap[Nothing] = throw new NoSuchElementException("Leaf.left")
   def right: Heap[Nothing] = throw new NoSuchElementException("Leaf.right")
@@ -233,13 +221,10 @@ object Heap {
     if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
     else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
     else Heap(x, l, r)
-
-  /**
-   * Creates a new bubble for given 'x' and 'b' arguments.
-   *
-   * Time - O(1)
-   * Space - O(1)
-   */
-  private[Heap] def bubble[A <% Ordered[A]](x: A, b: Heap[A] = Leaf): Heap[A] = 
-    new Bubble(x, b)
 }
+
+var h = Heap.fromArray(Array(30, 10, 20, 40))
+h = h.remove
+println(h.min)
+
+
