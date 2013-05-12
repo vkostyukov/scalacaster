@@ -222,9 +222,3 @@ object Heap {
     else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
     else Heap(x, l, r)
 }
-
-var h = Heap.fromArray(Array(30, 10, 20, 40))
-h = h.remove
-println(h.min)
-
-
