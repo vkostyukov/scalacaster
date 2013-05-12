@@ -98,13 +98,6 @@ abstract class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def remove: Heap[A] = {
-    def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] = 
-      if (!h.right.isEmpty && (h.right.min < h.left.min) && (h.min > h.right.min))
-        Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
-      else if (!h.left.isEmpty && (h.min > h.left.min))
-        Heap(h.left.min, Heap(h.min, h.left.left, h.left.right), h.right)
-      else h
-
     def bubbleLeftUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
       if (l.isEmpty) Heap(x, l, r)
       else Heap(l.min, Heap(x, l.left, l.right), r)
@@ -125,7 +118,7 @@ abstract class Heap[+A <% Ordered[A]] {
         bubbleRightUp(h.right.min, h.left, bubbleUpLastInserted(h.right))
 
     if (isEmpty) throw new NoSuchElementException("Empty heap.")
-    else bubbleDown(bubbleUpLastInserted(this))
+    else Heap.bubbleDown(bubbleUpLastInserted(this))
   }
 
   /**
@@ -205,7 +198,7 @@ object Heap {
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
-      if (i < a.length) bubbleUp(a(i), loop(2 * i + 1), loop(2 * i + 2))
+      if (i < a.length) bubbleDown(Heap(a(i), loop(2 * i + 1), loop(2 * i + 2)))
       else Heap.empty
 
     loop(0)
@@ -218,7 +211,23 @@ object Heap {
    * Space - O(1)
    */
   private[Heap] def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
-    if (!l.isEmpty && l.min < x) Heap(l.min, Heap(x, l.left, l.right), r)
-    else if (!r.isEmpty && r.min < x) Heap(r.min, l, Heap(x, r.left, r.right))
-    else Heap(x, l, r)
+    if (!l.isEmpty && l.min < x) 
+      Heap(l.min, Heap(x, l.left, l.right), r)
+    else if (!r.isEmpty && r.min < x) 
+      Heap(r.min, l, Heap(x, r.left, r.right))
+    else 
+      Heap(x, l, r)
+
+  /**
+   * Bubbles given heap 'h' down to search path.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  private[Heap] def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] =
+    if (!h.right.isEmpty && (h.right.min < h.left.min) && (h.min > h.right.min))
+      Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
+    else if (!h.left.isEmpty && (h.min > h.left.min)) {
+      Heap(h.left.min, bubbleDown(Heap(h.min, h.left.left, h.left.right)), h.right)
+    else h
 }
