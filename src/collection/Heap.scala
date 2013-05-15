@@ -46,7 +46,7 @@
  *
  */
 
-abstract class Heap[+A <% Ordered[A]] {
+abstract sealed class Heap[+A <% Ordered[A]] {
 
   /**
    * Minumum of this heap.
@@ -85,11 +85,16 @@ abstract class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def insert[B >: A <% Ordered[B]](x: B): Heap[B] =
-    if (isEmpty) Heap(x)
-    else if (left.size < math.pow(2, left.height) - 1) Heap.bubbleUp(min, left.insert(x), right)
-    else if (right.size < math.pow(2, right.height) - 1) Heap.bubbleUp(min, left, right.insert(x))
-    else if (right.height < left.height) Heap.bubbleUp(min, left, right.insert(x))
-    else Heap.bubbleUp(min, left.insert(x), right)
+    if (isEmpty) 
+      Heap(x)
+    else if (left.size < math.pow(2, left.height) - 1) 
+      Heap.bubbleUp(min, left.insert(x), right)
+    else if (right.size < math.pow(2, right.height) - 1) 
+      Heap.bubbleUp(min, left, right.insert(x))
+    else if (right.height < left.height) 
+      Heap.bubbleUp(min, left, right.insert(x))
+    else 
+      Heap.bubbleUp(min, left.insert(x), right)
 
   /**
    * Removes minumum element from this heap.
@@ -98,47 +103,38 @@ abstract class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def remove: Heap[A] = {
-    def bubbleLeftUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
-      if (l.isEmpty) Heap(x, l, r)
-      else Heap(l.min, Heap(x, l.left, l.right), r)
+    def bubbleLeftUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = l match {
+      case Branch(y, lt, rt, _, _) => Heap(y, Heap(x, lt, rt), r)
+      case _ => Heap(x, l, r)
+    }
 
-    def bubbleRightUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
-      if (r.isEmpty) Heap(x, l, r)
-      else Heap(r.min, l, Heap(x, r.left, r.right))
+    def bubbleRightUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = r match {
+      case Branch(y, lt, rt, _, _) => Heap(y, l, Heap(x, lt, rt))
+      case _ => Heap(x, l, r)
+    }
 
-    def bubbleUpLastInserted(h: Heap[A]): Heap[A] = 
-      if (h.left.isEmpty) Heap.empty
-      else if (h.left.size < math.pow(2, h.left.height) - 1) 
-        bubbleLeftUp(h.left.min, bubbleUpLastInserted(h.left), h.right)
-      else if (h.right.size < math.pow(2, h.right.height) - 1)
-        bubbleRightUp(h.right.min, h.left, bubbleUpLastInserted(h.right))
-      else if (h.right.height < h.left.height)
-        bubbleLeftUp(h.left.min, bubbleUpLastInserted(h.left), h.right)
+    def mergeChildren(l: Heap[A], r: Heap[A]): Heap[A] = 
+      if (l.isEmpty && r.isEmpty) 
+        Heap.empty
+      else if (l.size < math.pow(2, l.height) - 1) 
+        bubbleLeftUp(l.min, mergeChildren(l.left, l.right), r)
+      else if (r.size < math.pow(2, r.height) - 1)
+        bubbleRightUp(r.min, l, mergeChildren(r.left, r.right))
+      else if (r.height < l.height)
+        bubbleLeftUp(l.min, mergeChildren(l.left, l.right), r)
       else
-        bubbleRightUp(h.right.min, h.left, bubbleUpLastInserted(h.right))
+        bubbleRightUp(r.min, l, mergeChildren(r.left, r.right))
+
+    def bubbleRootDown(h: Heap[A]): Heap[A] = 
+      if (h.isEmpty) Heap.empty
+      else Heap.bubbleDown(h.min, h.left, h.right)
 
     if (isEmpty) throw new NoSuchElementException("Empty heap.")
-    else Heap.bubbleDown(bubbleUpLastInserted(this))
+    else bubbleRootDown(mergeChildren(left, right))
   }
-
-  /**
-   * Merges this heap with given 'that' heap.
-   *
-   * NOTES: Merge can be done in O(n + m) running time by using followin ideas:
-   *
-   * 1. All values from 'that' heap should be insterted to satisfy shape-property.
-   * 2. After each instertion new values should be bubbled up to satisfy heap property.
-   *
-   * Time - O(n log n)
-   * Space - O(log n)
-   */
-  def merge[B >: A <% Ordered[B]](that: Heap[B]): Heap[B] = 
-    if (that.isEmpty) this
-    else if (this.isEmpty) that
-    else insert(that.min).merge(that.left).merge(that.right)
 }
 
-class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
+case class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
   def min: A = m
   def left: Heap[A] = l
   def right: Heap[A] = r
@@ -147,7 +143,7 @@ class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) exte
   def isEmpty: Boolean = false
 }
 
-object Leaf extends Heap[Nothing] {
+case object Leaf extends Heap[Nothing] {
   def min: Nothing = throw new NoSuchElementException("Leaf.min")
   def left: Heap[Nothing] = throw new NoSuchElementException("Leaf.left")
   def right: Heap[Nothing] = throw new NoSuchElementException("Leaf.right")
@@ -198,11 +194,12 @@ object Heap {
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
-      if (i < a.length) bubbleDown(Heap(a(i), loop(2 * i + 1), loop(2 * i + 2)))
+      if (i < a.length) bubbleDown(a(i), loop(2 * i + 1), loop(2 * i + 2))
       else Heap.empty
 
     loop(0)
   }
+
 
   /**
    * Bubbles given 'l' or 'r' heaps up and build a new a heap.
@@ -210,13 +207,14 @@ object Heap {
    * Time - O(1)
    * Space - O(1)
    */
-  private[Heap] def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = 
-    if (!l.isEmpty && l.min < x) 
-      Heap(l.min, Heap(x, l.left, l.right), r)
-    else if (!r.isEmpty && r.min < x) 
-      Heap(r.min, l, Heap(x, r.left, r.right))
-    else 
+  private[Heap] def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = (l, r) match {
+    case (Branch(y, lt, rt, _, _), _) if (y < x) => 
+      Heap(y, Heap(x, lt, rt), r)
+    case (_, Branch(y, lt, rt, _, _)) if (y < x) => 
+      Heap(y, l, Heap(x, lt, rt))
+    case (_, _) => 
       Heap(x, l, r)
+  }
 
   /**
    * Bubbles given heap 'h' down to search path.
@@ -224,10 +222,12 @@ object Heap {
    * Time - O(log n)
    * Space - O(log n)
    */
-  private[Heap] def bubbleDown[A <% Ordered[A]](h: Heap[A]): Heap[A] =
-    if (!h.right.isEmpty && (h.right.min < h.left.min) && (h.min > h.right.min))
-      Heap(h.right.min, h.left, bubbleDown(Heap(h.min, h.right.left, h.right.right)))
-    else if (!h.left.isEmpty && (h.min > h.left.min)) {
-      Heap(h.left.min, bubbleDown(Heap(h.min, h.left.left, h.left.right)), h.right)
-    else h
+  private[Heap] def bubbleDown[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] =  (l, r) match {
+    case (Branch(z, _, _, _, _), Branch(y, lt, rt, _, _)) if (y < z && x > y) => 
+      Heap(y, l, bubbleDown(x, lt, rt))
+    case (Branch(y, lt, rt, _, _), _) if (x > y) => 
+      Heap(y, bubbleDown(x, lt, rt), r)
+    case (_, _) => 
+      Heap(x, l, r)
+  }
 }
