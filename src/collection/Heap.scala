@@ -202,7 +202,7 @@ object Heap {
 
 
   /**
-   * Bubbles given 'l' or 'r' heaps up and build a new a heap.
+   * Bubbles given heap ('x', 'l', 'r') up.
    *
    * Time - O(1)
    * Space - O(1)
@@ -217,7 +217,7 @@ object Heap {
   }
 
   /**
-   * Bubbles given heap 'h' down to search path.
+   * Bubbles given heap ('x', 'l', 'r') down.
    *
    * Time - O(log n)
    * Space - O(log n)
