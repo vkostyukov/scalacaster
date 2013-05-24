@@ -103,12 +103,12 @@ abstract sealed class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def remove: Heap[A] = {
-    def floatLeftUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = l match {
+    def floatLeft[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = l match {
       case Branch(y, lt, rt, _, _) => Heap(y, Heap(x, lt, rt), r)
       case _ => Heap(x, l, r)
     }
 
-    def floatRightUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = r match {
+    def floatRight[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = r match {
       case Branch(y, lt, rt, _, _) => Heap(y, l, Heap(x, lt, rt))
       case _ => Heap(x, l, r)
     }
@@ -117,13 +117,13 @@ abstract sealed class Heap[+A <% Ordered[A]] {
       if (l.isEmpty && r.isEmpty) 
         Heap.empty
       else if (l.size < math.pow(2, l.height) - 1) 
-        floatLeftUp(l.min, mergeChildren(l.left, l.right), r)
+        floatLeft(l.min, mergeChildren(l.left, l.right), r)
       else if (r.size < math.pow(2, r.height) - 1)
-        floatRightUp(r.min, l, mergeChildren(r.left, r.right))
+        floatRight(r.min, l, mergeChildren(r.left, r.right))
       else if (r.height < l.height)
-        floatLeftUp(l.min, mergeChildren(l.left, l.right), r)
+        floatLeft(l.min, mergeChildren(l.left, l.right), r)
       else
-        floatRightUp(r.min, l, mergeChildren(r.left, r.right))
+        floatRight(r.min, l, mergeChildren(r.left, r.right))
 
     def bubbleRootDown(h: Heap[A]): Heap[A] = 
       if (h.isEmpty) Heap.empty
