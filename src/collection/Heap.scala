@@ -223,8 +223,8 @@ object Heap {
    * Space - O(log n)
    */
   private[Heap] def bubbleDown[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] =  (l, r) match {
-    case (Branch(z, _, _, _, _), Branch(y, lt, rt, _, _)) if (y < z && x > y) => 
-      Heap(y, l, bubbleDown(x, lt, rt))
+    case (Branch(y, _, _, _, _), Branch(z, lt, rt, _, _)) if (z < y && x > z) => 
+      Heap(z, l, bubbleDown(x, lt, rt))
     case (Branch(y, lt, rt, _, _), _) if (x > y) => 
       Heap(y, bubbleDown(x, lt, rt), r)
     case (_, _) => 
