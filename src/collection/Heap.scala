@@ -208,10 +208,10 @@ object Heap {
    * Space - O(1)
    */
   private[Heap] def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = (l, r) match {
-    case (Branch(y, lt, rt, _, _), _) if (y < x) => 
+    case (Branch(y, lt, rt, _, _), _) if (x > y) => 
       Heap(y, Heap(x, lt, rt), r)
-    case (_, Branch(y, lt, rt, _, _)) if (y < x) => 
-      Heap(y, l, Heap(x, lt, rt))
+    case (_, Branch(z, lt, rt, _, _)) if (x > z) => 
+      Heap(z, l, Heap(x, lt, rt))
     case (_, _) => 
       Heap(x, l, r)
   }

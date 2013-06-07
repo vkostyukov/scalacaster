@@ -1,22 +1,19 @@
 Scalacaster
 ===========
 
-This project is a try to agregate knowledge in algorithms and data structures in terms of Scala programming language.
+Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and chalange for researchers. Data structures in a functional setting are much elegant and witty than in an imperative settings. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
+
 
 ##### Simple Collections
 * Linked List `src/collection/List.scala`
 * Queue `src/collection/Queue.scala`
 * Stack `src/collection/Stack.scala`
 * Heap `src/collection/Heap.scala`
-* [ROADMAP] Hashtable `src/collection/Hashtable.scala`
+* HashTrie `src/collection/HashTrie.scala`
 
 ##### Trees
 * Binary Search Tree `src/tree/Tree.scala`
 * Red-Black Tree `src/tree/RBTree.scala`
-
-##### Tries
-* [ROADMAP] Suffix Trie `src/trie/SuffixTrie.scala`
-* [ROADMAP] Radix Trie `src/trie/RadixTrie.scala`
 
 ##### Graphs
 * ... 
