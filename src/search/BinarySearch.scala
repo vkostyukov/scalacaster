@@ -19,15 +19,24 @@
  * They says that binary search on linked lists can give some benefits.
  */
 
-def binarysearch[T](a: Array[T], k: T): Int = {
-  def loop(l: Int, r: Int): Int = 
-    if (l == r) -1
-    else {
-      val p = (l + r) / 2
-      if (a(p) < k) loop(p + 1, r)
-      else if (a(p) > k) loop(l, p)
-      else p
-    }
+def binarysearch[A <% Ordered[A]](list: List[A], key: A): A = {
+  def loop(l: List[A], r: List[A]): A =
+    if (l == r) null.asInstanceOf[A]
+    else test(l, r, middle(l, r))
 
-  loop(0, a.length)
+  def test(l: List[A], r: List[A], m: List[A]): A =
+    if (key < m.head) loop(l, m)
+    else if (key > m.head) loop(m.tail, r)
+    else m.head
+
+  def middle(l: List[A], r: List[A]): List[A] = {
+    def race(t: List[A], h: List[A]): List[A] =
+      if (h != r && h.tail != r)
+        race(t.tail, h.tail.tail)
+      else t
+
+    race(l, l.tail)
+  }
+
+  loop(list, Nil)
 }
