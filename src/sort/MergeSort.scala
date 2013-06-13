@@ -26,7 +26,7 @@ def mergesort[A <% Ordered[A]](list: List[A]): List[A] = {
     case (Nil, Nil) => Nil
     case (ha :: Nil, Nil) => ha :: Nil
     case (Nil, hb :: Nil) => hb :: Nil
-    case (as, bs) => merge(halfAndSort(as), halfAndSort(bs)) 
+    case (as, bs) => merge(halfifyAndSort(as), halfifyAndSort(bs)) 
   }
 
   def halfify(as: List[A]): (List[A], List[A]) = {
@@ -52,7 +52,7 @@ def mergesort[A <% Ordered[A]](list: List[A]): List[A] = {
     loop(as, bs, Nil)
   }
 
-  def halfAndSort(as: List[A]) = sort(halfify(as))
+  def halfifyAndSort(as: List[A]) = sort(halfify(as))
 
-  halfAndSort(list)
+  halfifyAndSort(list)
 }
