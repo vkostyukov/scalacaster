@@ -7,6 +7,16 @@
  * Worst - O(n)
  * Best - O(1)
  * Average - O(n)
+ *
+ * -Notes-
+ * 
+ * There are some pages about using binary search with singly-linked lists:
+ *
+ *     http://www.ccscjournal.willmitchell.info/Vol7-91/No5/Marcin%20Paprzycki.pdf
+ *
+ *                 http://dl.acm.org/citation.cfm?id=101088
+ *
+ * They says that binary search on linked lists can give some benefits.
  */
 
 def binarysearch[T](a: Array[T], k: T): Int = {

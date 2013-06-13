@@ -9,11 +9,11 @@
  * Average - O(n)
  */
 
-def linearsearch[T](a: Array[T], k: T): Int = {
-  def loop(i: Int): Int = 
-    if (i == a.length) -1
-    else if (a(i) == k) i
-    else loop(i + 1)
+def linearsearch[A](list: List[A], key: A): A = {
+  def loop(as: List[A]): List[A] = 
+    if (as.isEmpty) Nil
+    else if (as.head == key) as.head
+    else loop(as.tail)
 
-  loop(0)
+  loop(list)
 }
