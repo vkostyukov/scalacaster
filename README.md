@@ -1,7 +1,7 @@
 Scalacaster
 ===========
 
-Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and chalange for researchers. Data structures in a functional setting are much elegant and witty than in an imperative settings. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
+Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and chalange for researchers. Data structures in a functional setting are much elegant and witty than in an imperative setting. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
 
 
 ##### Simple Collections
@@ -9,7 +9,7 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 * Queue `src/collection/Queue.scala`
 * Stack `src/collection/Stack.scala`
 * Heap `src/collection/Heap.scala`
-* HashTrie `src/collection/HashTrie.scala`
+* Hashtable `src/collection/Hashtable.scala`
 
 ##### Trees
 * Binary Search Tree `src/tree/Tree.scala`
