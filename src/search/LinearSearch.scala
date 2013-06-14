@@ -33,7 +33,7 @@ def linearsearchIter[A](list: List[A], key: A): A = {
   var that: List[A] = list
   var r: A = null.asInstanceOf[A]
 
-  while (!that.isEmpty && r != null) {
+  while (!that.isEmpty && r == null) {
     if (that.head == key) r = that.head
     that = that.tail
   }
