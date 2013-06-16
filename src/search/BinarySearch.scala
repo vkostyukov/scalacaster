@@ -22,6 +22,12 @@
  *
  * that says: "the binary search can give some benefits if comparsion of keys at
  * least 2x more expensive than iterating over list".
+ *
+ * There is also another interesting thing in this implementation. It uses 
+ *
+ *       http://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
+ *
+ * algorithm by R. Floyd for searching the middle of the list in O(n).
  */
 
 def binarysearch[A <% Ordered[A]](list: List[A], key: A): A = {
