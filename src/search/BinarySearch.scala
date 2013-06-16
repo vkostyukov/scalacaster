@@ -10,13 +10,18 @@
  *
  * -Notes-
  * 
- * There are some pages about using binary search with singly-linked lists:
+ * There is a research by Firooz Khosraviyani about binary search on linked lists
+ *
+ *                  http://dl.acm.org/citation.cfm?id=101088
+ *
+ * So, Firoozz suggested that it is possible to use binary search on linked lists
+ * and it is sometimes more efficient than using simple sequential search. There is
+ * also paper 
  *
  *     http://www.ccscjournal.willmitchell.info/Vol7-91/No5/Marcin%20Paprzycki.pdf
  *
- *                 http://dl.acm.org/citation.cfm?id=101088
- *
- * They says that binary search on linked lists can give some benefits.
+ * that says: "the binary search can give some benefits if comparsion of keys at
+ * least 2x more expensive than iterating over list".
  */
 
 def binarysearch[A <% Ordered[A]](list: List[A], key: A): A = {
