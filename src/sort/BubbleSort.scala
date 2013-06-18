@@ -10,6 +10,15 @@
  *
  * -Notes-
  *
+ * This is a functional implementation of standard bubble sort. There are two lists which represent
+ * source and result lists correspondingly. So, the 'bubble' function performs element-wise swaps and
+ * bubbles the greater element to the last position in the source list. This element should be transfered
+ * to the head of result list (which is Nil by default). The interesting thing here is that source list
+ * was reversed and we have to reverse it back to origin order. But, we didn't do that, since we don't 
+ * care about source data which is still unsorted. We only have to keep sorted data in a right order.
+ *
+ * Thus this implementation fits into standard requirements about performance. Also, it works in O(n)
+ * for lists wich are already sorted.
  */
 
 def bubblesort[A <% Ordered[A]](list: List[A]): List[A] = {
