@@ -7,20 +7,23 @@
  * Worst - O(n^2)
  * Best - O(n)
  * Average - O(n^2)
+ *
+ * -Notes-
+ *
  */
 
-def bubblesort(a: Array[Int]): Array[Int] = {
-  var result = a.clone()
-  for (k <- 0 until result.length) {
-    for (i <- 0 until result.length - k - 1) {
-      if (result(i) > result(i + 1)) {
-        val t = result(i)
-        result(i) = result(i + 1)
-        result(i + 1) = t
-      }
-    }
+def bubblesort[A <% Ordered[A]](list: List[A]): List[A] = {
+  def sort(as: List[A], bs: List[A]): List[A] =
+    if (as.isEmpty) bs
+    else bubble(as, Nil, bs)
+
+  def bubble(as: List[A], zs: List[A], bs: List[A]): List[A] = as match {
+    case h1 :: h2 :: t =>
+      if (h1 > h2) bubble(h1 :: t, h2 :: zs, bs)
+      else bubble(h2 :: t, h1 :: zs, bs)
+    case h1 :: Nil => sort(zs, h1 :: bs)
   }
-  result
+
+  sort(list, Nil)
 }
 
-assert { bubblesort(Array(5, 2, 1, 3, 4)).deep == Array(1, 2, 3, 4, 5).deep }
