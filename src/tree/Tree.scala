@@ -331,14 +331,15 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def ancestor[B >: A <% Ordered[B]](x: B, y: B): A = {
-    def loop(a: List[Tree[A]], b: List[Tree[A]]): A = 
-      if (a.tail.isEmpty && b.tail.isEmpty) a.head.value
-      else if (a.tail.isEmpty) a.head.value
-      else if (b.tail.isEmpty) b.head.value
-      else if (a.tail.head == b.tail.head) loop(a.tail, b.tail)
-      else a.head.value
+    def loop(t: Tree[A]): Tree[A] = 
+      if (x < t.value && y < t.value) loop(t.left)
+      else if (x > t.value && y > t.value) loop(t.right)
+      else t
 
-    loop(path(x), path(y))
+    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    else if (!contains(x)) throw new NoSuchElementException("Tree doesn't contain " + x ".")
+    else if (!contains(y)) throw new NoSuchElementException("Tree doesn't contain " + y ".")
+    else loop(this)
   }
 
   /**
