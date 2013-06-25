@@ -6,9 +6,21 @@
 
 object Numbers {
 
-  def fibonacci(n: Int): Array[Int] = 
-    if (n == 1 || n == 0) 1
-    else fibonacci(n - 1) + fibonacci(n - 2)
+  def EPS = 1e-5
+
+  /**
+   * Calculates the SQRT of given value 'y' by Newton's method.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def sqrt(x: Double): Double = {
+    def loop(y: Double): Double = 
+      if (math.abs(y * y - x) > EPS) loop(((x / y) + y) / 2.0)
+      else y
+
+    loop(1.0)
+  }
 
   //def prime()
 
