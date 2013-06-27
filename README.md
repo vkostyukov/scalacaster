@@ -33,7 +33,7 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 
 ##### Math
 * [ROADMAP] Big Arithmetic
-* [ROADMAP] Numbers theory
+*  Numbers theory `src/math/Numbers.scala`
 * [ROADMAP] Matrices
 
 ##### Strings
@@ -41,3 +41,6 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 
 ##### Dynamic Programming
 * Largest Increasing Subsequence `src/dp/LIS.scala`
+
+----
+by [Vladimir Kostyukov](http://vkostyukov.ru), 2013
