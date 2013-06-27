@@ -17,7 +17,7 @@ object Numbers {
   def sqrt(x: Double): Double = {
     def loop(y: Double): Double = 
       if (math.abs(y * y - x) > EPS) loop(((x / y) + y) / 2.0)
-      else y
+      else yf
 
     loop(1.0)
   }
@@ -29,4 +29,5 @@ object Numbers {
   //def exp()
 
   //def lcm()
+
 }
