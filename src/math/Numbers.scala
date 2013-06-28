@@ -11,8 +11,8 @@ object Numbers {
   /**
    * Calculates the SQRT of given value 'y' by Newton's method.
    *
-   * Time - O()
-   * Space - O()
+   * Time - O(n)
+   * Space - O(n)
    */
   def sqrt(x: Double): Double = {
     def loop(y: Double): Double = 
@@ -20,6 +20,30 @@ object Numbers {
       else yf
 
     loop(1.0)
+  }
+
+
+  /**
+   * Prints the `n`th levels of Pascal's Triangle.
+   *
+   * NOTE: I can do it better. The 'loop' operation looks awfull.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def pascalTriangle(n: Int): Unit = {
+    def pascal(i: Int, j: Int): Int =
+      if (j == 0 || j == i) 1
+      else pascal(i - 1, j - 1) + pascal(i - 1, j) 
+
+    def loop(m: Int): Unit =
+      if (m < n) {
+        for (k <- 0 to m) print(pascal(m, k) + " ")
+        print("\n")
+        loop(m + 1)
+      } else print("\n")
+
+    loop(0)
   }
 
   //def prime()

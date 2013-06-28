@@ -9,18 +9,21 @@
  * Average - O(n^2)
  */
 
-def insertionsort(a: Array[Int]): Array[Int] = {
-  var result = a.clone()
-  for (j <- 1 until result.length) {
-    val key = result(j)
-    var i = j - 1
-    while (i >= 0 && result(i) > key) {
-      result(i + 1) = result(i)
-      i = i - 1
-    }
-    result(i + 1) = key
-  }
-  result
+def insertionsort[A <% Ordered](list: List[A]): List[A] = {
+  
 }
 
-assert { insertionsort(Array(5, 2, 1, 3, 4)).deep == Array(1, 2, 3, 4, 5).deep }
+// def insertionsort(a: Array[Int]): Array[Int] = {
+//   var result = a.clone()
+//   for (j <- 1 until result.length) {
+//     val key = result(j)
+//     var i = j - 1
+//     while (i >= 0 && result(i) > key) {
+//       result(i + 1) = result(i)
+//       i = i - 1
+//     }
+//     result(i + 1) = key
+//   }
+//   result
+// }
+
