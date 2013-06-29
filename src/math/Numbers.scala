@@ -46,6 +46,15 @@ object Numbers {
     loop(0)
   }
 
+  /**
+   * Checks whether the given number 'n' is power of two.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def isPowerOfTwo(n: Int): Boolean =
+   (n & (n-1)) == 0
+
   //def prime()
 
   //def gcd()
