@@ -69,6 +69,38 @@ object Numbers {
     else if (n % 2 == 0 && m % 2 == 1) isSnoob(n >> 1, m)
     else isSnoob(n >> 1, m >> 1)
 
+  /**
+   * Swaps even and odd bits in given number 'n'.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def swapEvenAndOdd(n: Int): Int = {
+    def a(m: Int): Int = m match {
+      case 0 => 0
+      case 1 => 2
+      case 2 => 1
+      case 3 => 3
+      case 4 => 8
+      case 5 => 10
+      case 6 => 9
+      case 7 => 11
+      case 8 => 4
+      case 9 => 6
+      case 10 => 5
+      case 11 => 7
+      case 12 => 12
+      case 13 => 14
+      case 14 => 13
+      case 15 => 15
+    }
+
+    a((n >> 28) & 0xf) << 28 | a((n >> 24) & 0xf) << 24 |
+    a((n >> 20) & 0xf) << 20 | a((n >> 16) & 0xf) << 16 |
+    a((n >> 12) & 0xf) << 12 | a((n >> 8) & 0xf) << 8 |
+    a((n >> 4) & 0xf) << 4 | a(n & 0xf)
+  }
+
   //def prime()
 
   //def gcd()
