@@ -32,8 +32,8 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 * Linear Search `src/search/LinearSearch.scala`
 
 ##### Math
-* [ROADMAP] Big Arithmetic
-*  Numbers theory `src/math/Numbers.scala`
+* Numbers theory `src/math/Numbers.scala`
+* Sets `src/math/Sets.scala`
 * [ROADMAP] Matrices
 
 ##### Strings
