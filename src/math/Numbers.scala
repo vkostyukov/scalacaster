@@ -78,6 +78,58 @@ object Numbers {
   def swapEvenAndOdd(n: Int): Int =
     ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1)
 
+  /**
+   * Computes the 'n'th Fibonacci number.
+   *
+   * NOTES: It grows exponentially with golden ratio in base.
+   *        It is extremally slow!
+   *
+   * Time - O(1.6180 ^ n)
+   * Space - O(1.6180 ^ n)
+   */
+  def fibonacci(n: Int): Int =
+    if (n == 0 || n == 1) 1
+    else fibonacci(n - 1) + fibonacci(n - 2)
+
+  /**
+   * Computes the 'n'th Fibonacci number.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def fibonacciIter(n: Int): Int = {
+    def loop(a: Int, b: Int, k: Int): Int =
+      if (k > 0) loop(b, a + b, k - 1)
+      else b
+
+    loop(0, 1, n)
+  }
+
+  /**
+   * Computes the 'n'th Fibonacci number. 
+   *
+   * NOTES: It uses the following idea:
+   *
+   * | 1  1 | ^ n = | F(n+1)  F(n) |
+   * | 1  0 |       | F(n)  F(n-1) |
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def fibonacciMat(n: Int): Int = {
+    def loop(a: Int, b: Int, c: Int, d: Int, n: Int, 
+             e: Int, f: Int, g: Int, h: Int): Int =
+      if (n == 0) f
+      else if (n % 2 != 0)
+        loop(a * a + b * c, a * b + b * d, c * a + d * c, c * b + d * d, n / 2, 
+             e * a + g * b, f * a + h * b, e * c + g * d, f * c + h * d)
+      else 
+        loop(a * a + b * c, a * b + b * d, c * a + d * c, c * b + d * d, n / 2, 
+            e, f, g, h)
+
+    loop(1, 1, 1, 0, n + 1, 1, 0, 0, 1)
+  }
+
   //def prime()
 
   //def gcd()
