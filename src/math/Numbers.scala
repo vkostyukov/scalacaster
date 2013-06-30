@@ -53,7 +53,7 @@ object Numbers {
    * Space - O(1)
    */
   def isPowerOfTwo(n: Int): Boolean =
-   (n & (n-1)) == 0
+   (n & (n - 1)) == 0
 
   /**
    * Checks whether the given numbers 'n' and 'm' contain the same number of
@@ -75,31 +75,8 @@ object Numbers {
    * Time - O(1)
    * Space - O(1)
    */
-  def swapEvenAndOdd(n: Int): Int = {
-    def a(m: Int): Int = m match {
-      case 0 => 0
-      case 1 => 2
-      case 2 => 1
-      case 3 => 3
-      case 4 => 8
-      case 5 => 10
-      case 6 => 9
-      case 7 => 11
-      case 8 => 4
-      case 9 => 6
-      case 10 => 5
-      case 11 => 7
-      case 12 => 12
-      case 13 => 14
-      case 14 => 13
-      case 15 => 15
-    }
-
-    a((n >> 28) & 0xf) << 28 | a((n >> 24) & 0xf) << 24 |
-    a((n >> 20) & 0xf) << 20 | a((n >> 16) & 0xf) << 16 |
-    a((n >> 12) & 0xf) << 12 | a((n >> 8) & 0xf) << 8 |
-    a((n >> 4) & 0xf) << 4 | a(n & 0xf)
-  }
+  def swapEvenAndOdd(n: Int): Int =
+    ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1)
 
   //def prime()
 
