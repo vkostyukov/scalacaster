@@ -78,8 +78,8 @@ object Numbers {
    * Time - O(1)
    * Space - O(1)
    */
-  def isPowerOfTwo(n: Int): Boolean =
-   (n & (n - 1)) == 0
+  def isPowerOfTwo(x: Int): Boolean =
+   (x & (x - 1)) == 0
 
   /**
    * Checks whether the given numbers 'n' and 'm' contain the same number of
@@ -88,21 +88,21 @@ object Numbers {
    * Time - O(1)
    * Space - O(1)
    */
-  def isSnoob(n: Int, m: Int): Boolean = 
-    if (n == 0 && m == 0) true
-    else if (n == 0 || m == 0) false
-    else if (n % 2 == 1 && m % 2 == 0) isSnoob(n, m >> 1)
-    else if (n % 2 == 0 && m % 2 == 1) isSnoob(n >> 1, m)
-    else isSnoob(n >> 1, m >> 1)
+  def isSnoob(x: Int, y: Int): Boolean = 
+    if (x == 0 && y == 0) true
+    else if (x == 0 || y == 0) false
+    else if (x % 2 == 1 && y % 2 == 0) isSnoob(x, y >> 1)
+    else if (x % 2 == 0 && y % 2 == 1) isSnoob(x >> 1, y)
+    else isSnoob(x >> 1, y >> 1)
 
   /**
-   * Swaps even and odd bits in given number 'n'.
+   * Swaps even and odd bits in given number 'x'.
    *
    * Time - O(1)
    * Space - O(1)
    */
-  def swapEvenAndOdd(n: Int): Int =
-    ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1)
+  def swapEvenAndOdd(x: Int): Int =
+    ((x & 0xaaaaaaaa) >> 1) | ((x & 0x55555555) << 1)
 
   /**
    * Computes the 'n'th Fibonacci number.
