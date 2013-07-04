@@ -39,6 +39,17 @@ object Numbers {
   }
 
   /**
+   * Computes the GCD of two given numbers.
+   *
+   * NOTES: It used Euclid's algorithm.
+   *
+   * Time - O(log n)
+   * Sparse - O(log n)
+   */
+  def gcd(x: Int, y: Int): Int = 
+    if (y == 0) x else gcd (y, x % y)
+
+  /**
    * Prints the `n`th levels of Pascal's Triangle.
    *
    * NOTE: I can do it better. The 'loop' operation looks awfull.
