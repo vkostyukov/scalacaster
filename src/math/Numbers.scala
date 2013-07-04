@@ -29,10 +29,9 @@ object Numbers {
    * Space - O(log n)
    */
   def power(x: Double, y: Int): Double = {
-    def sqr(z: Double): Double = z * z
     def loop(xx: Double, yy: Int): Double = 
       if (yy == 0) xx
-      else if (yy % 2 == 0) sqr(loop(xx, yy / 2))
+      else if (yy % 2 == 0) { val s = loop(xx, yy / 2); s * s }
       else loop(xx * x, yy - 1)
 
     loop(1.0, y)
@@ -158,10 +157,6 @@ object Numbers {
 
 
   //def prime()
-
-  //def gcd()
-
-  //def exp()
 
   //def lcm()
 
