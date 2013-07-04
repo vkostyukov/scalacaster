@@ -16,7 +16,7 @@ object Numbers {
    */
   def sqrt(x: Double): Double = {
     def loop(y: Double): Double = 
-      if (math.abs(y * y - x) > EPS) loop(((x / y) + y) / 2.0)
+      if (math.abs(y * y - x) / x > EPS) loop(((x / y) + y) / 2.0)
       else y
 
     loop(1.0)
@@ -27,6 +27,8 @@ object Numbers {
    *
    * NOTES: The implementation is taken from SO discussion here:
    * http://stackoverflow.com/questions/17468478/what-is-a-good-way-of-reusing-function-result-in-scala
+   *
+   * x^2y = (x^y)^2
    *
    * Time - O(log n)
    * Space - O(log n)
@@ -46,10 +48,18 @@ object Numbers {
    * NOTES: It used Euclid's algorithm.
    *
    * Time - O(log n)
-   * Sparse - O(log n)
+   * Space - O(log n)
    */
   def gcd(x: Int, y: Int): Int = 
     if (y == 0) x else gcd (y, x % y)
+
+  /**
+   * Computes the LCM of two given numbers.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def lcm(x: Int, y: Int): Int = math.abs(x * y) / gcd(x y)
 
   /**
    * Prints the `n`th levels of Pascal's Triangle.
@@ -157,10 +167,4 @@ object Numbers {
 
     loop(1, 1, 1, 0, n + 1, 1, 0, 0, 1)
   }
-
-
-  //def prime()
-
-  //def lcm()
-
 }
