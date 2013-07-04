@@ -25,16 +25,19 @@ object Numbers {
   /**
    * Computes the exponentiation of given number 'x' in power of 'y'.
    *
+   * NOTES: The implementation is taken from SO discussion here:
+   * http://stackoverflow.com/questions/17468478/what-is-a-good-way-of-reusing-function-result-in-scala
+   *
    * Time - O(log n)
    * Space - O(log n)
    */
   def power(x: Double, y: Int): Double = {
-    def loop(xx: Double, yy: Int): Double = 
-      if (yy == 0) xx
-      else if (yy % 2 == 0) { val s = loop(xx, yy / 2); s * s }
-      else loop(xx * x, yy - 1)
+    def loop(xx: Double, acc: Double, yy: Int): Double = 
+      if (yy == 0) acc
+      else if (yy % 2 == 0) loop(xx * xx, acc, yy / 2)
+      else loop(xx, acc * xx, yy - 1)
 
-    loop(1.0, y)
+    loop(x, 1.0, y)
   }
 
   /**
