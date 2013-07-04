@@ -7,39 +7,22 @@
 object Sets {
 
   /**
-   * Generates all subsets of given set 's'.
-   *
-   * NOTES: This method uses Scala Style.
+   * Generates all combinations of given set 's' with given length 'n'.
    *
    * Time - O()
    * Space - O()
    */
-  def subsets[A](s: List[A]): List[List[A]] = s match {
-    case x :: xs => val ss = subsets(xs); List(x) :: ss ::: ss.map(x :: _)
-    case Nil => Nil
-  }
+  def combinations[A](s: List[A], k: Int): List[List[A]] = 
+    if (k > s.length) Nil
+    else if (k == 1) s.map(List(_))
+    else combinations(s.tail, k - 1).map(s.head :: _) ::: combinations(s.tail, k)
 
   /**
-   * Generates all combinations of given length 'n'.
+   * Generates all combinations of given set 's'.
    *
    * Time - O()
    * Space - O()
    */
-  def combinations[A](s: List[A], n: Int): List[List[A]] = {
-    def mix(a: A, as: List[List[A]]): List[List[A]] = 
-      as.map(a :: _)
-
-    if (n == 0) Nil
-    else if (n == 1) s.map(List(_))
-    else mix(s.head, combinations(s.tail, n - 1))
-  }
-
-  /**
-   * Generates all permutations of given set 's'.
-   *
-   * Time - O()
-   * Space - O()
-   */
-  def permutations[A](s: List[A]): List[List[A]] = 
-    combinations(s, s.length)
+   def combinations[A](s: List[A]): List[List[A]] = 
+     (2 to s.length).foldLeft(combinations(s, 1))((a, i) => combinations(s, i) ::: a)
 }
