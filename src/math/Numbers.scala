@@ -22,6 +22,21 @@ object Numbers {
     loop(1.0)
   }
 
+  /**
+   * Computes the exponentiation of given number 'x' in power of 'y'.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def power(x: Double, y: Int): Double = {
+    def sqr(z: Double): Double = z * z
+    def loop(xx: Double, yy: Int): Double = 
+      if (yy == 0) xx
+      else if (yy % 2 == 0) sqr(loop(xx, yy / 2))
+      else loop(xx * x, yy - 1)
+
+    loop(1.0, y)
+  }
 
   /**
    * Prints the `n`th levels of Pascal's Triangle.
