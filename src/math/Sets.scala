@@ -34,9 +34,9 @@ object Sets {
   def variations[A](s: List[A], k: Int): List[List[A]] = {
     def mixmany(x: A, ss: List[List[A]]): List[List[A]] = 
       if (ss.isEmpty) Nil
-      else foldOne(x, ss.head) ::: mixmany(x, ss.tail)
+      else foldone(x, ss.head) ::: mixmany(x, ss.tail)
 
-    def foldOne(x: A, ss: List[A]): List[List[A]] = 
+    def foldone(x: A, ss: List[A]): List[List[A]] = 
       (1 to ss.length).foldLeft(List(x :: ss))((a, i) => mixone(i, x, ss) :: a)
 
     def mixone(i: Int, x: A, ss: List[A]): List[A] = 

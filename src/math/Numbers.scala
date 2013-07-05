@@ -59,7 +59,7 @@ object Numbers {
    * Time - O(log n)
    * Space - O(log n)
    */
-  def lcm(x: Int, y: Int): Int = math.abs(x * y) / gcd(x y)
+  def lcm(x: Int, y: Int): Int = math.abs(x * y) / gcd(x, y)
 
   /**
    * Prints the `n`th levels of Pascal's Triangle.
@@ -167,4 +167,16 @@ object Numbers {
 
     loop(1, 1, 1, 0, n + 1, 1, 0, 0, 1)
   }
+
+  /**
+   * Calculates the number of ways of changing 'x' money with 'c' coins.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def change(x: Int, c: List[Int]): Int = 
+    if (x < 0 || c.isEmpty) 0
+    else if (x == 0) 1
+    else change(x, c.tail) + change(x - c.head, c)
 }
+
