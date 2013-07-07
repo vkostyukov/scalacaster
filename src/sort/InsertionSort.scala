@@ -9,21 +9,16 @@
  * Average - O(n^2)
  */
 
-def insertionsort[A <% Ordered](list: List[A]): List[A] = {
-  
+def insertionsort[A <% Ordered[A]](list: List[A]): List[A] = {
+  def sort(as: List[A], bs: List[A]): List[A] = as match {
+    case h :: t => sort(t, insert(h, bs))
+    case Nil => bs
+  }
+
+  def insert(a: A, as: List[A]): List[A] = as match {
+    case h :: t if (a > h) => h :: insert(a, t)
+    case _ => a :: as
+  }
+
+  sort(list, Nil)
 }
-
-// def insertionsort(a: Array[Int]): Array[Int] = {
-//   var result = a.clone()
-//   for (j <- 1 until result.length) {
-//     val key = result(j)
-//     var i = j - 1
-//     while (i >= 0 && result(i) > key) {
-//       result(i + 1) = result(i)
-//       i = i - 1
-//     }
-//     result(i + 1) = key
-//   }
-//   result
-// }
-
