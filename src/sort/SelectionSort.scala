@@ -9,8 +9,14 @@
  * Average - O(n^2)
  */
 
-def insertionsort(a: Array[Int]): Array[Int] = {
-  null
-}
+def selectionsort[A <% Ordered[A]](list: List[A]): List[A] = {
+  def sort(as: List[A], bs: List[A]): List[A] = as match {
+    case h :: t => select(as.max, as, bs)
+    case Nil => bs
+  }
 
-// assert { mergesort(Array(5, 2, 1, 3, 4)).deep == Array(1, 2, 3, 4, 5).deep }
+  def select(m: A, as: List[A], bs: List[A]): List[A] = 
+    sort(as.filter(_ != m), m :: bs)
+
+  sort(list, Nil)
+}
