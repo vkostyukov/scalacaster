@@ -15,37 +15,43 @@ def nth(a: Array[Int], n: Int): Int = nth(a.clone(), 0, a.length, n)
 
 def nth(a: Array[Int], low: Int, hight: Int, n: Int): Int = {
   if (low == hight - 1) {
-    return low
+    return a(low)
   }
 
-  var p = (hight - low) / 2
-  p = partition(a, low, hight, p)
+  var p = (low + hight) / 2
+  val q = partition(a, low, hight, p)
 
-  var k = p - low
+  var k = q - low
 
   if (n < k) {
-    return nth(a, low, p, n)
+    return nth(a, low, q, n)
   } else if (n > k) {
-    return nth(a, p, hight, n - k - 1)
+    return nth(a, q + 1, hight, n - k - 1)
   }
 
-  return p
+  return a(q)
 }
 
 def partition(a: Array[Int], low: Int, hight: Int, p: Int): Int = {
+  println("p = " + p)
+  println(a.deep)
+
   val pivot = a(p)
   swap(a, p, hight - 1)
 
   var i = low
-  for (j  <- low until hight) {
-    //println(j)
-    if (a(i) <= pivot) {
+  for (j  <- low until hight - 1) {
+    if (a(j) < pivot) {
       swap(a, i, j)
       i = i + 1
     }
   }
 
-  //swap(a, hight - 1, i - 1)
+  swap(a, hight - 1, i)
+
+  println("i = " + i + ", left = " + low + ", right = " + hight)
+  println(a.deep)
+  println("---------")
   return i
 }
 

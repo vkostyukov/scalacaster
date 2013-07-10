@@ -9,42 +9,26 @@
  * Average - O(n log n)
  */
 
-def swap(a: Array[Int], i: Int, j: Int) = {
-  val t = a(i)
-  a(i) = a(j)
-  a(j) = t
-}
-
-def partition(a: Array[Int], left: Int, right: Int): Int = {
-  val pivot = a((left + right) / 2)
-  var i = left - 1
-  var j = right + 1
-
-  while (i < j) {
-
-    i += 1
-    while (a(i) < pivot) i += 1
-    j -= 1
-    while (a(j) > pivot) j -= 1
-
-    if (i < j) {
-      swap(a, i, j)
-    }
+def quicksort[A <% Ordered[A]](list: List[A]): List[A] = {
+  def sort(t: (List[A], A, List[A])): List[A] = t match {
+    case (Nil, p, Nil) => List(p)
+    case (Nil, p, g) => p :: partitionAndSort(g)
+    case (l, p, Nil) => partitionAndSort(l) :+ p
+    case (l, p, g) =>  partitionAndSort(l) ::: (p :: partitionAndSort(g))
   }
 
-  return j
-}
+  def partition(as: List[A]): (List[A], A, List[A]) = {
+    def loop(p: A, as: List[A], l: List[A], g: List[A]): (List[A], A, List[A]) = 
+      as match {
+        case h :: t => if (h < p) loop(p, t, h :: l, g) else loop(p, t, l, h :: g)
+        case Nil => (l, p, g)
+      }
 
-def quicksort(a: Array[Int]): Array[Int] = quicksort(a.clone(), 0, a.length - 1)
-
-def quicksort(a: Array[Int], left: Int, right: Int): Array[Int] = {
-  if (left < right) {
-    val pivot = partition(a, left, right)
-    quicksort(a, left, pivot)
-    quicksort(a, pivot + 1, right)
+    loop(as.head, as.tail, Nil, Nil)
   }
 
-  return a
-}
+  def partitionAndSort(as: List[A]): List[A] = sort(partition(as))
 
-assert { quicksort(Array(5, 2, 1, 3, 4)).deep == Array(1, 2, 3, 4, 5).deep }
+  if (list.isEmpty) Nil
+  else partitionAndSort(list)
+}
