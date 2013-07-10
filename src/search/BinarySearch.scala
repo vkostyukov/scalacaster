@@ -31,13 +31,13 @@
  */
 
 def binarysearch[A <% Ordered[A]](list: List[A], key: A): A = {
-  def loop(l: List[A], r: List[A]): A =
+  def search(l: List[A], r: List[A]): A =
     if (l == r) null.asInstanceOf[A]
     else test(l, r, middle(l, r))
 
   def test(l: List[A], r: List[A], m: List[A]): A =
-    if (key < m.head) loop(l, m)
-    else if (key > m.head) loop(m.tail, r)
+    if (key < m.head) search(l, m)
+    else if (key > m.head) search(m.tail, r)
     else m.head
 
   def middle(l: List[A], r: List[A]): List[A] = {
@@ -49,5 +49,5 @@ def binarysearch[A <% Ordered[A]](list: List[A], key: A): A = {
     race(l, l.tail)
   }
 
-  loop(list, Nil)
+  search(list, Nil)
 }

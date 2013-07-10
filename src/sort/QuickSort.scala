@@ -12,8 +12,6 @@
 def quicksort[A <% Ordered[A]](list: List[A]): List[A] = {
   def sort(t: (List[A], A, List[A])): List[A] = t match {
     case (Nil, p, Nil) => List(p)
-    case (Nil, p, g) => p :: partitionAndSort(g)
-    case (l, p, Nil) => partitionAndSort(l) :+ p
     case (l, p, g) =>  partitionAndSort(l) ::: (p :: partitionAndSort(g))
   }
 
@@ -27,8 +25,9 @@ def quicksort[A <% Ordered[A]](list: List[A]): List[A] = {
     loop(as.head, as.tail, Nil, Nil)
   }
 
-  def partitionAndSort(as: List[A]): List[A] = sort(partition(as))
+  def partitionAndSort(as: List[A]): List[A] = 
+    if (as.isEmpty) Nil
+    else sort(partition(as))
 
-  if (list.isEmpty) Nil
   else partitionAndSort(list)
 }

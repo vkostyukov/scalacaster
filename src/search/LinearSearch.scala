@@ -10,10 +10,10 @@
  */
 
 def linearsearch[A](list: List[A], key: A): A = {
-  def loop(as: List[A]): A = 
+  def search(as: List[A]): A = 
     if (as.isEmpty) null.asInstanceOf[A]
     else if (as.head == key) as.head
-    else loop(as.tail)
+    else search(as.tail)
 
-  loop(list)
+  search(list)
 }

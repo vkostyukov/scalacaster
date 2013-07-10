@@ -7,60 +7,35 @@
  * Worst - O(n^2)
  * Best - O(1)
  * Average - O(n)
- *
- * Doesn't work properly!!!
  */
 
-def nth(a: Array[Int], n: Int): Int = nth(a.clone(), 0, a.length, n)
-
-def nth(a: Array[Int], low: Int, hight: Int, n: Int): Int = {
-  if (low == hight - 1) {
-    return a(low)
+def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): A = { // quickselect
+  def search(t: (List[A], A, List[A]), m: Int): A = t match {
+    case (Nil, p, Nil) => p
+    case (l, p, g) => select(l, p, g, l.length, m)
   }
 
-  var p = (low + hight) / 2
-  val q = partition(a, low, hight, p)
+  def select(l: List[A], p: A, g: List[A], q: Int, m: Int): A = 
+    if (m < q) partitionAndSearch(l, m)
+    else if (m > q) partitionAndSearch(g, m - q - 1)
+    else p
 
-  var k = q - low
+  /**
+   * The same as in quicksort.
+   */
+  def partition(as: List[A]): (List[A], A, List[A]) = {
+    def loop(p: A, as: List[A], l: List[A], g: List[A]): (List[A], A, List[A]) = 
+      as match {
+        case h :: t => if (h < p) loop(p, t, h :: l, g) else loop(p, t, l, h :: g)
+        case Nil => (l, p, g)
+      }
 
-  if (n < k) {
-    return nth(a, low, q, n)
-  } else if (n > k) {
-    return nth(a, q + 1, hight, n - k - 1)
+    loop(as.head, as.tail, Nil, Nil)
   }
 
-  return a(q)
+  def partitionAndSearch(as: List[A], m: Int): A = 
+    if (as.isEmpty) null.asInstanceOf[A]
+    else search(partition(as), m)
+
+  partitionAndSearch(list, n)
 }
-
-def partition(a: Array[Int], low: Int, hight: Int, p: Int): Int = {
-  println("p = " + p)
-  println(a.deep)
-
-  val pivot = a(p)
-  swap(a, p, hight - 1)
-
-  var i = low
-  for (j  <- low until hight - 1) {
-    if (a(j) < pivot) {
-      swap(a, i, j)
-      i = i + 1
-    }
-  }
-
-  swap(a, hight - 1, i)
-
-  println("i = " + i + ", left = " + low + ", right = " + hight)
-  println(a.deep)
-  println("---------")
-  return i
-}
-
-def swap(a: Array[Int], i: Int, j: Int) = {
-  val t = a(i)
-  a(i) = a(j)
-  a(j) = t
-}
-
-println(nth(Array(6, 7, 5, 8, 9), 1))
-
-//assert { nth(Array(5, 2, 1, 3, 4), 1) == 2 }
