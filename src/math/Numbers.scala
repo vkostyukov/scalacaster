@@ -244,6 +244,14 @@ object Numbers {
   def rem(x: Int, y: Int): Int = sub(x, mul(y, div(x, y)))
 
   /**
+   * Returns the maximum of two numbers.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def max(x: Int, y: Int) = x - (((x - y) >> 31) & 0x1) * (x - y)
+
+  /**
    * Generates first 'n' prime numbers using Sieve of Erastosthenes.
    *
    * Time - O(n log log n)
