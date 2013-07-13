@@ -178,5 +178,69 @@ object Numbers {
     if (x < 0 || c.isEmpty) 0
     else if (x == 0) 1
     else change(x, c.tail) + change(x - c.head, c)
+
+
+  /**
+   * Negates 'x'.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def neg(x: Int): Int = {
+    def loop(xx: Int, yy: Int, zz: Int): Int = 
+      if (xx == 0) yy
+      else loop(xx + zz, yy + zz, zz)
+
+    loop(x, 0, if (x < 0) 1 else -1)
+  }
+
+  /**
+   * Multiplies 'x' by 'y'.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def mul(x: Int, y: Int): Int = {
+    def loop(xx: Int, yy: Int): Int = 
+      if (yy == math.abs(y)) xx
+      else loop(xx + x, yy + 1)
+
+    if (x < 0 && y < 0) loop(0, 0)
+    else if (x < 0 || y < 0) neg(loop(0, 0))
+    else loop(0, 0)
+  }
+
+  /**
+   * Subtracts 'y' from 'x'.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def sub(x: Int, y: Int): Int = x + neg(y)
+
+  /**
+   * Divides 'x' by 'y'.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def div(x: Int, y: Int): Int = {
+    def loop(xx: Int, yy: Int, zz: Int): Int = 
+      if (xx < math.abs(yy)) zz
+      else loop(xx + yy, yy, zz + 1)
+
+    if (y == 0) throw new ArithmeticException("Division by zero.")
+    else if (x < 0 && y < 0) loop(math.abs(x), neg(math.abs(y)), 0)
+    else if (x < 0 || y < 0) neg(loop(math.abs(x), neg(math.abs(y)), 0))
+    else loop(math.abs(x), neg(math.abs(y)), 0)
+  }
+
+  /**
+   * Finds the remainer of division 'x' by 'y'.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def rem(x: Int, y: Int): Int = sub(x, mul(y, div(x, y)))
 }
 
