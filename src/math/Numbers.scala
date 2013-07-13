@@ -242,5 +242,33 @@ object Numbers {
    * Space - O()
    */
   def rem(x: Int, y: Int): Int = sub(x, mul(y, div(x, y)))
+
+  /**
+   * Generates first 'n' prime numbers using Sieve of Erastosthenes.
+   *
+   * Time - O(n log log n)
+   * Space - O(n)
+   */
+  def sievePrimes(n: Int): List[Int] = {
+    def loop(s: Stream[Int]): Stream[Int] = 
+      s.head #:: loop(s.tail.filter(_ % s.head != 0))
+
+    loop(Stream.from(2)).take(n).toList
+  }
+
+  /**
+   * Performs the factorization of given number 'n'.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def primeFactors(n: Int): List[Int] = {
+    def loop(n: Int, m: Int, as: List[Int]): List[Int] = 
+      if (m > n) as
+      else if (n % m == 0) loop(n / m, m, m :: as)
+      else loop(n, m + 1, as)
+
+    loop(n, 2, Nil)
+  }
 }
 
