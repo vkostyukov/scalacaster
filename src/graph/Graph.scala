@@ -28,11 +28,24 @@ class Graph[E, N](var value: N = null.asInstanceOf[N]) {
   var inEdges: List[Edge[E, N]] = Nil
   var outEdges: List[Edge[E, N]] = Nil
 
+  /**
+   * All successors of this graph.
+   *
+   * Time - O(n)
+   * Space - O(1)
+   */
   def succs: List[Graph[E, N]] = outEdges.map(_.target)
+
+  /**
+   * All predecessors of this graph.
+   *
+   * Time - O(n)
+   * Space - O(1)
+   */
   def preds: List[Graph[E, N]] = inEdges.map(_.source)
 
   /**
-   * Connects this graph with given 'g' graph via 'e' edge.
+   * Adds new connection to this graph.
    *
    * Time - O()
    * Space - O()
@@ -54,26 +67,78 @@ class Graph[E, N](var value: N = null.asInstanceOf[N]) {
     (fromGraph, toGraph)
   }
 
+  /**
+   * Hops to the given node 'n' if its exist in this graph.
+   *
+   * Time - O(n)
+   * Space - O(1)
+   */
   def hop(n: N): Option[Graph[E, N]] = graphsByDepth.find(_.value == n)
 
+  /**
+   * Returns all nodes of this graph arranged by DFS algorithm.
+   *
+   * Time - O()
+   * Space - O()
+   */
   def nodesByDepth: List[N] = graphsByDepth.map(_.value)
+
+  /**
+   * Returns all nodes of this graph arranged by BFS algorithm.
+   *
+   * Time - O()
+   * Space - O()
+   */
   def nodesByBreadth: List[N] = graphsByBreadth.map(_.value)
 
+  /**
+   * Returns all graphs that are connected to this graph arranged by DFS algorithm.
+   *
+   * Time - O()
+   * Space - O()
+   */
   def graphsByDepth: List[Graph[E, N]] = {
     def loop(g: Graph[E, N], s: Set[Graph[E, N]]): Set[Graph[E, N]] = 
-      if (!s(g)) g.succs.foldLeft(s + g)((acc, gg) => loop(gg, acc))
-      else s
+      if (!s(g)) {
+        val ss = g.succs.foldLeft(s + g)((acc, gg) => loop(gg, acc))
+        g.preds.foldLeft(ss)((acc, gg) => loop(gg, acc))
+      } else s
 
     loop(this, Set()).toList
   }
 
+  /**
+   * Returns all graphs that are connected to this graph arranged by BFS algorithm.
+   *
+   * Time - O()
+   * Space - O()
+   */
   def graphsByBreadth: List[Graph[E, N]] = {
     def loop(q: Queue[Graph[E, N]], s: Set[Graph[E, N]]): Set[Graph[E, N]] = 
-      if (!q.isEmpty && !s(q.head)) 
-        loop(q.head.succs.foldLeft(q.tail)((acc, gg) => acc :+ gg), s + q.head)
-      else s
+      if (!q.isEmpty && !s(q.head)) {
+        val qq = q.head.succs.foldLeft(q.tail)((acc, gg) => acc :+ gg)
+        loop(q.head.preds.foldLeft(qq)((acc, gg) => acc :+ gg), s + q.head)
+      } else s
 
     loop(Queue(this), Set()).toList
+  }
+
+  /**
+   * Returns the number of nodes connected with this graph.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def nodes: Int = graphsByDepth.size
+
+  /**
+   * Returns the number of edges in this graph.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def edges: Int = {
+
   }
 
   override def equals(o: Any): Boolean = o match {
@@ -84,11 +149,23 @@ class Graph[E, N](var value: N = null.asInstanceOf[N]) {
   override def toString: String = "Graph(" + value + ")"
 }
 
+class WeightedGraph[N](n: N) extends Graph[Double, N](n) {
+
+  /**
+   * Searches for the shortest path in graph.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def dijkstra(from: N, to: N): List[N] = {
+    Nil
+  }
+}
+
 object Graph {
   def apply[E, N](tuples: (N, E, N)*): Graph[E, N] = {
     var g: Graph[E, N] = Graph.empty
     for ((from, via, to) <- tuples) {
-      println(from + "->" + to)
       g.connect(from, via, to)
     }
     g
@@ -100,9 +177,8 @@ object Graph {
 }
 
 // var g: Graph[Int, String] = Graph(
-//       ("A", 20, "B"), ("B", 30, "C"), 
-//       ("C", 40, "D"), ("D", 50, "A"), 
-//       ("A", 100, "C"), ("D", 200, "B"))
+//        ("A", 20, "B"), ("B", 30, "C"), 
+//        ("C", 40, "D"), ("D", 50, "A"), 
+//        ("A", 100, "C"), ("D", 200, "B"))
 
-// println(g.nodesByDepth)
 // println(g.nodesByBreadth)
