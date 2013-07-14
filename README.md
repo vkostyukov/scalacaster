@@ -16,7 +16,7 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 * Red-Black Tree `src/tree/RBTree.scala`
 
 ##### Graphs
-* ... 
+* Graphs `src/graph/Graph.scala`
 
 ##### Sorting Algorithms
 * Quick Sort `src/sort/QuickSort.scala`
