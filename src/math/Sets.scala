@@ -26,7 +26,7 @@ object Sets {
     else combinations(s.tail, k - 1).map(_ + s.head) ++ combinations(s.tail, k)
 
   /**
-   * Generates variations of given set 's' with given length 'k'.
+   * Generates variations of given list 'l' with given length 'k'.
    * 
    * NOTES: To count number of variations the following formula can be used:
    * 
@@ -52,7 +52,7 @@ object Sets {
   }
 
   /**
-   * Generates all permutations of given set 's'.
+   * Generates all permutations of given list 'l'.
    *
    * NOTES: To count number of permutations the following formula can be used:
    *
@@ -79,21 +79,13 @@ object Sets {
   def subsets[A](s: Set[A]): Set[Set[A]] =
     (2 to s.size).foldLeft(combinations(s, 1))((a, i) => combinations(s, i) ++ a)
 
-   /**
-    * Shuffles given set 's'.
-    *
-    * Time - O(n^2)
-    * Space - O(n^2)
-    */
-  // def shuffle[A](s: List[A]): List[A] = {
-  //   val r = new scala.util.Random()
-  //   def dropIndex(ss: List[A], n: Int) = {
-  //     val (l, r) = ss.splitAt(n); l ::: r.tail
-  //   }
-  //   def loop(ss: List[A], n: Int, rr: List[A]): List[A] = 
-  //     if (ss.isEmpty) rr
-  //     else { val i = r.nextInt(n - 1); loop(dropIndex(ss.tail, i), n - 1, ss.tail(i) :: rr) }
-
-  //   loop(s, s.length, Nil)
-  // }
+  /**
+   * Shuffles given list 'l'.
+   *
+   * Time - O(n^2)
+   * Space - O(n^2)
+   */
+   def shuffle[A](l: List[A]): List[A] = {
+     Nil
+   }
 }

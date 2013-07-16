@@ -244,6 +244,16 @@ object Numbers {
   def rem(x: Int, y: Int): Int = sub(x, mul(y, div(x, y)))
 
   /**
+   * Sums given numbers without '+' or any other arithmetic operation.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def sum(x: Int, y: Int): Int =
+    if (y == 0) x
+    else sum(x ^ y, (x & y) << 1)
+
+  /**
    * Returns the maximum of two numbers.
    *
    * Time - O(1)
