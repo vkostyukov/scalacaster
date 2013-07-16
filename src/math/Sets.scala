@@ -82,10 +82,15 @@ object Sets {
   /**
    * Shuffles given list 'l'.
    *
-   * Time - O(n^2)
-   * Space - O(n^2)
+   * Time - O(n)
+   * Space - O(n)
    */
-   def shuffle[A](l: List[A]): List[A] = {
-     Nil
-   }
+  def shuffle[A](l: List[A]): List[A] = {
+    val random = new scala.util.Random
+    def insert(x: A, ll: List[A], n: Int): List[A] = 
+      ll.slice(0, n) ::: List(x) ::: ll.slice(n, ll.length)
+
+    if (l.isEmpty) Nil
+    else insert(l.head, shuffle(l.tail), random.nextInt(l.tail.length + 1))
+  }
 }
