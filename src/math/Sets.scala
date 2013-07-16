@@ -35,20 +35,20 @@ object Sets {
    * Time - O(V_k,n)
    * Space - O(V_k,n)
    */
-  def variations[A](s: List[A], k: Int): List[List[A]] = {
-    def mixmany(x: A, ss: List[List[A]]): List[List[A]] = 
-      if (ss.isEmpty) Nil
-      else foldone(x, ss.head) ::: mixmany(x, ss.tail)
+  def variations[A](l: List[A], k: Int): List[List[A]] = {
+    def mixmany(x: A, ll: List[List[A]]): List[List[A]] = 
+      if (ll.isEmpty) Nil
+      else foldone(x, ll.head) ::: mixmany(x, ll.tail)
 
-    def foldone(x: A, ss: List[A]): List[List[A]] = 
-      (1 to ss.length).foldLeft(List(x :: ss))((a, i) => mixone(i, x, ss) :: a)
+    def foldone(x: A, ll: List[A]): List[List[A]] = 
+      (1 to ll.length).foldLeft(List(x :: ll))((a, i) => mixone(i, x, ll) :: a)
 
-    def mixone(i: Int, x: A, ss: List[A]): List[A] = 
-      ss.slice(0, i) ::: List(x) ::: ss.slice(i, ss.length)
+    def mixone(i: Int, x: A, ll: List[A]): List[A] = 
+      ll.slice(0, i) ::: List(x) ::: ll.slice(i, ll.length)
 
-    if (k > s.length) Nil
-    else if (k == 1) s.map(List(_))
-    else mixmany(s.head, variations(s.tail, k - 1)) ::: variations(s.tail, k)
+    if (k > l.length) Nil
+    else if (k == 1) l.map(List(_))
+    else mixmany(l.head, variations(l.tail, k - 1)) ::: variations(l.tail, k)
   }
 
   /**
@@ -61,8 +61,8 @@ object Sets {
    * Time - O(P_n)
    * Space - O(P_n)
    */
-  def permutations[A](s: List[A]): List[List[A]] = 
-    (2 to s.length).foldLeft(variations(s, 1))((a, i) => variations(s, i) ::: a)
+  def permutations[A](l: List[A]): List[List[A]] = 
+    (2 to l.length).foldLeft(variations(l, 1))((a, i) => variations(l, i) ::: a)
 
 
   /**
