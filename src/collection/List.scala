@@ -121,8 +121,8 @@ abstract class List[+A] {
    * Time - O(n)
    * Space - O(n)
    */
-  def map[B >: A](f: (A) => B): List[B] = 
-    if (isEmpty) this
+  def map[B](f: (A) => B): List[B] = 
+    if (isEmpty) Nill
     else tail.map(f).prepend(f(head))
 
   /**
@@ -164,6 +164,17 @@ abstract class List[+A] {
     else ordering.max(head, tail.max(ordering))
 
   /**
+   * Slices this list.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def slice(from: Int, until: Int): List[A] = 
+    if (isEmpty || until == 0) Nill
+    else if (from == 0) tail.slice(from, until - 1).prepend(head)
+    else tail.slice(from - 1, until - 1)
+
+  /**
    * Reverses this list.
    *
    * Time - O(n)
@@ -176,6 +187,60 @@ abstract class List[+A] {
 
     loop(this, Nill)
   }
+
+  /**
+   * Shuffles this list.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def shuffle: List[A] = {
+    val random = new scala.util.Random
+    def insert(x: A, ll: List[A], n: Int): List[A] = 
+      ll.slice(0, n).concat(ll.slice(n, ll.length).prepend(x))
+
+    if (isEmpty) Nill
+    else insert(head, tail.shuffle, random.nextInt(tail.length + 1))
+  }
+
+  /**
+   * Generates variations of this list with given length 'k'.
+   * 
+   * NOTES: To count number of variations the following formula can be used:
+   * 
+   * V_k,n = n!/(n - k)!
+   *
+   * Time - O(V_k,n)
+   * Space - O(V_k,n)
+   */
+  def variations(k: Int): List[List[A]] = {
+    def mixmany(x: A, ll: List[List[A]]): List[List[A]] =
+      if (ll.isEmpty) Nill
+      else foldone(x, ll.head).concat(mixmany(x, ll.tail))
+
+    def foldone(x: A, ll: List[A]): List[List[A]] = 
+      (1 to ll.length).foldLeft(List(ll.prepend(x)))((a, i) => a.prepend(mixone(i, x, ll)))
+
+    def mixone(i: Int, x: A, ll: List[A]): List[A] = 
+      ll.slice(0, i).concat(ll.slice(i, ll.length).prepend(x))
+
+    if (isEmpty || k > length) Nill
+    else if (k == 1) map(List(_))
+    else mixmany(head, tail.variations(k - 1)).concat(tail.variations(k))
+  }
+
+  /**
+   * Generates all permutations of this list.
+   *
+   * NOTES: To count number of permutations the following formula can be used:
+   *
+   * P_n = V_n,n = n!
+   *
+   * Time - O(P_n)
+   * Space - O(P_n)
+   */
+  def permutations: List[List[A]] = 
+    (2 to length).foldLeft(variations(1))((a, i) => variations(i).concat(a))
 
   /**
    * Calculates the length of this list.
@@ -247,3 +312,6 @@ object List {
     r
   }
 }
+
+var l = List(1, 2, 3)
+println(l.variations(2))
