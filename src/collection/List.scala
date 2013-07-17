@@ -312,6 +312,3 @@ object List {
     r
   }
 }
-
-var l = List(1, 2, 3)
-println(l.variations(2))
