@@ -175,8 +175,8 @@ abstract class Tree[+A <% Ordered[A]] {
    * Time - O(n log n)
    * Space - O(log n)
    */
-  def merge[B >: A Ordered[B]](t: Tree[B]): Tree[B] = {
-    def loop(s: Tree[A], d: Tree[A]): Tree[A] = 
+  def merge[B >: A <% Ordered[B]](t: Tree[B]): Tree[B] = {
+    def loop(s: Tree[B], d: Tree[B]): Tree[B] = 
       if (s.isEmpty) d
       else loop(s.right, loop(s.left, d.add(s.value)))
 
@@ -331,14 +331,14 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def ancestor[B >: A <% Ordered[B]](x: B, y: B): A = {
-    def loop(t: Tree[A]): Tree[A] = 
+    def loop(t: Tree[A]): A = 
       if (x < t.value && y < t.value) loop(t.left)
       else if (x > t.value && y > t.value) loop(t.right)
-      else t
+      else t.value
 
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
-    else if (!contains(x)) throw new NoSuchElementException("Tree doesn't contain " + x ".")
-    else if (!contains(y)) throw new NoSuchElementException("Tree doesn't contain " + y ".")
+    else if (!contains(x)) throw new NoSuchElementException("Tree doesn't contain " + x + ".")
+    else if (!contains(y)) throw new NoSuchElementException("Tree doesn't contain " + y + ".")
     else loop(this)
   }
 
@@ -467,6 +467,29 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
+   * Searches the longest possible leaf-to-leaf path in this tree.
+   *
+   * Time - O(log^2 n)
+   * Space - O(log n)
+   */
+  def diameter: List[A] = {
+    def build(t: Tree[A], p: List[A]): List[A] = 
+      if (t.isEmpty) p
+      else if (t.left.height > t.right.height) build(t.left, t.value :: p)
+      else build(t.right, t.value :: p)
+
+    if (isEmpty) Nil
+    else {
+      val ld = left.diameter
+      val rd = right.diameter
+      val md = if (ld.length > rd.length) ld else rd
+      if (1 + left.height + right.height > md.length)
+        build(right, value :: build(left, Nil).reverse).reverse
+      else md
+    }
+  }
+
+  /**
    * Searches for the n-th element of this list.
    *
    * Time - O(log n)
@@ -572,3 +595,7 @@ object Tree {
     loop(0, a.length)
   }
 }
+
+var t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+println(t)
+println(t.diameter)
