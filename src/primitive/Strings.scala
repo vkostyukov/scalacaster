@@ -56,12 +56,14 @@ object Strings {
   def longestCommonSubstring(a: String, b: String): String = ???
 
   /**
+   * Searches for the fist 'n' most frequent words in the string 's'.
    *
-   *
-   *
-   *
+   * Time - O()
+   * Space - O()
    */
-  def mostFrequentWords(s: String, n: Int): List[String] = ???
+  def mostFrequentWords(s: String, n: Int): List[String] =
+    s.split(" ").groupBy(w => w).mapValues(_.size).toList.sortBy(-_._2).map(_._1).take(n)
+
 
   /**
    * Checks whether the string 'ss' is substring of 's' with Rabin-Karp 
