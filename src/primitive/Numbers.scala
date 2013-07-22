@@ -295,7 +295,20 @@ object Numbers {
    * Time - O()
    * Space - O()
    */
-  def fromRoman(s: String): Int = ???
+  def fromRoman(s: String): Int = {
+    val digits = Map('M' -> 1000, 'D' -> 500, 'C' -> 100, 'L' -> 50 , 'X' -> 10, 'V' -> 5, 'I' -> 1)
+
+    def loop(i: Int, r: Int): Int =
+      if (i == s.length - 1) r + digits(s.charAt(i))
+      else {
+        val c = digits(s.charAt(i))
+        val n = digits(s.charAt(i + 1))
+        if (n > c) loop(i + 1, r - c)
+        else loop(i + 1, r + c)
+      }
+
+    loop(0, 0)
+  }
 
   /**
    * Converts given number 'x' into Roman representaion.
@@ -317,4 +330,3 @@ object Numbers {
     loop(digits, x)
   }
 }
-
