@@ -33,20 +33,18 @@ object Strings {
       else if (s.charAt(i) == s.charAt(j)) check(i + 1, j - 1)
       else false
 
-    def fill(i: Int, l: Int): List[Int] = 
-      if (i == s.length) Nil
-      else if (i - l - 1 >= 0 && check(i - l - 1, i)) l :: fill(i + 1, l + 2)
-      else if (i - l >= 0 && check(i - l, i)) l :: fill(i + 1, l + 1)
-      else l :: fill(i + 1, 1)
-
-    def fetch(d: List[Int]): String = {
-      val l = d.max 
-      val i = d.indexOf(l)
-      s.substring(i - l + 1, i + 1)
-    }
+    def search(i: Int, l: Int, j: Int, m: Int): String = 
+      if (i == s.length) s.substring(j - m + 1, j + 1)
+      else if (i - l > 0 && check(i - l - 1, i))
+        if (l + 2 > m) search(i + 1, l + 2, i, l + 2)
+        else search(i + 1, l + 2, j, m)
+      else if (i - l >= 0 && check(i - l, i))
+        if (l + 1 > m) search(i + 1, l + 1, i, l + 1)
+        else search(i + 1, l + 1, j, m)
+      else search(i + 1, 1, j, m)
 
     if (s.isEmpty) s
-    else fetch(fill(1, 1))
+    else search(1, 1, 1, 1)
   }
 
   /**
