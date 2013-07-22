@@ -35,12 +35,14 @@ object Strings {
 
     def fill(i: Int, l: Int): List[Int] = 
       if (i == s.length) Nil
-      else if (check(i - l - 1, i)) l :: fill(i + 1, l + 2)
+      else if (i - l - 1 >= 0 && check(i - l - 1, i)) l :: fill(i + 1, l + 2)
+      else if (i - l >= 0 && check(i - l, i)) l :: fill(i + 1, l + 1)
       else l :: fill(i + 1, 1)
 
     def fetch(d: List[Int]): String = {
       val l = d.max 
-      s.substring(d.indexOf(l) - l, l)
+      val i = d.indexOf(l)
+      s.substring(i - l + 1, i + 1)
     }
 
     if (s.isEmpty) s
@@ -72,5 +74,3 @@ object Strings {
    */
   def isSubstring(s: String, ss: String): Boolean = ???
 }
-
-///println(Strings.longestPalindrom("abcba aba  a b c d c b a"))
