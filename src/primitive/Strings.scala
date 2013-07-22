@@ -64,10 +64,11 @@ object Strings {
   def mostFrequentWords(s: String, n: Int): List[String] = ???
 
   /**
+   * Checks whether the string 'ss' is substring of 's' with Rabin-Karp 
+   * algorithm.
    *
-   *
-   *
-   *
+   * Time - O(n + m)
+   * Space - O(1)
    */
   def isSubstring(s: String, ss: String): Boolean = ???
 }

@@ -252,6 +252,14 @@ abstract class List[+A] {
   def longestIncreasingSubList: List[A] = ???
 
   /**
+   * Returns the number of out-of-order elements in this list.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def outOfOrder: Int = ???
+
+  /**
    * Calculates the length of this list.
    *
    * Time - O(n)
