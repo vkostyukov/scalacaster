@@ -242,6 +242,15 @@ abstract class List[+A] {
   def permutations: List[List[A]] = 
     (2 to length).foldLeft(variations(1))((a, i) => variations(i).concat(a))
 
+
+  /**
+   * Searches for the longest increasing sub list of this list.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def longestIncreasingSubList: List[A] = ???
+
   /**
    * Calculates the length of this list.
    *

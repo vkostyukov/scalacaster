@@ -527,6 +527,22 @@ abstract class Tree[+A <% Ordered[A]] {
 
     loop(this, Nil)
   }
+
+  /**
+   * Performs the DFS and dumps values to the list. 
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def valuesByDepth: List[A] = ???
+
+  /**
+   * Performs BFS and dumps values to the list.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def vakuesByBreadth: List[A] = ???
 }
 
 object Leaf extends Tree[Nothing] {

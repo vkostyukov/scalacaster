@@ -288,5 +288,33 @@ object Numbers {
 
     loop(n, 2, Nil)
   }
+
+  /**
+   * Converts Roman string representation of a number into integer.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def fromRoman(s: String): Int = ???
+
+  /**
+   * Converts given number 'x' into Roman representaion.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def toRoman(x: Int): String = {
+    val digits = List(1000 -> "M", 900 -> "CM", 500 -> "D", 400 -> "CD", 100 -> "C", 90 -> "XC", 
+                      50 -> "L", 40 -> "XL", 10 -> "X", 9 -> "IX", 5 -> "V", 4 -> "IV", 1 -> "I")
+
+    def loop(l: List[(Int, String)], y: Int): String =
+      if (y == 0) ""
+      else l.head match {
+        case (v, s) if (v <= y) => s + loop(l, y - v)
+        case _ => loop(l.tail, y)
+      }
+
+    loop(digits, x)
+  }
 }
 

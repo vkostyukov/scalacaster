@@ -29,5 +29,5 @@ def quicksort[A <% Ordered[A]](list: List[A]): List[A] = {
     if (as.isEmpty) Nil
     else sort(partition(as))
 
-  else partitionAndSort(list)
+  partitionAndSort(list)
 }

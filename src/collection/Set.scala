@@ -89,4 +89,12 @@ abstract class Set[+A] {
   def subsets: List[Set[A]] =
     if (isEmpty) Nil
     else (2 to size).foldLeft(s.combinations(1))((a, i) => s.combinations(i) :: a)
+
+  /**
+   * Calculates the subset with max sub.
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def maxSumSubset: Set[A] = ???
 }
