@@ -534,7 +534,14 @@ abstract class Tree[+A <% Ordered[A]] {
    * Time - O(n)
    * Space - O(log n)
    */
-  def valuesByDepth: List[A] = ???
+  def valuesByDepth: List[A] = {
+    def loop(s: List[Tree[A]]): List[A] = 
+      if (s.isEmpty) Nil
+      else if (s.head.isEmpty) loop(s.tail)
+      else s.head.value :: loop(s.head.right :: s.head.left :: s.tail)
+
+    loop(List(this))
+  }
 
   /**
    * Performs BFS and dumps values to the list.
@@ -542,7 +549,15 @@ abstract class Tree[+A <% Ordered[A]] {
    * Time - O(n)
    * Space - O(log n)
    */
-  def vakuesByBreadth: List[A] = ???
+  def valuesByBreadth: List[A] = {
+    import scala.collection.immutable.Queue
+    def loop(q: Queue[Tree[A]]): List[A] = 
+      if (q.isEmpty) Nil
+      else if (q.head.isEmpty) loop(q.tail)
+      else q.head.value :: loop(q.tail :+ q.head.left :+ q.head.right)
+
+    loop(Queue(this))
+  }
 }
 
 object Leaf extends Tree[Nothing] {
