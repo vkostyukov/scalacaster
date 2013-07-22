@@ -292,11 +292,14 @@ object Numbers {
   /**
    * Converts Roman string representation of a number into integer.
    *
-   * Time - O()
-   * Space - O()
+   * Time - O(n)
+   * Space - O(n)
    */
   def fromRoman(s: String): Int = {
-    val digits = Map('M' -> 1000, 'D' -> 500, 'C' -> 100, 'L' -> 50 , 'X' -> 10, 'V' -> 5, 'I' -> 1)
+    val digits = Map('M' -> 1000, 'D' -> 500, 
+                     'C' -> 100,  'L' -> 50 ,
+                     'X' -> 10,   'V' -> 5, 
+                     'I' -> 1)
 
     def loop(i: Int, r: Int): Int =
       if (i == s.length - 1) r + digits(s.charAt(i))
@@ -317,8 +320,11 @@ object Numbers {
    * Space - O(n)
    */
   def toRoman(x: Int): String = {
-    val digits = List(1000 -> "M", 900 -> "CM", 500 -> "D", 400 -> "CD", 100 -> "C", 90 -> "XC", 
-                      50 -> "L", 40 -> "XL", 10 -> "X", 9 -> "IX", 5 -> "V", 4 -> "IV", 1 -> "I")
+    val digits = List(1000 ->  "M", 900 -> "CM", 500 ->  "D", 
+                      400  -> "CD", 100 ->  "C",  90 -> "XC", 
+                      50   ->  "L",  40 -> "XL",  10 ->  "X", 
+                       9   -> "IX",   5 ->  "V",   4 -> "IV", 
+                       1   ->  "I")
 
     def loop(l: List[(Int, String)], y: Int): String =
       if (y == 0) ""
