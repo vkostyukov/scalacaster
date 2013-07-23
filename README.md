@@ -5,40 +5,40 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 
 
 ##### Primitive routines
-* Numbers theory `src/primitive/Numbers.scala`
-* Strings `src/primitive/Strings.scala`
+* Numbers theory [`src/primitive/Numbers.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/primitive/Numbers.scala)
+* Strings [`src/primitive/Strings.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/primitive/Strings.scala)
 
 ##### Simple Collections
-* Linked List `src/collection/List.scala`
-* Queue `src/collection/Queue.scala`
-* Stack `src/collection/Stack.scala`
-* Heap `src/collection/Heap.scala`
-* Set `src/collection/Set.scala`
+* List [`src/collection/List.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/List.scala)
+* Queue [`src/collection/Queue.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Queue.scala)
+* Stack [`src/collection/Stack.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Stack.scala)
+* Heap [`src/collection/Heap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Heap.scala)
+* Set [`src/collection/Set.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Set.scala)
 
 ##### Trees
-* Binary Search Tree `src/tree/Tree.scala`
-* Red-Black Tree `src/tree/RBTree.scala`
+* Binary Search Tree [`src/tree/Tree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/Tree.scala)
+* Red-Black Tree [`src/tree/RBTree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/RBTree.scala)
 
 ##### Graphs
-* Graphs `src/graph/Graph.scala`
+* Graphs [`src/graph/Graph.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/graph/Graph.scala)
 
 ##### Sorting Algorithms
-* Quick Sort `src/sort/QuickSort.scala`
-* Merge Sort `src/sort/MergeSort.scala`
-* Bubble Sort `src/sort/BubbleSort.scala`
-* Insertion Sort `src/sort/InsertionSort.scala`
-* Selection Sort `src/sort/SelectionSort.scala`
+* Quick Sort [`src/sort/QuickSort.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/sort/QuickSort.scala)
+* Merge Sort [`src/sort/MergeSort.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/sort/MergeSort.scala)
+* Bubble Sort [`src/sort/BubbleSort.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/sort/BubbleSort.scala)
+* Insertion Sort [`src/sort/InsertionSort.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/sort/InsertionSort.scala)
+* Selection Sort [`src/sort/SelectionSort.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/sort/SelectionSort.scala)
 
 ##### Searching Algorithms
-* Selection Search (k-th order statistic) `src/search/SelectionSearch.scala`
-* Binary Search `src/search/BinarySearch.scala`
-* Linear Search `src/search/LinearSearch.scala`
+* Selection Search (k-th order statistic) [`src/search/SelectionSearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/SelectionSearch.scala)
+* Binary Search [`src/search/BinarySearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/BinarySearch.scala)
+* Linear Search [`src/search/LinearSearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/LinearSearch.scala)
 
 ##### Math
-* Sets `src/math/Sets.scala`
+* Sets `src/math/Sets.scala` (will be removed)
 
 ##### Dynamic Programming
-* Largest Increasing Subsequence `src/dp/LIS.scala`
+* Largest Increasing Subsequence `src/dp/LIS.scala` (will be removed)
 
 ----
 by [Vladimir Kostyukov](http://vkostyukov.ru), 2013
