@@ -242,10 +242,14 @@ abstract class Tree[+A <% Ordered[A]] {
    * Time - O(log n)
    * Space - O(log n)
    */
-  def min: A = 
+  def min: A = {
+    def loop(t: Tree[A], m: A): A = 
+      if (t.isEmpty) m
+      else loop(t.left, t.value)
+
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
-    else if (left.isEmpty) value
-    else left.min
+    else loop(left, value)
+  }
 
   /**
    * Searches for the maximal element of this tree.
@@ -253,10 +257,14 @@ abstract class Tree[+A <% Ordered[A]] {
    * Time - O(log n)
    * Space - O(log n)
    */
-  def max: A = 
+  def max: A = {
+    def loop(t: Tree[A], m: A): A = 
+      if (t.isEmpty) m
+      else loop(t.right, t.value)
+
     if (isEmpty) throw new NoSuchElementException("Tree is empty.")
-    else if (right.isEmpty) value
-    else right.max
+    else loop(right, value)
+  }
 
   /**
    * Calculates the height of this tree.
