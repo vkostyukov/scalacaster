@@ -34,11 +34,5 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 * Binary Search [`src/search/BinarySearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/BinarySearch.scala)
 * Linear Search [`src/search/LinearSearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/LinearSearch.scala)
 
-##### Math
-* Sets `src/math/Sets.scala` (will be removed)
-
-##### Dynamic Programming
-* Largest Increasing Subsequence `src/dp/LIS.scala` (will be removed)
-
 ----
 by [Vladimir Kostyukov](http://vkostyukov.ru), 2013

@@ -246,10 +246,16 @@ abstract class List[+A] {
   /**
    * Searches for the longest increasing sub list of this list.
    *
-   * Time - O()
-   * Space - O()
+   * NOTES: This is a classical approach of dynamic programming.
+   * See details here: http://en.wikipedia.org/wiki/Longest_increasing_subsequence
+   *
+   * Time - O(n^2)
+   * Space - O(n)
    */
-  def longestIncreasingSubList: List[A] = ???
+  def longestIncreasingSubsequence: List[A] = {
+    // use map for sub sequences
+    ???
+  }
 
   /**
    * Returns the number of out-of-order elements in this list.
