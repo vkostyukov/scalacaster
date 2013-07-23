@@ -455,7 +455,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
-   * Constructs the list of 'n' smallest elements of this list.
+   * Constructs the list of 'n' smallest elements of this tree.
    *
    * Note: We suppose that list.size runs in O(1).
    *
@@ -498,7 +498,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
-   * Searches for the n-th element of this list.
+   * Searches for the n-th element of this tree.
    *
    * Time - O(log n)
    * Space - O(log n)

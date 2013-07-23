@@ -4,9 +4,13 @@
  *
  * Queue http://en.wikipedia.org/wiki/Queue_(abstract_data_type)
  *
+ * -Notes-
+ * This queue also known as Banker's Queue.
+ *
  * Enqueue - O(1)
  * Dequeue - O(1)
  * Front - O(1)
+ * Rear - O(1)
  */
 
 abstract class List[+A] {
@@ -61,12 +65,18 @@ class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
    * Time - O(1)
    * Space - O(1)
    */
-  def front: A = (in, out) match {
-    case (_, Cons(h, t)) => h
-    case (_, _) => in.reverse match {
-      case Cons(h, t) => h
-      case Nill => throw new NoSuchElementException("Empty queue.")
-    }
+  def front: A = dequeue match {
+    case (a, _) => a
+  }
+
+  /**
+   * Returns the rear of this queue.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def rear: Queue[A] = dequeue match {
+    case (_, q) => q
   }
 }
 
