@@ -242,7 +242,6 @@ abstract class List[+A] {
   def permutations: List[List[A]] = 
     (2 to length).foldLeft(variations(1))((a, i) => variations(i).concat(a))
 
-
   /**
    * Searches for the longest increasing sub list of this list.
    *
@@ -252,9 +251,27 @@ abstract class List[+A] {
    * Time - O(n^2)
    * Space - O(n)
    */
-  def longestIncreasingSubsequence: List[A] = {
-    // use map for sub sequences
-    ???
+  def longestIncreasingSubsequence[B >: A](implicit ordering: Ordering[B]): List[B] = {
+    // We can use the followng instead:
+    // zipWithIndex.map(t => (t._2, List(t._1))).toMap
+    // http://stackoverflow.com/questions/17828431/convert-scalas-list-into-map-with-indicies-as-keys
+    def init(i: Int, l: List[A], m: Map[Int, List[A]]): Map[Int, List[A]] = 
+     if (l.isEmpty) m
+     else init(i + 1, l.tail, m + (i -> List(l.head)))
+
+    def loop(i: Int, l: List[A], m: Map[Int, List[A]]): List[A] =
+      if (l.isEmpty) m.maxBy(_._2.length)._2.reverse
+      else {
+        val f = m.filter(p => p._1 < i && ordering.lt(p._2.head, l.head))
+        if (f.isEmpty) loop(i + 1, l.tail, m)
+        else {
+          val (_, ll) = f.maxBy(_._2.length)
+          loop(i + 1, l.tail, m + (i -> ll.prepend(l.head)))
+        }
+      }
+
+    if (isEmpty) Nill
+    else loop(1, tail, init(0, this, Map[Int, List[A]]()))
   }
 
   /**
@@ -335,3 +352,6 @@ object List {
     r
   }
 }
+
+var l = List(1, 5, 2, 4, 7, 8, 11, 3, -100)
+println(l.longestIncreasingSubsequence)
