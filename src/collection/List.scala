@@ -281,9 +281,9 @@ abstract class List[+A] {
    * Time - O(mn)
    * Space - O(n)
    */
-  // def longestCommonSubsequence(l: List[A]): List[A] = {
-  //   ???
-  // }
+  def longestCommonSubsequence(l: List[A]): List[A] = {
+     ???
+  }
 
   /**
    * Returns the number of inversions that required to make this list sorted.
@@ -306,7 +306,7 @@ abstract class List[+A] {
   def subsequences: List[List[A]] =
     if (isEmpty) Nill
     else { 
-      val ss = tail.allSubsequences 
+      val ss = tail.subsequences 
       ss.map(_.prepend(head)).prepend(List(head)).concat(ss)
     }
 
