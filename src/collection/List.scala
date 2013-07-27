@@ -245,8 +245,7 @@ abstract class List[+A] {
   /**
    * Searches for the longest increasing sub list of this list.
    *
-   * NOTES: This is a classical approach of dynamic programming.
-   * See details here: http://en.wikipedia.org/wiki/Longest_increasing_subsequence
+   * http://www.geeksforgeeks.org/dynamic-programming-set-3-longest-increasing-subsequence/
    *
    * Time - O(n^2)
    * Space - O(n)
@@ -275,12 +274,41 @@ abstract class List[+A] {
   }
 
   /**
-   * Returns the number of out-of-order elements in this list.
+   * Searches for the longest common subsequence of this and 'l' lists.
    *
-   * Time - O()
-   * Space - O()
+   * http://www.geeksforgeeks.org/dynamic-programming-set-4-longest-common-subsequence/
+   *
+   * Time - O(mn)
+   * Space - O(n)
    */
-  def outOfOrder: Int = ???
+  // def longestCommonSubsequence(l: List[A]): List[A] = {
+  //   ???
+  // }
+
+  /**
+   * Returns the number of inversions that required to make this list sorted.
+   *
+   * http://www.geeksforgeeks.org/counting-inversions/
+   *
+   * Time - O(n log n)
+   * Space - O(n)
+   */
+  def inversions[B >: A](implicit ordering: Ordering[B]): Int = {
+    ???
+  }
+
+  /**
+   * Generates all the subsequences of this list.
+   *
+   * Time - O(2^n)
+   * Space - O(n)
+   */
+  def subsequences: List[List[A]] =
+    if (isEmpty) Nill
+    else { 
+      val ss = tail.allSubsequences 
+      ss.map(_.prepend(head)).prepend(List(head)).concat(ss)
+    }
 
   /**
    * Calculates the length of this list.
@@ -352,6 +380,3 @@ object List {
     r
   }
 }
-
-var l = List(1, 5, 2, 4, 7, 8, 11, 3, -100)
-println(l.longestIncreasingSubsequence)
