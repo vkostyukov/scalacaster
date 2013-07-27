@@ -301,11 +301,20 @@ abstract class List[+A] {
    *
    * http://www.geeksforgeeks.org/counting-inversions/
    *
-   * Time - O(n log n)
+   * TODO: The Divide-And-Conquer approach can be used here to reduce the complexity to O(n log n)
+   *       due to merge sort.
+   *
+   * Time - O(n^2)
    * Space - O(n)
    */
   def inversions[B >: A](implicit ordering: Ordering[B]): Int = {
-    ???
+    def loop(x: A, t: List[A], i: Int): Int =
+      if (t.isEmpty) i
+      else if (ordering.gt(x, t.head)) loop(x, t.tail, i + 1)
+      else loop(x, t.tail, i)
+
+    if (isEmpty) 0 
+    else tail.inversions(ordering) + loop(head, tail, 0)
   }
 
   /**
@@ -391,3 +400,6 @@ object List {
     r
   }
 }
+
+var l = List(2, 4, 1, 3, 5)
+println(l.inversions)
