@@ -278,11 +278,22 @@ abstract class List[+A] {
    *
    * http://www.geeksforgeeks.org/dynamic-programming-set-4-longest-common-subsequence/
    *
-   * Time - O(mn)
-   * Space - O(n)
+   * TODO: The DP approach can be used here to reduce the compexity to O(mn)
+   *
+   * Time - O(n^2)
+   * Space - O(n^2)
    */
-  def longestCommonSubsequence(l: List[A]): List[A] = {
-     ???
+  def longestCommonSubsequence[B >: A](l: List[B]): List[B] = {
+    def loop(a: List[A], b: List[B], c: List[B]): List[B] = 
+      if (a.isEmpty || b.isEmpty) c
+      else if (a.head == b.head) loop(a.tail, b.tail, c.prepend(a.head))
+      else {
+        val la = loop(a.tail, b, c)
+        val lb = loop(a, b.tail, c)
+        if (la.length > lb.length) la else lb
+      }
+
+    loop(reverse, l.reverse, Nill)
   }
 
   /**
