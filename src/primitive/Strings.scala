@@ -50,12 +50,27 @@ object Strings {
   }
 
   /**
+   * Returns the longest common substring of two strings 'a' and 'b'.
+   * 
+   * http://www.geeksforgeeks.org/longest-common-substring/
    *
+   * TODO: The DP approach can be used here to reduce the compexity to O(mn)
    *
-   *
-   *
+   * Time - O(mn^2)
+   * Space - O(mn)
    */
-  def longestCommonSubstring(a: String, b: String): String = ???
+  def longestCommonSubstring(a: String, b: String): String = {
+    def loop(i: Int, j: Int): String = 
+      if (i == -1 || j == -1) ""
+      else if (a.charAt(i) == b.charAt(j)) loop(i - 1, j - 1) + a.charAt(i)
+      else {
+        val sa = loop(i - 1, j)
+        val sb = loop(i, j - 1)
+        if (sa.length > sb.length) sa else sb
+      }
+
+    loop(a.length - 1, b.length - 1)
+  }
 
   /**
    * Searches for the fist 'n' most frequent words in the string 's'.

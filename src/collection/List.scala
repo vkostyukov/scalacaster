@@ -280,8 +280,8 @@ abstract class List[+A] {
    *
    * TODO: The DP approach can be used here to reduce the compexity to O(mn)
    *
-   * Time - O(n^2)
-   * Space - O(n^2)
+   * Time - O(2^n)
+   * Space - O(n)
    */
   def longestCommonSubsequence[B >: A](l: List[B]): List[B] = {
     def loop(a: List[A], b: List[B], c: List[B]): List[B] = 
@@ -304,7 +304,7 @@ abstract class List[+A] {
    * TODO: The Divide-And-Conquer approach can be used here to reduce the complexity to O(n log n)
    *       due to merge sort.
    *
-   * Time - O(2^n)
+   * Time - O(n^2)
    * Space - O(n)
    */
   def inversions[B >: A](implicit ordering: Ordering[B]): Int = {
@@ -329,6 +329,16 @@ abstract class List[+A] {
       val ss = tail.subsequences 
       ss.map(_.prepend(head)).prepend(List(head)).concat(ss)
     }
+
+  /**
+   * Builds the inreasing subsequence with maximum sum.
+   *
+   * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def maximumSumIncreasingSubsequence: List[A] = ???
 
   /**
    * Calculates the length of this list.
@@ -400,6 +410,3 @@ object List {
     r
   }
 }
-
-var l = List(2, 4, 1, 3, 5)
-println(l.inversions)
