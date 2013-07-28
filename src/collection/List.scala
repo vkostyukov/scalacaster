@@ -304,7 +304,7 @@ abstract class List[+A] {
    * TODO: The Divide-And-Conquer approach can be used here to reduce the complexity to O(n log n)
    *       due to merge sort.
    *
-   * Time - O(n^2)
+   * Time - O(2^n)
    * Space - O(n)
    */
   def inversions[B >: A](implicit ordering: Ordering[B]): Int = {

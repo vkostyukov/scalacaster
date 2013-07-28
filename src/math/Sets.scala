@@ -31,7 +31,8 @@ object Sets {
    *
    * NOTES: To count number of subsets the following formual can be used:
    *
-   * S_n = SUM(k=1..n, C_k,n)
+   * S_n = SUM(k=1..n, C_k,n), or
+   * S_n = 2^n
    *
    * Time - O(S_n)
    * Space - O(S_n)

@@ -24,6 +24,8 @@ object Strings {
   /**
    * Searches for the longest palindrom in given string 's'.
    *
+   * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
+   *
    * Time - O(n^2)
    * Space - O(n)
    */
@@ -64,7 +66,6 @@ object Strings {
   def mostFrequentWords(s: String, n: Int): List[String] =
     s.split(" ").groupBy(w => w).mapValues(_.size).toList.sortBy(-_._2).map(_._1).take(n)
 
-
   /**
    * Checks whether the string 'ss' is substring of 's' with Rabin-Karp 
    * algorithm.
@@ -72,5 +73,7 @@ object Strings {
    * Time - O(n + m)
    * Space - O(1)
    */
-  def isSubstring(s: String, ss: String): Boolean = ???
+  def isSubstring(s: String, ss: String): Boolean = {
+    ???
+  }
 }

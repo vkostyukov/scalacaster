@@ -97,4 +97,23 @@ abstract class Set[+A] {
    * Space - O()
    */
   def maxSumSubset: Set[A] = ???
+
+  /**
+   *
+   *
+   *
+   *
+   */
+  def maxSumSubset(n: Int): Set[A] = ???
+
+
+  /**
+   *
+   * http://www.geeksforgeeks.org/backttracking-set-4-subset-sum/
+   *
+   *
+   */
+  def subsetWithSum(x: A): Set[A] = {
+
+  }
 }
