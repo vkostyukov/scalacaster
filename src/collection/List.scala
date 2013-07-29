@@ -318,6 +318,28 @@ abstract class List[+A] {
   }
 
   /**
+   * Count the largest sum of contigous sub list.
+   *
+   * http://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
+   * 
+   * NOTES: It uses the DP-approach based on Kadane’s algorithm.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def largestSumOfContiguousSubList[B >: A](implicit num: Numeric[B]): B = {
+    def loop(sm: B, gm: B, l: List[B]): B = 
+      if (l.isEmpty) gm
+      else {
+        val nsm = num.max(l.head, num.plus(sm, l.head))
+        loop(nsm, num.max(gm, nsm), l.tail)
+      }
+
+    if (isEmpty) throw new NoSuchElementException("Empty list.")
+    else loop(head, head, tail)
+  }
+
+  /**
    * Generates all the subsequences of this list.
    *
    * Time - O(2^n)
