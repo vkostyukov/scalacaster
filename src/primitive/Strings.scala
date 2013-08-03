@@ -82,13 +82,43 @@ object Strings {
     s.split(" ").groupBy(w => w).mapValues(_.size).toList.sortBy(-_._2).map(_._1).take(n)
 
   /**
-   * Checks whether the string 'ss' is substring of 's' with Rabin-Karp 
-   * algorithm.
+   * Checks whether the pattern 'p' is substring of 's' with Rabin-Karp algorithm.
+   * If it maches then the function returns the start index, else returns -1.
+   * 
+   * http://www.geeksforgeeks.org/searching-for-patterns-set-3-rabin-karp-algorithm/
    *
    * Time - O(n + m)
    * Space - O(1)
    */
-  def isSubstring(s: String, ss: String): Boolean = {
+  def matchRabinKarp(s: String, p: String): Int = {
     ???
   }
+
+  /**
+   * Checks whether the pattern 'p' is substring of 's' with naive sliding algorithm.
+   * If it maches then the function returns the start index, else returns -1.
+   *
+   * http://www.geeksforgeeks.org/searching-for-patterns-set-1-naive-pattern-searching/
+   *
+   * Time - O(nm)
+   * Space - O(n)
+   */
+  def matchNaive(s: String, p: String): Int = {
+    def loop(i: Int): Int = 
+      if (i == s.length - p.length) -1
+      else {
+        val ii = matchPattern(i, 0)
+        if (ii != -1) ii
+        else loop(i + 1)
+      }
+
+    def matchPattern(i: Int, j: Int): Int =
+      if (j == p.length) i - p.length
+      else if (s.charAt(i) == p.charAt(j)) matchPattern(i + 1, j + 1)
+      else -1
+
+    loop(0)
+  }
 }
+
+println(Strings.matchNaive("asdcgd", "dcg"))
