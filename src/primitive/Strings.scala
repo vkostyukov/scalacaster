@@ -91,7 +91,24 @@ object Strings {
    * Space - O(1)
    */
   def matchRabinKarp(s: String, p: String): Int = {
-    ???
+    val n = s.length()
+    val m = p.length()
+    val q = 3355439
+    val r = 256
+    val d = (1 until m).foldLeft(1)((a, v) => (a * r) % q)
+
+    def hash(ss: String, m: Int): Int = 
+      (0 until m).foldLeft(0)((a, v) => ((a * r) + ss.charAt(v)) % q)
+
+    def loop(hs: Int, hp: Int, i: Int): Int =
+      if (hs == hp) i - m
+      else if (i == n) -1
+      else {
+        val hss = (hs - d * s.charAt(i - m) % q) % q
+        loop((hss * r + s.charAt(i)) % q, hp, i + 1)
+      }
+
+    loop(hash(s, m), hash(p, m), m)
   }
 
   /**
@@ -99,6 +116,9 @@ object Strings {
    * If it maches then the function returns the start index, else returns -1.
    *
    * http://www.geeksforgeeks.org/searching-for-patterns-set-1-naive-pattern-searching/
+   *
+   * NOTES: The good question here: why Java's String.indexOf() uses the similar brute-force 
+   *        algorithm instead of Rabin-Karp or KMP?
    *
    * Time - O(nm)
    * Space - O(n)
@@ -120,5 +140,3 @@ object Strings {
     loop(0)
   }
 }
-
-println(Strings.matchNaive("asdcgd", "dcg"))
