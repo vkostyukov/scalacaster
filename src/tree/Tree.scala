@@ -658,7 +658,3 @@ object Tree {
     loop(0, a.length)
   }
 }
-
-val t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 9))
-println(t)
-println(t.valuesByZigZag)
