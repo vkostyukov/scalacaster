@@ -566,6 +566,30 @@ abstract class Tree[+A <% Ordered[A]] {
 
     loop(Queue(this))
   }
+
+  /**
+   * Perfroms Zig-Zag (spiral) travesal and dumps values to the list.
+   *
+   * http://www.geeksforgeeks.org/level-order-traversal-in-spiral-form/
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def valuesByZigZag: List[A] = {
+    def zig(ltr: List[Tree[A]], rtl: List[Tree[A]]): List[A] = 
+      if (ltr.isEmpty && rtl.isEmpty) Nil
+      else if (ltr.isEmpty) zag(ltr, rtl)
+      else if (ltr.head.isEmpty) zig(ltr.tail, rtl)
+      else ltr.head.value :: zig(ltr.tail, ltr.head.left :: ltr.head.right :: rtl)
+
+    def zag(ltr: List[Tree[A]], rtl: List[Tree[A]]): List[A] = 
+      if (ltr.isEmpty && rtl.isEmpty) Nil
+      else if (rtl.isEmpty) zig(ltr, rtl)
+      else if (rtl.head.isEmpty) zag(ltr, rtl.tail)
+      else rtl.head.value :: zag(rtl.head.right :: rtl.head.left :: ltr, rtl.tail)
+
+    zig(List(this), Nil)
+  }
 }
 
 object Leaf extends Tree[Nothing] {
@@ -634,3 +658,7 @@ object Tree {
     loop(0, a.length)
   }
 }
+
+val t = Tree.fromSortedArray(Array(1, 2, 3, 4, 5, 6, 7, 9))
+println(t)
+println(t.valuesByZigZag)
