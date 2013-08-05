@@ -139,4 +139,25 @@ object Strings {
 
     loop(0)
   }
+
+  /**
+   * Checks whether the parenthesis are balanced or not.
+   * 
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def validateParenthesis(s: String): Boolean = {
+    def left(i: Int, k: Int): Boolean = 
+      if (i == s.length) k == 0
+      else if (s.charAt(i) == '(') right(i + 1, k + 1)
+      else false
+
+    def right(i: Int, k: Int): Boolean = 
+      if (i == s.length) false
+      else if (s.charAt(i) == '(') right(i + 1, k + 1)
+      else if (k == 1) left(i + 1, k - 1)
+      else right(i + 1, k - 1)
+
+    left(0, 0)
+  }
 }
