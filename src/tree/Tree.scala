@@ -590,6 +590,21 @@ abstract class Tree[+A <% Ordered[A]] {
 
     zig(List(this), Nil)
   }
+
+  /**
+   * Builds all the possible root-to-leaf paths that sum to given value.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def rootToLeafPathsWithSum[B >: A](sum: B)(implicit num: Numeric[B]): List[List[B]] = {
+    def loop(t: Tree[A], p: List[B]): List[List[B]] = 
+      if (t.isEmpty)
+        if (p.sum == sum) List(p) else Nil
+      else loop(t.left, t.value :: p) ::: loop(t.right, t.value :: p)
+
+    loop(this, Nil)
+  }
 }
 
 object Leaf extends Tree[Nothing] {
