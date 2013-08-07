@@ -221,6 +221,17 @@ abstract class Tree[+A <% Ordered[A]] {
     else Tree(f(value), left.map(f), right.map(f))
 
   /**
+   * Inverts the sign of all the values in this tree.
+   * In other words, builds a mirror tree.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def invert[B >: A](implicit num: Numeric[B]): Tree[B] =
+    if (isEmpty) Tree.empty
+    else Tree(num.negate(value), right.invert(num), left.invert(num))
+
+  /**
    * Calculates the sum of all elements of this tree.
    *
    * Time - O(n)
