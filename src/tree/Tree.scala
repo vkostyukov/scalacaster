@@ -668,7 +668,7 @@ object Tree {
   }
 
   /**
-   * Creates a new tree from given sorted array 'a'.
+   * Creates a new balanced tree from given sorted array 'a'.
    *
    * Time - O(n)
    * Space - O(log n)
@@ -682,5 +682,27 @@ object Tree {
       }
 
     loop(0, a.length)
+  }
+
+  /**
+   * Creates a new balanced tree from given sorted list 'l'.
+   *
+   * http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/
+   * 
+   * TODO There should be a way to do it better.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def fromSortedList[A <% Ordered[A]](l: List[A]): Tree[A] = {
+    def loop(ll: List[A], n: Int): (List[A], Tree[A]) = 
+      if (n == 0) (ll, Tree.empty)
+      else {
+        val (lt, left) = loop(ll, n / 2)
+        val (rt, right) = loop(lt.tail, n - 1 - n / 2)
+        (rt, Tree(lt.head, left, right))
+      }
+
+    loop(l, l.length)._2
   }
 }
