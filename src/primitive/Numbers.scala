@@ -179,7 +179,6 @@ object Numbers {
     else if (x == 0) 1
     else change(x, c.tail) + change(x - c.head, c)
 
-
   /**
    * Negates 'x'.
    *

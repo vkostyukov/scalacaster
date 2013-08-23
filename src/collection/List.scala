@@ -355,12 +355,34 @@ abstract class List[+A] {
   /**
    * Builds the inreasing subsequence with maximum sum.
    *
-   * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
+   * http://www.geeksforgeeks.org/dynamic-programming-set-14-maximum-sum-increasing-subsequence/
    *
    * Time - O()
    * Space - O()
    */
   def maximumSumIncreasingSubsequence: List[A] = ???
+
+  /**
+   * Returns an intersect nodes of two lists.
+   *
+   * http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/
+   *
+   * Time - O()
+   * Space - O()
+   */
+  def intersect[B >: A](l: List[B]): List[B] = {
+
+  }
+
+  /**
+   * Returns the longes palindromic subsequence of this list.
+   *
+   * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
+   *
+   * Time - O(n^2)
+   * Space - O()
+   */
+  def longestPalindromicSubsequence: List[A] = ???
 
   /**
    * Calculates the length of this list.
@@ -407,7 +429,7 @@ object List {
   /**
    * Returns an empty list instance.
    *
-   * Time - O(1)
+   *  Time - O(1)
    * Space - O(1)
    */
   def empty[A]: List[A] = Nill
