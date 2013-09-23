@@ -36,3 +36,7 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 
 ----
 by [Vladimir Kostyukov](http://vkostyukov.ru), 2013
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/vkostyukov/scalacaster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
