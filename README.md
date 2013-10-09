@@ -20,7 +20,8 @@ Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms
 * Red-Black Tree [`src/tree/RBTree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/RBTree.scala)
 
 ##### Graphs
-* Graphs [`src/graph/Graph.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/graph/Graph.scala)
+* Graph [`src/graph/Graph.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/graph/Graph.scala)
+* InductiveGraph [`src/graph/InductiveGraph.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/graph/InductiveGraph.scala)
 
 ##### Sorting Algorithms
 * Quick Sort [`src/sort/QuickSort.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/sort/QuickSort.scala)
