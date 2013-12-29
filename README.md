@@ -3,6 +3,7 @@ Scalacaster
 
 Since Fender Stratocaster is a classic guitar, Scalacaster is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and chalange for researchers. Data structures in a functional setting are much elegant and witty than in an imperative setting. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
 
+See ["Purely Functional Data Structures in Scala"](http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521) slides based on Scalacaster.
 
 ##### Primitive routines
 * Numbers theory [`src/primitive/Numbers.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/primitive/Numbers.scala)

@@ -64,7 +64,7 @@ object Numbers {
   /**
    * Prints the `n`th levels of Pascal's Triangle.
    *
-   * NOTE: I can do it better. The 'loop' operation looks awfull.
+   * NOTE: I can do it better.
    *
    * Time - O()
    * Space - O()
@@ -120,7 +120,7 @@ object Numbers {
    * Computes the 'n'th Fibonacci number.
    *
    * NOTES: It grows exponentially with golden ratio in base.
-   *        It is extremally slow!
+   *        It is extremely slow!
    *
    * Time - O(1.6180 ^ n)
    * Space - O(1.6180 ^ n)
@@ -235,7 +235,7 @@ object Numbers {
   }
 
   /**
-   * Finds the remainer of division 'x' by 'y'.
+   * Finds the remainder of division 'x' by 'y'.
    *
    * Time - O()
    * Space - O()
@@ -313,7 +313,7 @@ object Numbers {
   }
 
   /**
-   * Converts given number 'x' into Roman representaion.
+   * Converts given number 'x' into Roman representation.
    *
    * Time - O(n)
    * Space - O(n)

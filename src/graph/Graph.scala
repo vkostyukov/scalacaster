@@ -187,7 +187,7 @@ class WeightedGraph[N](n: N) extends Graph[Double, N](n) {
 
 object Graph {
   def apply[E, N](tuples: (N, E, N)*): Graph[E, N] = {
-    var g: Graph[E, N] = Graph.empty
+    val g: Graph[E, N] = Graph.empty
     for ((from, via, to) <- tuples) {
       g.connect(from, via, to)
     }

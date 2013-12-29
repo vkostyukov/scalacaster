@@ -126,7 +126,7 @@ abstract class List[+A] {
     else tail.map(f).prepend(f(head))
 
   /**
-   * Caclulates the sum of all elements of this list.
+   * Calculates the sum of all elements of this list.
    *
    * Time - O(n)
    * Space - O(n)
@@ -251,7 +251,7 @@ abstract class List[+A] {
    * Space - O(n)
    */
   def longestIncreasingSubsequence[B >: A](implicit ordering: Ordering[B]): List[B] = {
-    // We can use the followng instead:
+    // We can use the following instead:
     // zipWithIndex.map(t => (t._2, List(t._1))).toMap
     // http://stackoverflow.com/questions/17828431/convert-scalas-list-into-map-with-indicies-as-keys
     def init(i: Int, l: List[A], m: Map[Int, List[A]]): Map[Int, List[A]] = 
@@ -274,11 +274,11 @@ abstract class List[+A] {
   }
 
   /**
-   * Searches for the longest common subsequence of this and 'l' lists.
+   * Searches for the longest common sub-sequence of this and 'l' lists.
    *
    * http://www.geeksforgeeks.org/dynamic-programming-set-4-longest-common-subsequence/
    *
-   * TODO: The DP approach can be used here to reduce the compexity to O(mn)
+   * TODO: The DP approach can be used here to reduce the complexity to O(mn)
    *
    * Time - O(2^n)
    * Space - O(n)
@@ -318,7 +318,7 @@ abstract class List[+A] {
   }
 
   /**
-   * Count the largest sum of contigous sub list.
+   * Count the largest sum of contiguous sub list.
    *
    * http://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
    * 
@@ -340,7 +340,7 @@ abstract class List[+A] {
   }
 
   /**
-   * Generates all the subsequences of this list.
+   * Generates all the sub-sequences of this list.
    *
    * Time - O(2^n)
    * Space - O(n)
@@ -353,7 +353,7 @@ abstract class List[+A] {
     }
 
   /**
-   * Builds the inreasing subsequence with maximum sum.
+   * Builds the increasing sub-sequence with maximum sum.
    *
    * http://www.geeksforgeeks.org/dynamic-programming-set-14-maximum-sum-increasing-subsequence/
    *
@@ -370,12 +370,10 @@ abstract class List[+A] {
    * Time - O()
    * Space - O()
    */
-  def intersect[B >: A](l: List[B]): List[B] = {
-
-  }
+  def intersect[B >: A](l: List[B]): List[B] = ???
 
   /**
-   * Returns the longes palindromic subsequence of this list.
+   * Returns the longest palindromic sub-sequence of this list.
    *
    * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
    *

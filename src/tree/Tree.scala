@@ -10,7 +10,7 @@
  *
  * -Notes-
  *
- * This is an efficient implementation of binary search tree. This tree garantees
+ * This is an efficient implementation of binary search tree. This tree guarantees
  * O(log n) running time for ordered operations like 'nthMin', 'nthMax' and 'rank'.
  * The main idea here - is use additional node field that stores size of tree rotted
  * at this node. This allows to get the size of tree in O(1) instead of linear time.
@@ -124,7 +124,7 @@ abstract class Tree[+A <% Ordered[A]] {
     else true
 
   /**
-   * Returns the sumbtree of this tree with root element 'x'.
+   * Returns the sub-tree of this tree with root element 'x'.
    *
    * Time - O(log n)
    * Space - O(log n)
@@ -146,7 +146,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * 3. check whether second in-order string is substring of the first in-order string - O(log n)
    * 3. check whether second pre-order string is substring of the first pre-order string - O(log n)
    *
-   * HINT: 'isSubstring' checking can be done with suffix-tree in O(m) but requeres O(n) time for
+   * HINT: 'isSubstring' checking can be done with suffix-tree in O(m) but requires O(n) time for
    *       it's building. 
    *
    * Time - O(n log n)
@@ -164,7 +164,7 @@ abstract class Tree[+A <% Ordered[A]] {
   /**
    * Merges this tree with given 't' tree.
    *
-   * NOTE: This taks can be done in O(n + m) running time by using 
+   * NOTE: This task can be done in O(n + m) running time by using
    * the following algorithm:
    *
    * 1. convert this tree into list - O(n)
@@ -579,7 +579,7 @@ abstract class Tree[+A <% Ordered[A]] {
   }
 
   /**
-   * Perfroms Zig-Zag (spiral) travesal and dumps values to the list.
+   * Performs Zig-Zag (spiral) traversal and dumps values to the list.
    *
    * http://www.geeksforgeeks.org/level-order-traversal-in-spiral-form/
    *

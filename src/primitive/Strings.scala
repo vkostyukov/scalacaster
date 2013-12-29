@@ -7,12 +7,12 @@
 object Strings {
 
   /**
-   * Checks whether the given string 's' is palindrom or not.
+   * Checks whether the given string 's' is palindrome or not.
    *
    * Time - O(n)
    * Space - O(1)
    */
-  def isPalindrom(s: String): Boolean = {
+  def isPalindrome(s: String): Boolean = {
     def loop(i: Int, j: Int): Boolean =
       if (i == j) true
       else if (s.charAt(i) == s.charAt(j)) loop(i + 1, j - 1)
@@ -22,14 +22,14 @@ object Strings {
   }
 
   /**
-   * Searches for the longest palindrom in given string 's'.
+   * Searches for the longest palindrome in given string 's'.
    *
    * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
    *
    * Time - O(n^2)
    * Space - O(n)
    */
-  def longestPalindrom(s: String): String = {
+  def longestPalindrome(s: String): String = {
     def check(i: Int, j: Int): Boolean = 
       if (i == j) true
       else if (s.charAt(i) == s.charAt(j)) check(i + 1, j - 1)
@@ -54,7 +54,7 @@ object Strings {
    * 
    * http://www.geeksforgeeks.org/longest-common-substring/
    *
-   * TODO: The DP approach can be used here to reduce the compexity to O(mn)
+   * TODO: The DP approach can be used here to reduce the complexity to O(mn)
    *
    * Time - O(mn^2)
    * Space - O(mn)
@@ -113,7 +113,7 @@ object Strings {
 
   /**
    * Checks whether the pattern 'p' is substring of 's' with naive sliding algorithm.
-   * If it maches then the function returns the start index, else returns -1.
+   * If it matches then the function returns the start index, else returns -1.
    *
    * http://www.geeksforgeeks.org/searching-for-patterns-set-1-naive-pattern-searching/
    *

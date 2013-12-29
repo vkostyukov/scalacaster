@@ -20,7 +20,7 @@
  *
  *     http://www.ccscjournal.willmitchell.info/Vol7-91/No5/Marcin%20Paprzycki.pdf
  *
- * that says: "the binary search can give some benefits if comparsion of keys at
+ * that says: "the binary search can give some benefits if comparison of keys at
  * least 2x more expensive than iterating over list".
  *
  * There is also another interesting thing in this implementation. It uses 

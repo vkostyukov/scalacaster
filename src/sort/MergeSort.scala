@@ -11,11 +11,11 @@
  * -Notes-
  *
  * Using mergesort is a common way to sort a singly-linked list in a functional environment.
- * This implementation fits into standard requirements about perfromance. The only difference
- * here with default imperative implementaiotn is a way how to split a list into two parts.
+ * This implementation fits into standard requirements about performance. The only difference
+ * here with default imperative implementation is a way how to split a list into two parts.
  * This commonly solved by using length of the list, which costs O(n) since requires to walk
- * from the start to the end of this. In this implementaion, list is splitted into two equal 
- * parts by using 'halfify' function. This function perfrom very simple thing - it takes first
+ * from the start to the end of this. In this implementation, list is splitted into two equal
+ * parts by using 'halfify' function. This function perform very simple thing - it takes first
  * two elements of the list and appends them to two separate lists, which accumulate the result.
  * In other words, this function append all even nodes into first part, while odd nodes into the
  * second one. This can be done in O(n).

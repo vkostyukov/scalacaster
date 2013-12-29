@@ -11,29 +11,29 @@
  * -Notes-
  *
  * This is an implementation of Okasaki's red-black tree introduced in his fantastic book
- * "Purely Functional Data Structures and Alorightms". Here is the short link to article:
+ * "Purely Functional Data Structures and Algorithms". Here is the short link to article:
  * 
  *            www.ccs.neu.edu/course/cs3500wc/jfp99redblack.pdf
  *
  * As well, as Okasaki's tree this implementation doesn't contain a 'remove()' method, 
  * since it totally madness to understand and write such code. There is one CS hero, 
  * who handled that task - Matt Might. He described a new approach of removing node 
- * from red-balck tree by using additional node colors (double balck, negate black) 
+ * from red-black tree by using additional node colors (double black, negate black)
  * and new phase - 'bubbling'. Anyway, these things are a bit more then 'just-for-fun' 
  * package. Here is the link to Matt's research:
  *
  *              http://matt.might.net/articles/red-black-delete/
  *
- * Chris Okasaki said in his blog that removing is akward operation for functional 
- * data structures due to percistance. What does 'remove' mean in a functional world? 
+ * Chris Okasaki said in his blog that removing is awkward operation for functional
+ * data structures due to persistence. What does 'remove' mean in a functional world?
  * It means that the client wants to get a new collection without one element. In functional 
  * settings we can store both states of collection - without element 'x' (before insertion) 
- * and with 'x' (after instertion). So, when the removing is requered for 'x' the prevoius 
+ * and with 'x' (after insertion). So, when the removing is needed for 'x' the previous
  * state of collection can be used instead.
  *
  * Anyway, red-black trees is a great data structure with fantastic running time 
- * algorithms, but it's implemnetation is so complicated that you might use simple 
- * BST instead. This is why, Robert Sedgewick invented left-leaning red-balck trees as
+ * algorithms, but it's implementation is so complicated that you might use simple
+ * BST instead. This is why, Robert Sedgewick invented left-leaning red-black trees as
  * simple (in terms of implementation) replacement for red-black trees. Here is his 
  * awesome trees description:
  * 
@@ -41,16 +41,16 @@
  *
  * There are also two ways to improve current implementation. First of them - modify
  * 'balance()' method to expect violations only along the search path. Second - use 
- * 'two-way-comparsion' that is invented by Anre Andersonin method 'contains()'. 
+ * 'two-way-comparison' that is invented by Anre Andersonin method 'contains()'.
  * Here is the explanation of this idea:
  *
  *                  http://user.it.uu.se/~arnea/ps/searchproc.pdf
  *
- * This tree implementation doesn't inherit loads a useful methods from binary serach  
+ * This tree implementation doesn't inherit loads a useful methods from binary search
  * tree (see 'src/tree/Tree.scala') since is not necessary to have these methods in 
- * both trees (it also brokes DRY principle). The main goal of this project - is to
+ * both trees (it also brakes DRY principle). The main goal of this project - is to
  * provide a clear functional approaches of implementation functional data structures,
- * not to provide a completelly stable collections and algorithms framework. 
+ * not to provide a completely stable collections and algorithms framework.
  *
  *
  * PS: I would be happy, if someone decided to add Matt's 'remove()' method into this
@@ -98,7 +98,7 @@ abstract class RBTree[+A <% Ordered[A]] {
   def add[B >: A <% Ordered[B]](x: B): RBTree[B] = balancedAdd(x).blacken
 
   /**
-   * Checks whether this tree contans element 'x' or not.
+   * Checks whether this tree contains element 'x' or not.
    *
    * Time - O(n)
    * Space - O(n)
@@ -160,7 +160,7 @@ abstract class RBTree[+A <% Ordered[A]] {
     else RedTree(t.value, l, r)
 
   /**
-   * Convertes this tree into the string representation.
+   * Converts this tree into the string representation.
    *
    * Time - O(n)
    * Space - O(log n)

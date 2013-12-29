@@ -12,7 +12,7 @@
  *
  * -Notes-
  * 
- * This is an effecient implementation of binary heap that grantees O(log n) running
+ * This is an efficient implementation of binary heap that grantees O(log n) running
  * time for insert/remove operations.
  *
  * There are two invariants of binary heaps:
@@ -22,7 +22,7 @@
  *
  * These invariants complete by two main ideas. The first thing is there are (2^n - 1)
  * nodes in a complete binary tree. This can be used in insertion for choosing right
- * search path. To garantee O(log n) insertion running time two node parameters can be
+ * search path. To guarantee O(log n) insertion running time two node parameters can be
  * used - 'height' and 'size'. So, the condition looks like following:
  *
  *               node.size < math.pow(2, node.height) - 1
@@ -49,7 +49,7 @@
 abstract sealed class Heap[+A <% Ordered[A]] {
 
   /**
-   * Minumum of this heap.
+   * Minimum of this heap.
    */
   def min: A
 
@@ -97,7 +97,7 @@ abstract sealed class Heap[+A <% Ordered[A]] {
       Heap.bubbleUp(min, left.insert(x), right)
 
   /**
-   * Removes minumum element from this heap.
+   * Removes minimum element from this heap.
    *
    * Time - O(log n)
    * Space - O(log n)
@@ -171,7 +171,6 @@ object Heap {
   def apply[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
     new Branch(x, l, r, l.size + r.size + 1, math.max(l.height, r.height) + 1)
 
-
   /**
    * Creates a new heap from given sorted array 'a'.
    *
@@ -231,3 +230,4 @@ object Heap {
       Heap(x, l, r)
   }
 }
+

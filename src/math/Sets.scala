@@ -29,7 +29,7 @@ object Sets {
    * Generates all subsets of given set 's'.
    * The order doesn't matter.
    *
-   * NOTES: To count number of subsets the following formual can be used:
+   * NOTES: To count number of subsets the following formula can be used:
    *
    * S_n = SUM(k=1..n, C_k,n), or
    * S_n = 2^n
