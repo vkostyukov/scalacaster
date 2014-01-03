@@ -11,7 +11,7 @@
  * Lookup - O(n)
  */
 
-abstract class List[+A] {
+abstract sealed class List[+A] {
 
   /**
    * The head of this list.
@@ -35,8 +35,8 @@ abstract class List[+A] {
    * Space - O(n)
    */ 
   def append[B >: A](x: B): List[B] =
-    if (isEmpty) List(x)
-    else List(head, tail.append(x))
+    if (isEmpty) Cons(x)
+    else Cons(head, tail.append(x))
 
   /**
    * Prepends the element 'x' to this list. 
@@ -44,7 +44,7 @@ abstract class List[+A] {
    * Time - O(1)
    * Space - O(1)
    */
-  def prepend[B >: A](x: B): List[B] = List(x, this)
+  def prepend[B >: A](x: B): List[B] = Cons(x, this)
 
   /**
    * Concatenates this list with given 'xs' list.
@@ -64,7 +64,7 @@ abstract class List[+A] {
    */
   def remove[B >: A](x: B): List[B] = 
     if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this list.")
-    else if (x != head) List(head, tail.remove(x))
+    else if (x != head) Cons(head, tail.remove(x))
     else tail
 
   /**
@@ -88,6 +88,16 @@ abstract class List[+A] {
     if (isEmpty) false
     else if (x != head) tail.contains(x)
     else true
+
+  /**
+   * Exercise 2.1 @ PFDS.
+   * 
+   * Generates all the suffixes of this list.
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def suffixes: List[List[A]] = ???
 
   /**
    * Applies the 'f' function to the each element of this list.
@@ -122,7 +132,7 @@ abstract class List[+A] {
    * Space - O(n)
    */
   def map[B](f: (A) => B): List[B] = 
-    if (isEmpty) Nill
+    if (isEmpty) Nil
     else tail.map(f).prepend(f(head))
 
   /**
@@ -170,7 +180,7 @@ abstract class List[+A] {
    * Space - O(n)
    */
   def slice(from: Int, until: Int): List[A] = 
-    if (isEmpty || until == 0) Nill
+    if (isEmpty || until == 0) Nil
     else if (from == 0) tail.slice(from, until - 1).prepend(head)
     else tail.slice(from - 1, until - 1)
 
@@ -185,7 +195,7 @@ abstract class List[+A] {
       if (s.isEmpty) d
       else loop(s.tail, d.prepend(s.head))
 
-    loop(this, Nill)
+    loop(this, Nil)
   }
 
   /**
@@ -199,7 +209,7 @@ abstract class List[+A] {
     def insert(x: A, ll: List[A], n: Int): List[A] = 
       ll.slice(0, n).concat(ll.slice(n, ll.length).prepend(x))
 
-    if (isEmpty) Nill
+    if (isEmpty) Nil
     else insert(head, tail.shuffle, random.nextInt(tail.length + 1))
   }
 
@@ -215,7 +225,7 @@ abstract class List[+A] {
    */
   def variations(k: Int): List[List[A]] = {
     def mixmany(x: A, ll: List[List[A]]): List[List[A]] =
-      if (ll.isEmpty) Nill
+      if (ll.isEmpty) Nil
       else foldone(x, ll.head).concat(mixmany(x, ll.tail))
 
     def foldone(x: A, ll: List[A]): List[List[A]] = 
@@ -224,7 +234,7 @@ abstract class List[+A] {
     def mixone(i: Int, x: A, ll: List[A]): List[A] = 
       ll.slice(0, i).concat(ll.slice(i, ll.length).prepend(x))
 
-    if (isEmpty || k > length) Nill
+    if (isEmpty || k > length) Nil
     else if (k == 1) map(List(_))
     else mixmany(head, tail.variations(k - 1)).concat(tail.variations(k))
   }
@@ -269,7 +279,7 @@ abstract class List[+A] {
         }
       }
 
-    if (isEmpty) Nill
+    if (isEmpty) Nil
     else loop(1, tail, init(0, this, Map[Int, List[A]]()))
   }
 
@@ -293,7 +303,7 @@ abstract class List[+A] {
         if (la.length > lb.length) la else lb
       }
 
-    loop(reverse, l.reverse, Nill)
+    loop(reverse, l.reverse, Nil)
   }
 
   /**
@@ -346,7 +356,7 @@ abstract class List[+A] {
    * Space - O(n)
    */
   def subsequences: List[List[A]] =
-    if (isEmpty) Nill
+    if (isEmpty) Nil
     else { 
       val ss = tail.subsequences 
       ss.map(_.prepend(head)).prepend(List(head)).concat(ss)
@@ -408,37 +418,18 @@ abstract class List[+A] {
   }
 }
 
-object Nill extends List[Nothing] { // since 'Nil' already reserved 
+case object Nil extends List[Nothing] { // since 'Nil' already reserved 
   def head: Nothing = throw new NoSuchElementException("Nill.head")
   def tail: List[Nothing] = throw new NoSuchElementException("Nill.tail") 
 
   def isEmpty: Boolean = true
 }
 
-class Cons[A](h: A, t: List[A] = Nill) extends List[A] {
-  def head: A = h
-  def tail: List[A] = t
-
+case class Cons[A](head: A, tail: List[A] = Nil) extends List[A] {
   def isEmpty: Boolean = false
 }
 
 object List {
-
-  /**
-   * Returns an empty list instance.
-   *
-   *  Time - O(1)
-   * Space - O(1)
-   */
-  def empty[A]: List[A] = Nill
-
-  /**
-   * Creates a new list from given head 'h' and tail 't'.
-   *
-   * Time - O(1)
-   * Space - O(1)
-   */
-  def apply[A](h: A, t: List[A] = Nill): List[A] = new Cons(h, t)
 
   /**
    * Creates a new list from given 'xs' sequence.
@@ -447,7 +438,7 @@ object List {
    * Space - O(1)
    */
   def apply[A](xs: A*): List[A] = {
-    var r: List[A] = Nill
+    var r: List[A] = Nil
     for (x <- xs.reverse) r = r.prepend(x)
     r
   }
