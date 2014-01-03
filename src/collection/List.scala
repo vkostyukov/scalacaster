@@ -97,7 +97,17 @@ abstract sealed class List[+A] {
    * Time - O(n)
    * Space - O(n)
    */
-  def suffixes: List[List[A]] = ???
+  def suffixes: List[List[A]] = 
+    if (isEmpty) Cons(Nil)
+    else tail.suffixes.prepend(this)
+
+  /**
+   * Generates all the prefixes of this list.
+   * 
+   * Time - O(n)
+   * Space - O(n)
+   */
+  def prefixes: List[List[A]] = ???
 
   /**
    * Applies the 'f' function to the each element of this list.
@@ -443,3 +453,6 @@ object List {
     r
   }
 }
+
+val xs = List(1, 2, 3, 4)
+println(xs.suffixes)
