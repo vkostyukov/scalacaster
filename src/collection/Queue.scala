@@ -5,7 +5,9 @@
  * Queue http://en.wikipedia.org/wiki/Queue_(abstract_data_type)
  *
  * -Notes-
- * This queue also known as Banker's Queue.
+ *
+ * This queue also known as Banker's Queue. There is also Physics Queue. Interested in the topic -
+ * read the Okasaki`s book.
  *
  * Enqueue - O(1)
  * Dequeue - O(1)
@@ -13,27 +15,13 @@
  * Rear - O(1)
  */
 
-abstract class List[+A] {
-  def reverse: List[A] = {
-    def loop(s: List[A], d: List[A]): List[A] = s match {
-      case Nill => d
-      case Cons(h, t) => loop(t, new Cons(h, d))
-    }
-
-    loop(this, Nill)
-  }
-}
-
-case object Nill extends List[Nothing]
-case class Cons[A](head: A, tail: List[A]) extends List[A]
-
-class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
+class Queue[+A](in: List[A] = Nil, out: List[A] = Nil) {
 
   /**
    * Check whether this queue is empty or not.
    */
   def isEmpty: Boolean = (in, out) match {
-    case (Nill, Nill) => true
+    case (Nil, Nil) => true
     case (_, _) => false
   }
 
@@ -43,11 +31,11 @@ class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
    * Time - O(1)
    * Space - O(1)
    */
-  def dequeue: (A, Queue[A]) = (in, out) match {
-    case (_, Cons(h, t)) => (h, new Queue(in, t))
-    case (_, _) => in.reverse match {
-      case Cons(h, t) => (h, new Queue(Nill, t))
-      case Nill => throw new NoSuchElementException("Empty queue.")
+   def dequeue: (A, Queue[A]) = out match {
+    case hd :: tl => (hd, new Queue(in, tl))
+    case Nil => in.reverse match {
+      case hd :: tl => (hd, new Queue(Nil, tl))
+      case Nil => throw new NoSuchElementException("Empty queue.")
     }
   }
 
@@ -57,7 +45,7 @@ class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
    * Time - O(1)
    * Space - O(1)
    */
-  def enqueue[B >: A](x: B): Queue[B] = new Queue(new Cons(x, in), out)
+  def enqueue[B >: A](x: B): Queue[B] = new Queue(x :: in, out)
 
   /**
    * Returns the first element of this queue.
@@ -65,9 +53,7 @@ class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
    * Time - O(1)
    * Space - O(1)
    */
-  def front: A = dequeue match {
-    case (a, _) => a
-  }
+  def front: A = dequeue match { case (a, _) => a }
 
   /**
    * Returns the rear of this queue.
@@ -75,9 +61,7 @@ class Queue[+A](in: List[A] = Nill, out: List[A] = Nill) {
    * Time - O(1)
    * Space - O(1)
    */
-  def rear: Queue[A] = dequeue match {
-    case (_, q) => q
-  }
+  def rear: Queue[A] = dequeue match { case (_, q) => q }
 }
 
 object Queue {
