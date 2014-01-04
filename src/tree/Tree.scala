@@ -16,7 +16,7 @@
  * at this node. This allows to get the size of tree in O(1) instead of linear time.
  */
 
-abstract class Tree[+A <% Ordered[A]] {
+abstract sealed class Tree[+A <% Ordered[A]] {
 
   /**
    * The value of this tree.
@@ -34,14 +34,14 @@ abstract class Tree[+A <% Ordered[A]] {
   def right: Tree[A]
 
   /**
-   * Checks whether this tree is empty or not.
-   */
-  def isEmpty: Boolean
-
-  /**
    * The size of this tree.
    */
   def size: Int
+
+  /**
+   * Checks whether this tree is empty or not.
+   */
+  def isEmpty: Boolean
 
   /**
    * Checks whether this tree is a binary search tree or not.
@@ -86,9 +86,9 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def add[B >: A <% Ordered[B]](x: B): Tree[B] =
-    if (isEmpty) Tree(x)
-    else if (x < value) Tree(value, left.add(x), right)
-    else if (x > value) Tree(value, left, right.add(x))
+    if (isEmpty) Tree.make(x)
+    else if (x < value) Tree.make(value, left.add(x), right)
+    else if (x > value) Tree.make(value, left, right.add(x))
     else this
 
   /**
@@ -98,16 +98,16 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def remove[B >: A <% Ordered[B]](x: B): Tree[B] =
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
-    else if (x < value) Tree(value, left.remove(x), right)
-    else if (x > value) Tree(value, left, right.remove(x))
+    if (isEmpty) fail("Can't find " + x + " in this tree.")
+    else if (x < value) Tree.make(value, left.remove(x), right)
+    else if (x > value) Tree.make(value, left, right.remove(x))
     else {
       if (left.isEmpty && right.isEmpty) Tree.empty
       else if (left.isEmpty) right
       else if (right.isEmpty) left
       else {
         val succ = right.min
-        Tree(succ, left, right.remove(succ))
+        Tree.make(succ, left, right.remove(succ))
       }
     }
 
@@ -130,7 +130,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def subtree[B >: A <% Ordered[B]](x: B): Tree[B] =
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    if (isEmpty) fail("Can't find " + x + " in this tree.")
     else if (x < value) left.subtree(x)
     else if (x > value) right.subtree(x)
     else this
@@ -218,7 +218,7 @@ abstract class Tree[+A <% Ordered[A]] {
    */
   def map[B <% Ordered[B]](f: (A) => B): Tree[B] = 
     if (isEmpty) Tree.empty
-    else Tree(f(value), left.map(f), right.map(f))
+    else Tree.make(f(value), left.map(f), right.map(f))
 
   /**
    * Inverts the sign of all the values in this tree.
@@ -229,7 +229,7 @@ abstract class Tree[+A <% Ordered[A]] {
    */
   def invert[B >: A](implicit num: Numeric[B]): Tree[B] =
     if (isEmpty) Tree.empty
-    else Tree(num.negate(value), right.invert(num), left.invert(num))
+    else Tree.make(num.negate(value), right.invert(num), left.invert(num))
 
   /**
    * Calculates the sum of all elements of this tree.
@@ -258,7 +258,7 @@ abstract class Tree[+A <% Ordered[A]] {
       if (t.isEmpty) m
       else loop(t.left, t.value)
 
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    if (isEmpty) fail("An empty tree.")
     else loop(left, value)
   }
 
@@ -273,7 +273,7 @@ abstract class Tree[+A <% Ordered[A]] {
       if (t.isEmpty) m
       else loop(t.right, t.value)
 
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    if (isEmpty) fail("An empty tree.")
     else loop(right, value)
   }
 
@@ -294,7 +294,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def depth[B >: A <% Ordered[B]](x: B): Int =
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    if (isEmpty) fail("Can't find " + x + " in this tree.")
     else if (x < value) 1 + left.depth(x)
     else if (x > value) 1 + right.depth(x)
     else 0
@@ -307,14 +307,14 @@ abstract class Tree[+A <% Ordered[A]] {
    */
   def successor[B >: A <% Ordered[B]](x: B): A = {
     def forward(t: Tree[A], p: List[Tree[A]]): A =
-      if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+      if (t.isEmpty) fail("Can't find " + x + " in this tree.")
       else if (x < t.value) forward(t.left, t :: p)
       else if (x > t.value) forward(t.right, t :: p)
       else if (!t.right.isEmpty) t.right.min
       else backward(t, p)
 
     def backward(t: Tree[A], p: List[Tree[A]]): A = 
-      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an successor.")
+      if (p.isEmpty) fail("The " + x + " doesn't have an successor.")
       else if (t == p.head.right) backward(p.head, p.tail)
       else p.head.value
 
@@ -329,14 +329,14 @@ abstract class Tree[+A <% Ordered[A]] {
    */
   def predecessor[B >: A <% Ordered[B]](x: B): A = {
     def forward(t: Tree[A], p: List[Tree[A]]): A =
-      if (t.isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+      if (t.isEmpty) fail("Can't find " + x + " in this tree.")
       else if (x < t.value) forward(t.left, t :: p)
       else if (x > t.value) forward(t.right, t :: p)
       else if (!t.left.isEmpty) t.left.max
       else backward(t, p)
 
     def backward(t: Tree[A], p: List[Tree[A]]): A = 
-      if (p.isEmpty) throw new NoSuchElementException("The " + x + " doesn't have an predecessor.")
+      if (p.isEmpty) fail("The " + x + " doesn't have an predecessor.")
       else if (t == p.head.left) backward(p.head, p.tail)
       else p.head.value
 
@@ -355,9 +355,9 @@ abstract class Tree[+A <% Ordered[A]] {
       else if (x > t.value && y > t.value) loop(t.right)
       else t.value
 
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
-    else if (!contains(x)) throw new NoSuchElementException("Tree doesn't contain " + x + ".")
-    else if (!contains(y)) throw new NoSuchElementException("Tree doesn't contain " + y + ".")
+    if (isEmpty) fail("Tree is empty.")
+    else if (!contains(x)) fail("Tree doesn't contain " + x + ".")
+    else if (!contains(y)) fail("Tree doesn't contain " + y + ".")
     else loop(this)
   }
 
@@ -368,7 +368,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def lowerBound[B >: A <% Ordered[B]](x: B): A =
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    if (isEmpty) fail("Tree is empty.")
     else if (x < value)
       if (!left.isEmpty) left.lowerBound(x)
       else value
@@ -396,7 +396,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Time - O(log n)
    */
   def upperBound[B >: A <% Ordered[B]](x: B): A = 
-    if (isEmpty) throw new NoSuchElementException("Tree is empty.")
+    if (isEmpty) fail("Tree is empty.")
     else if (x < value)
       if (!left.isEmpty) { val v = left.upperBound(x); if (v < x) value else v }
       else value
@@ -412,7 +412,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def path[B >: A <% Ordered[B]](x: B): List[Tree[A]] = 
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    if (isEmpty) fail("Can't find " + x + " in this tree.")
     else if (x < value) this :: left.path(x)
     else if (x > value) this :: right.path(x)
     else List(this)
@@ -424,7 +424,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def trace[B >: A <% Ordered[B]](x: B): List[A] = 
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this tree.")
+    if (isEmpty) fail("Can't find " + x + " in this tree.")
     else if (x < value) this.value :: left.trace(x)
     else if (x > value) this.value :: right.trace(x)
     else List(this.value)
@@ -515,7 +515,7 @@ abstract class Tree[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def apply(n: Int): A = 
-    if (isEmpty) throw new NoSuchElementException("Tree doesn't contain a " + n + "th element.")
+    if (isEmpty) fail("Tree doesn't contain a " + n + "th element.")
     else {
       val size = left.size
       if (n < size) left(n)
@@ -616,44 +616,44 @@ abstract class Tree[+A <% Ordered[A]] {
 
     loop(this, Nil)
   }
+
+  /**
+   * Fails with given message 'm'.
+   */
+  def fail(m: String) = throw new NoSuchElementException(m)
 }
 
-object Leaf extends Tree[Nothing] {
-  def value: Nothing = throw new NoSuchElementException("Leaf.value")
-  def left: Tree[Nothing] = throw new NoSuchElementException("Leaf.left")
-  def right: Tree[Nothing] = throw new NoSuchElementException("Leaf.right")
+case object Leaf extends Tree[Nothing] {
+  def value: Nothing = fail("An empty tree.")
+  def left: Tree[Nothing] = fail("An empty tree.")
+  def right: Tree[Nothing] = fail("An empty tree.")
   def size: Int = 0
 
   def isEmpty: Boolean = true
 }
 
-class Branch[A <% Ordered[A]](v: A, l: Tree[A], r: Tree[A], s: Int) extends Tree[A] {
-  def value: A = v
-  def left: Tree[A] = l
-  def right: Tree[A] = r
-  def size: Int = s
-
+case class Branch[A <% Ordered[A]](value: A, 
+                                   left: Tree[A], 
+                                   right: Tree[A], 
+                                   size: Int) extends Tree[A] {
   def isEmpty: Boolean = false
 }
 
 object Tree {
 
   /**
-   * Returns an empty tree instance.
-   *
-   * Time - O(1)
-   * Space - O(1)
+   * An empty tree.
    */
   def empty[A]: Tree[A] = Leaf
 
   /**
-   * Creates a singleton tree for given element 'x'.
-   *
+   * A smart constructor for tree's branch.
+   * 
    * Time - O(1)
    * Space - O(1)
    */
-  def apply[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf): Tree[A] = 
-    new Branch(x, l, r, l.size + r.size + 1)
+  def make[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf) =
+    Branch(x, l, r, l.size + r.size + 1)
 
   /**
    * Creates a new tree from given sequence 'xs'.
@@ -678,7 +678,7 @@ object Tree {
       if (l == r) Tree.empty
       else {
         val p = (l + r) / 2
-        Tree(a(p), loop(l, p), loop(p + 1, r))
+        Tree.make(a(p), loop(l, p), loop(p + 1, r))
       }
 
     loop(0, a.length)
@@ -700,7 +700,7 @@ object Tree {
       else {
         val (lt, left) = loop(ll, n / 2)
         val (rt, right) = loop(lt.tail, n - 1 - n / 2)
-        (rt, Tree(lt.head, left, right))
+        (rt, Tree.make(lt.head, left, right))
       }
 
     loop(l, l.length)._2
