@@ -35,8 +35,8 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */ 
   def append[B >: A](x: B): List[B] =
-    if (isEmpty) Cons(x)
-    else Cons(head, tail.append(x))
+    if (isEmpty) List.make(x)
+    else List.make(head, tail.append(x))
 
   /**
    * Prepends the element 'x' to this list. 
@@ -44,7 +44,7 @@ abstract sealed class List[+A] {
    * Time - O(1)
    * Space - O(1)
    */
-  def prepend[B >: A](x: B): List[B] = Cons(x, this)
+  def prepend[B >: A](x: B): List[B] = List.make(x, this)
 
   /**
    * Concatenates this list with given 'xs' list.
@@ -63,8 +63,8 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def remove[B >: A](x: B): List[B] = 
-    if (isEmpty) throw new NoSuchElementException("Can't find " + x + " in this list.")
-    else if (x != head) Cons(head, tail.remove(x))
+    if (isEmpty) fail("Can't find " + x + " in this list.")
+    else if (x != head) List.make(head, tail.remove(x))
     else tail
 
   /**
@@ -74,7 +74,7 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def apply(n: Int): A =
-    if (isEmpty) throw new NoSuchElementException("Index out of the bounds.")
+    if (isEmpty) fail("Index out of the bounds.")
     else if (n == 0) head
     else tail(n - 1)
 
@@ -98,7 +98,7 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def suffixes: List[List[A]] = 
-    if (isEmpty) Cons(Nil)
+    if (isEmpty) List.make(List.empty)
     else tail.suffixes.prepend(this)
 
   /**
@@ -142,7 +142,7 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def map[B](f: (A) => B): List[B] = 
-    if (isEmpty) Nil
+    if (isEmpty) List.empty
     else tail.map(f).prepend(f(head))
 
   /**
@@ -168,7 +168,7 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */ 
   def min[B >: A](implicit ordering: Ordering[B]): B = 
-    if (isEmpty) throw new NoSuchElementException("Nill.min")
+    if (isEmpty) fail("An empty list.")
     else if (tail.isEmpty) head
     else ordering.min(head, tail.min(ordering))
 
@@ -179,7 +179,7 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def max[B >: A](implicit ordering: Ordering[B]): B = 
-    if (isEmpty) throw new NoSuchElementException("Nill.max")
+    if (isEmpty) fail("An empty list.")
     else if (tail.isEmpty) head
     else ordering.max(head, tail.max(ordering))
 
@@ -190,7 +190,7 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def slice(from: Int, until: Int): List[A] = 
-    if (isEmpty || until == 0) Nil
+    if (isEmpty || until == 0) List.empty
     else if (from == 0) tail.slice(from, until - 1).prepend(head)
     else tail.slice(from - 1, until - 1)
 
@@ -205,7 +205,7 @@ abstract sealed class List[+A] {
       if (s.isEmpty) d
       else loop(s.tail, d.prepend(s.head))
 
-    loop(this, Nil)
+    loop(this, List.empty)
   }
 
   /**
@@ -219,7 +219,7 @@ abstract sealed class List[+A] {
     def insert(x: A, ll: List[A], n: Int): List[A] = 
       ll.slice(0, n).concat(ll.slice(n, ll.length).prepend(x))
 
-    if (isEmpty) Nil
+    if (isEmpty) List.empty
     else insert(head, tail.shuffle, random.nextInt(tail.length + 1))
   }
 
@@ -235,17 +235,17 @@ abstract sealed class List[+A] {
    */
   def variations(k: Int): List[List[A]] = {
     def mixmany(x: A, ll: List[List[A]]): List[List[A]] =
-      if (ll.isEmpty) Nil
+      if (ll.isEmpty) List.empty
       else foldone(x, ll.head).concat(mixmany(x, ll.tail))
 
     def foldone(x: A, ll: List[A]): List[List[A]] = 
-      (1 to ll.length).foldLeft(List(ll.prepend(x)))((a, i) => a.prepend(mixone(i, x, ll)))
+      (1 to ll.length).foldLeft(List.make(ll.prepend(x)))((a, i) => a.prepend(mixone(i, x, ll)))
 
     def mixone(i: Int, x: A, ll: List[A]): List[A] = 
       ll.slice(0, i).concat(ll.slice(i, ll.length).prepend(x))
 
-    if (isEmpty || k > length) Nil
-    else if (k == 1) map(List(_))
+    if (isEmpty || k > length) List.empty
+    else if (k == 1) map(List.make(_))
     else mixmany(head, tail.variations(k - 1)).concat(tail.variations(k))
   }
 
@@ -289,7 +289,7 @@ abstract sealed class List[+A] {
         }
       }
 
-    if (isEmpty) Nil
+    if (isEmpty) List.empty
     else loop(1, tail, init(0, this, Map[Int, List[A]]()))
   }
 
@@ -313,7 +313,7 @@ abstract sealed class List[+A] {
         if (la.length > lb.length) la else lb
       }
 
-    loop(reverse, l.reverse, Nil)
+    loop(reverse, l.reverse, List.empty)
   }
 
   /**
@@ -355,7 +355,7 @@ abstract sealed class List[+A] {
         loop(nsm, num.max(gm, nsm), l.tail)
       }
 
-    if (isEmpty) throw new NoSuchElementException("Empty list.")
+    if (isEmpty) fail("An empty list.")
     else loop(head, head, tail)
   }
 
@@ -366,10 +366,10 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def subsequences: List[List[A]] =
-    if (isEmpty) Nil
+    if (isEmpty) List.empty
     else { 
       val ss = tail.subsequences 
-      ss.map(_.prepend(head)).prepend(List(head)).concat(ss)
+      ss.map(_.prepend(head)).prepend(List.make(head)).concat(ss)
     }
 
   /**
@@ -426,16 +426,21 @@ abstract sealed class List[+A] {
     if (isEmpty) "List[]"
     else "List[" + loop(head, tail, "") + "]"
   }
+
+  /**
+   * Fails with given message.
+   */
+  def fail(m: String) = throw new NoSuchElementException(m)
 }
 
-case object Nil extends List[Nothing] { // since 'Nil' already reserved 
-  def head: Nothing = throw new NoSuchElementException("Nill.head")
-  def tail: List[Nothing] = throw new NoSuchElementException("Nill.tail") 
+case object Nil extends List[Nothing] {
+  def head: Nothing = fail("An empty list.")
+  def tail: List[Nothing] = fail("An empty list.")
 
   def isEmpty: Boolean = true
 }
 
-case class Cons[A](head: A, tail: List[A] = Nil) extends List[A] {
+case class Cons[A](head: A, tail: List[A]) extends List[A] {
   def isEmpty: Boolean = false
 }
 
@@ -443,12 +448,13 @@ object List {
 
   /**
    * An empty list.
-   * 
-   * Time - O(1)
-   * Space - O(1)
-   *
    */
   def empty[A]: List[A] = Nil
+
+  /**
+   * A smart constructor for list's cons.
+   */
+  def make[A](x: A, t: List[A] = Nil): List[A] = Cons(x, t)
 
   /**
    * Creates a new list from given 'xs' sequence.

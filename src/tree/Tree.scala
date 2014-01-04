@@ -652,7 +652,7 @@ object Tree {
    * Time - O(1)
    * Space - O(1)
    */
-  def make[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf) =
+  def make[A <% Ordered[A]](x: A, l: Tree[A] = Leaf, r: Tree[A] = Leaf): Tree[A] =
     Branch(x, l, r, l.size + r.size + 1)
 
   /**
