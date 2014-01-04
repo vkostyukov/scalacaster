@@ -81,7 +81,7 @@ object Queue {
    * Space - O(1)
    */
   def apply[A](xs: A*): Queue[A] = {
-    var r: Queue[A] = new Queue()
+    var r: Queue[A] = Queue.empty
     for (x <- xs) {
       r = r.enqueue(x)
     }

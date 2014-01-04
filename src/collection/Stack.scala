@@ -9,21 +9,22 @@
  * Pop - O(1)
  */
 
-abstract class Stack[+A] {
+class Stack[+A](self: List[A]) {
+
   /**
    * The top of this stack.
    */
-  def top: A
+  def top: A = self.head
 
   /**
    * The rest of this stack.
    */
-  def rest: Stack[A]
+  def rest: Stack[A] = new Stack(self.tail)
 
   /**
    * Checks whether this stack is empty or not.
    */
-  def isEmpty: Boolean
+  def isEmpty: Boolean = self.isEmpty
 
   /**
    * Pops top element from this stack.
@@ -39,21 +40,7 @@ abstract class Stack[+A] {
    * Time - O(1)
    * Space - O(1)
    */
-  def push[B >: A](x: B): Stack[B] = new NonEmptyStack(x, this)
-}
-
-object EmptyStack extends Stack[Nothing] {
-  def top: Nothing = throw new NoSuchElementException("EmptyStack.top")
-  def rest: Nothing = throw new NoSuchElementException("EmptyStack.rest")
-
-  def isEmpty: Boolean = true
-}
-
-class NonEmptyStack[A](t: A, r: Stack[A] = EmptyStack) extends Stack[A] {
-  def top: A = t
-  def rest: Stack[A] = r
-
-  def isEmpty: Boolean = false
+  def push[B >: A](x: B): Stack[B] = new Stack(x :: self)
 }
 
 object Stack {
@@ -64,7 +51,7 @@ object Stack {
     * Time - O(1)
     * Space - O(1)
     */
-   def empty[A]: Stack[A] = EmptyStack
+   def empty[A]: Stack[A] = new Stack(Nil)
 
    /**
     * Creates a new stack from given 'xs' sequence.
@@ -73,7 +60,7 @@ object Stack {
     * Space - O(1)
     */
    def apply[A](xs: A*): Stack[A] = {
-    var r: Stack[A] = EmptyStack
+    var r: Stack[A] = Stack.empty
     for (x <- xs) r = r.push(x)
     r
   }

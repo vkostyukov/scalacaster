@@ -442,17 +442,23 @@ case class Cons[A](head: A, tail: List[A] = Nil) extends List[A] {
 object List {
 
   /**
+   * An empty list.
+   * 
+   * Time - O(1)
+   * Space - O(1)
+   *
+   */
+  def empty[A]: List[A] = Nil
+
+  /**
    * Creates a new list from given 'xs' sequence.
    *
    * Time - O(n)
    * Space - O(1)
    */
   def apply[A](xs: A*): List[A] = {
-    var r: List[A] = Nil
+    var r: List[A] = List.empty
     for (x <- xs.reverse) r = r.prepend(x)
     r
   }
 }
-
-val xs = List(1, 2, 3, 4)
-println(xs.suffixes)

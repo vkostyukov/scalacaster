@@ -230,4 +230,3 @@ object Heap {
       Heap(x, l, r)
   }
 }
-
