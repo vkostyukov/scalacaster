@@ -45,7 +45,7 @@ What is inside?
 * Linear Search [`src/search/LinearSearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/LinearSearch.scala)
 * 
 
-How to controbute?
+How to contribute?
 ------------------
 
 * Give it a star
