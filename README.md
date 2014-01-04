@@ -6,7 +6,7 @@ Since Fender Stratocaster is a classic guitar, **Scalacaster** is classic algori
 How to use Scalacaster?
 -----------------------
 
-Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be launched at all. The code is not for Scala compiler and JVM. It is for humans. For enthusiasts and researches of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments. Anyway, all the sources are ready for compilation and launching.
+Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be launched at all. The code is not for Scala compiler and JVM. It is for human beings. For enthusiasts and researches of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments. Anyway, all the sources are ready for compilation and launching.
 
 There is also a great slides compiled as an overview the whole idea behind the Scalacaster. See ["Purely Functional Data Structures in Scala"](http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521) slides for more details.
 
@@ -43,7 +43,6 @@ What is inside?
 * Selection Search (k-th order statistic) [`src/search/SelectionSearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/SelectionSearch.scala)
 * Binary Search [`src/search/BinarySearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/BinarySearch.scala)
 * Linear Search [`src/search/LinearSearch.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/search/LinearSearch.scala)
-* 
 
 How to contribute?
 ------------------
@@ -53,7 +52,7 @@ How to contribute?
 * Send a PR with fixes of typos/bugs/etc
 
 ----
-by [Vladimir Kostyukov](http://vkostyukov.ru), 2013
+by [Vladimir Kostyukov](http://vkostyukov.ru), 2013-2014
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/vkostyukov/scalacaster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
