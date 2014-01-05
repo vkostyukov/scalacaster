@@ -187,7 +187,7 @@ object Heap {
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
-      if (i < a.length) Heao.bubbleDown(a(i), loop(2 * i + 1), loop(2 * i + 2))
+      if (i < a.length) Heap.bubbleDown(a(i), loop(2 * i + 1), loop(2 * i + 2))
       else Heap.empty
 
     loop(0)
