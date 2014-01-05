@@ -30,15 +30,15 @@
  * algorithm by R. Floyd for searching the middle of the list in O(n).
  */
 
-def binarysearch[A <% Ordered[A]](list: List[A], key: A): A = {
-  def search(l: List[A], r: List[A]): A =
-    if (l == r) null.asInstanceOf[A]
+def binarysearch[A <% Ordered[A]](list: List[A], key: A): Option[A] = {
+  def search(l: List[A], r: List[A]): Option[A] =
+    if (l == r) None
     else test(l, r, middle(l, r))
 
-  def test(l: List[A], r: List[A], m: List[A]): A =
+  def test(l: List[A], r: List[A], m: List[A]): Option[A] =
     if (key < m.head) search(l, m)
     else if (key > m.head) search(m.tail, r)
-    else m.head
+    else Some(m.head)
 
   def middle(l: List[A], r: List[A]): List[A] = {
     def race(t: List[A], h: List[A]): List[A] =
