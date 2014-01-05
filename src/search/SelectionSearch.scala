@@ -9,16 +9,16 @@
  * Average - O(n)
  */
 
-def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): A = { // quickselect
-  def search(t: (List[A], A, List[A]), m: Int): A = t match {
-    case (Nil, p, Nil) => p
+def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): Option[A] = { // quickselect
+  def search(t: (List[A], A, List[A]), m: Int): Option[A] = t match {
+    case (Nil, p, Nil) => Some(p)
     case (l, p, g) => select(l, p, g, l.length, m)
   }
 
-  def select(l: List[A], p: A, g: List[A], q: Int, m: Int): A = 
+  def select(l: List[A], p: A, g: List[A], q: Int, m: Int): Option[A] = 
     if (m < q) partitionAndSearch(l, m)
     else if (m > q) partitionAndSearch(g, m - q - 1)
-    else p
+    else Some(p)
 
   /**
    * The same as in quicksort.
@@ -33,8 +33,8 @@ def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): A = { // quickselec
     loop(as.head, as.tail, Nil, Nil)
   }
 
-  def partitionAndSearch(as: List[A], m: Int): A = 
-    if (as.isEmpty) null.asInstanceOf[A]
+  def partitionAndSearch(as: List[A], m: Int): Option[A] = 
+    if (as.isEmpty) None
     else search(partition(as), m)
 
   partitionAndSearch(list, n)
