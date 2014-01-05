@@ -114,14 +114,28 @@ abstract sealed class Tree[+A <% Ordered[A]] {
   /**
    * Checks whether this tree contains element 'x' or not.
    *
+   * Exercise 2.1 @ PFDS.
+   *
+   * According to the Anderson's paper (1991) we can reduce the number of comparisons
+   * from 2d to d + 1 in the worst case by keeping track of candidate elements that migh
+   * be equal to the query.
+   *
    * Time - O(log n)
    * Space - O(log n)
    */
-  def contains[B >: A <% Ordered[B]](x: B): Boolean =
-    if (isEmpty) false
-    else if (x < value) left.contains(x)
-    else if (x > value) right.contains(x)
-    else true
+  def contains[B >: A <% Ordered[B]](x: B): Boolean = {
+    def loop(t: Tree[A], c: Option[A]): Boolean = 
+      if (t.isEmpty) check(c)
+      else if (x < t.value) loop(t.left, c)
+      else loop(t.right, Some(t.value))
+
+    def check(c: Option[A]): Boolean = c match {
+      case Some(y) if y == x => true
+      case _ => false
+    }
+
+    loop(this, None)
+  }
 
   /**
    * Returns the sub-tree of this tree with root element 'x'.
@@ -706,3 +720,6 @@ object Tree {
     loop(l, l.length)._2
   }
 }
+
+//val t = Tree.fromSortedArray(Array(1, 3, 5, 7, 10, 20))
+//println(t.contains(2))
