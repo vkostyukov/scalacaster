@@ -719,7 +719,45 @@ object Tree {
 
     loop(l, l.length)._2
   }
-}
 
-//val t = Tree.fromSortedArray(Array(1, 3, 5, 7, 10, 20))
-//println(t.contains(2))
+  /**
+   * Exercise 2.5a @ PFDS.
+   * 
+   * Generates a complete tree of depth 'd' with 'x' stored in every node.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def complete[A <% Ordered[A]](x: A, d: Int): Tree[A] =
+    if (d == 0) Tree.make(x)
+    else {
+      val t = Tree.complete(x, d - 1)
+      Tree.make(x, t, t)
+    }
+
+  /**
+   * Exercise 2.5b @ PFDS.
+   * 
+   * Generates a balanced tree of given size 's' with 'x' stored in every node.
+   *
+   * NOTES:
+   *
+   * Here, we're trying to reduce the memory footprint by sharing the common structure
+   * of two almost-equivalent trees (in function pair). Instead, we're paying 2 * O(log n)
+   * time for insertion at every level of recursion.
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
+  def balanced[A <% Ordered[A]](x: A, s: Int): Tree[A] = {
+    def pair(ss: Int): (Tree[A], Tree[A]) =
+      if (ss <= 0) (Tree.empty, Tree.empty)
+      else {
+        val t = balanced(x, ss - 1)
+        (t, t.add(x)) 
+      }
+
+    val (lt, rt) = pair(s / 2) 
+    Tree.make(x, lt, rt)
+  }
+}
