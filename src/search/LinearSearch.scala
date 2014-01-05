@@ -9,10 +9,10 @@
  * Average - O(n)
  */
 
-def linearsearch[A](list: List[A], key: A): A = {
-  def search(as: List[A]): A = 
-    if (as.isEmpty) null.asInstanceOf[A]
-    else if (as.head == key) as.head
+def linearsearch[A](list: List[A], key: A): Option[A] = {
+  def search(as: List[A]): Option[A] = 
+    if (as.isEmpty) None
+    else if (as.head == key) Some(as.head)
     else search(as.tail)
 
   search(list)
