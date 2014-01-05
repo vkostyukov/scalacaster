@@ -11,6 +11,10 @@
  * Merge - O(n)
  *
  * -Notes-
+ *
+ * There is an article that describes all the ideas behind this implementation:
+ *
+ *                      http://arxiv.org/pdf/1312.4666v1.pdf
  * 
  * This is an efficient implementation of binary heap that grantees O(log n) running
  * time for insert/remove operations.
@@ -85,16 +89,14 @@ abstract sealed class Heap[+A <% Ordered[A]] {
    * Space - O(log n)
    */
   def insert[B >: A <% Ordered[B]](x: B): Heap[B] =
-    if (isEmpty) 
-      Heap(x)
+    if (isEmpty) Heap.make(x)
     else if (left.size < math.pow(2, left.height) - 1) 
       Heap.bubbleUp(min, left.insert(x), right)
     else if (right.size < math.pow(2, right.height) - 1) 
       Heap.bubbleUp(min, left, right.insert(x))
     else if (right.height < left.height) 
       Heap.bubbleUp(min, left, right.insert(x))
-    else 
-      Heap.bubbleUp(min, left.insert(x), right)
+    else Heap.bubbleUp(min, left.insert(x), right)
 
   /**
    * Removes minimum element from this heap.
@@ -104,49 +106,47 @@ abstract sealed class Heap[+A <% Ordered[A]] {
    */
   def remove: Heap[A] = {
     def floatLeft[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = l match {
-      case Branch(y, lt, rt, _, _) => Heap(y, Heap(x, lt, rt), r)
-      case _ => Heap(x, l, r)
+      case Branch(y, lt, rt, _, _) => Heap.make(y, Heap.make(x, lt, rt), r)
+      case _ => Heap.make(x, l, r)
     }
 
     def floatRight[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = r match {
-      case Branch(y, lt, rt, _, _) => Heap(y, l, Heap(x, lt, rt))
-      case _ => Heap(x, l, r)
+      case Branch(y, lt, rt, _, _) => Heap.make(y, l, Heap.make(x, lt, rt))
+      case _ => Heap.make(x, l, r)
     }
 
     def mergeChildren(l: Heap[A], r: Heap[A]): Heap[A] = 
-      if (l.isEmpty && r.isEmpty) 
-        Heap.empty
+      if (l.isEmpty && r.isEmpty) Heap.empty
       else if (l.size < math.pow(2, l.height) - 1) 
         floatLeft(l.min, mergeChildren(l.left, l.right), r)
       else if (r.size < math.pow(2, r.height) - 1)
         floatRight(r.min, l, mergeChildren(r.left, r.right))
       else if (r.height < l.height)
         floatLeft(l.min, mergeChildren(l.left, l.right), r)
-      else
-        floatRight(r.min, l, mergeChildren(r.left, r.right))
+      else floatRight(r.min, l, mergeChildren(r.left, r.right))
 
     def bubbleRootDown(h: Heap[A]): Heap[A] = 
       if (h.isEmpty) Heap.empty
       else Heap.bubbleDown(h.min, h.left, h.right)
 
-    if (isEmpty) throw new NoSuchElementException("Empty heap.")
+    if (isEmpty) fail("An empty heap.")
     else bubbleRootDown(mergeChildren(left, right))
   }
+
+  /**
+   * Fails with given message.
+   */
+  def fail(m: String) = throw new NoSuchElementException(m)
 }
 
-case class Branch[A <% Ordered[A]](m: A, l: Heap[A], r: Heap[A], s: Int, h: Int) extends Heap[A] {
-  def min: A = m
-  def left: Heap[A] = l
-  def right: Heap[A] = r
-  def size: Int = s
-  def height: Int = h
+case class Branch[A <% Ordered[A]](min: A, left: Heap[A], right: Heap[A], size: Int, height: Int) extends Heap[A] {
   def isEmpty: Boolean = false
 }
 
 case object Leaf extends Heap[Nothing] {
-  def min: Nothing = throw new NoSuchElementException("Leaf.min")
-  def left: Heap[Nothing] = throw new NoSuchElementException("Leaf.left")
-  def right: Heap[Nothing] = throw new NoSuchElementException("Leaf.right")
+  def min: Nothing = fail("An empty heap.")
+  def left: Heap[Nothing] = fail("An empty heap.")
+  def right: Heap[Nothing] = fail("An empty heap.")
   def size: Int = 0
   def height: Int = 0
   def isEmpty: Boolean = true
@@ -156,20 +156,14 @@ object Heap {
 
   /**
    * Returns an empty heap.
-   *
-   * Time - O(1)
-   * Space - O(1)
    */
   def empty[A]: Heap[A] = Leaf
 
   /**
-   * Creates a singleton heap for given element 'x'.
-   *
-   * Time - O(1)
-   * Space - O(1)
+   * A smart constructor for heap's branch.
    */
-  def apply[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
-    new Branch(x, l, r, l.size + r.size + 1, math.max(l.height, r.height) + 1)
+  def make[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
+    Branch(x, l, r, l.size + r.size + 1, math.max(l.height, r.height) + 1)
 
   /**
    * Creates a new heap from given sorted array 'a'.
@@ -179,7 +173,7 @@ object Heap {
    */
   def fromSortedArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
-      if (i < a.length) Heap(a(i), loop(2 * i + 1), loop(2 * i + 2))
+      if (i < a.length) Heap.make(a(i), loop(2 * i + 1), loop(2 * i + 2))
       else Heap.empty
 
     loop(0)
@@ -193,7 +187,7 @@ object Heap {
    */
   def fromArray[A <% Ordered[A]](a: Array[A]): Heap[A] = {
     def loop(i: Int): Heap[A] = 
-      if (i < a.length) bubbleDown(a(i), loop(2 * i + 1), loop(2 * i + 2))
+      if (i < a.length) Heao.bubbleDown(a(i), loop(2 * i + 1), loop(2 * i + 2))
       else Heap.empty
 
     loop(0)
@@ -208,11 +202,10 @@ object Heap {
    */
   private[Heap] def bubbleUp[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = (l, r) match {
     case (Branch(y, lt, rt, _, _), _) if (x > y) => 
-      Heap(y, Heap(x, lt, rt), r)
+      Heap.make(y, Heap.make(x, lt, rt), r)
     case (_, Branch(z, lt, rt, _, _)) if (x > z) => 
-      Heap(z, l, Heap(x, lt, rt))
-    case (_, _) => 
-      Heap(x, l, r)
+      Heap.make(z, l, Heap.make(x, lt, rt))
+    case (_, _) => Heap.make(x, l, r)
   }
 
   /**
@@ -221,12 +214,11 @@ object Heap {
    * Time - O(log n)
    * Space - O(log n)
    */
-  private[Heap] def bubbleDown[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] =  (l, r) match {
+  private[Heap] def bubbleDown[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = (l, r) match {
     case (Branch(y, _, _, _, _), Branch(z, lt, rt, _, _)) if (z < y && x > z) => 
-      Heap(z, l, bubbleDown(x, lt, rt))
+      Heap.make(z, l, Heap.bubbleDown(x, lt, rt))
     case (Branch(y, lt, rt, _, _), _) if (x > y) => 
-      Heap(y, bubbleDown(x, lt, rt), r)
-    case (_, _) => 
-      Heap(x, l, r)
+      Heap.make(y, Heap.bubbleDown(x, lt, rt), r)
+    case (_, _) => Heap.make(x, l, r)
   }
 }
