@@ -21,8 +21,11 @@ What is inside?
 * List [`src/collection/List.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/List.scala)
 * Queue [`src/collection/Queue.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Queue.scala)
 * Stack [`src/collection/Stack.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Stack.scala)
-* Heap [`src/collection/Heap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Heap.scala)
 * Set [`src/collection/Set.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/collection/Set.scala)
+
+##### Heaps
+* Standard Binary Heap [`src/heap/StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala)
+* Leftist Heap [`src/heap/LeftistHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/LeftistHeap.scala)
 
 ##### Trees
 * Binary Search Tree [`src/tree/Tree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/Tree.scala)
