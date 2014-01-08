@@ -65,13 +65,17 @@ abstract sealed class Heap[+A <% Ordered[A]] {
    *
    * We also can define the 'insert' function directly rather then calling merge
    * function. But the new function should also work in O(log n) time. This is the
-   * main resriction.
+   * main restriction.
    *
    * Tha main idea behind this function is that we can safely insert new node into
    * the right sub-heap until it's rank less then it's left sibling. Otherwise,
    * we have to _fill_ the left sub-heap enough to have it rank increased. This
    * approach gives us a complete heap as output, instead of unbalanced in case
    * of pure leftist heaps. 
+   * 
+   * Building the heap with such algorithm guarantees logarithmic running time
+   * for custom queries on the heap's shape. This is not a popular scenarion,
+   * but it might be usful for some problems.
    *
    * Time - O(log n)
    * Space - O(log n)
