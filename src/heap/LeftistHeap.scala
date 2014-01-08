@@ -57,10 +57,29 @@ abstract sealed class Heap[+A <% Ordered[A]] {
   /**
    * Inserts given element 'x' into this heap.
    *
+   * Exercise 3.2 @ PFDS.
+   *
+   * The 'insert' function might be defined through the 'Heap.merge' function, like
+   *
+   *   insert(x) = Heap.merge(this, Heap.make(x))
+   *
+   * We also can define the 'insert' function directly rather then calling merge
+   * function. But the new function should also work in O(log n) time. This is the
+   * main resriction.
+   *
+   * Tha main idea behind this function is that we can safely insert new node into
+   * the right sub-heap until it's rank less then it's left sibling. Otherwise,
+   * we have to _fill_ the left sub-heap enough to have it rank increased. This
+   * approach gives us a complete heap as output, instead of unbalanced in case
+   * of pure leftist heaps. 
+   *
    * Time - O(log n)
    * Space - O(log n)
    */
-  def insert[B >: A <% Ordered[B]](x: B): Heap[B] = Heap.merge(this, Heap.make(x))
+  def insert[B >: A <% Ordered[B]](x: B): Heap[B] =
+    if (isEmpty) Heap.make(x)
+    else if (left.rank > right.rank) Heap.bubble(min, left, right.insert(x))
+    else Heap.bubble(min, left.insert(x), right)
 
   /**
    * Removes the minimum element from this heap.
@@ -100,6 +119,12 @@ object Heap {
   def empty[A]: Heap[A] = Leaf
 
   /**
+   * Makes a heap's node with pre-calculated rank value.
+   */
+  def make[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf) =
+    Branch(x, l, r, r.rank + 1)
+
+  /**
    * A smart constructor for heap's branch.
    *
    * In order to satisfy the leftist property, we have to check the children's ranks
@@ -108,9 +133,25 @@ object Heap {
    * Time - O(1)
    * Space - O(1)
    */
-  def make[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
+  def swap[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
     if (l.rank < r.rank) Branch(x, r, l, l.rank + 1)
     else Branch(x, l, r, r.rank + 1)
+
+  /**
+   * Bubbles given value up to the heap's root.
+   *
+   * This function fixes the heap-ordered property violation.
+   *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def bubble[A <% Ordered[A]](x: A, l: Heap[A], r: Heap[A]): Heap[A] = (l, r) match {
+    case (Branch(y, lt, rt, _), _) if (x > y) => 
+      Heap.make(y, Heap.make(x, lt, rt), r)
+    case (_, Branch(z, lt, rt, _)) if (x > z) => 
+      Heap.make(z, l, Heap.make(x, lt, rt))
+    case (_, _) => Heap.make(x, l, r)
+  }
 
   /**
    * Merges two given heaps along their right spine.
@@ -126,7 +167,7 @@ object Heap {
     case (_, Leaf) => x
     case (Leaf, _) => y
     case (Branch(xx, xl, xr, _), Branch(yy, yl, yr, _)) =>
-      if (xx < yy) Heap.make(xx, xl, Heap.merge(xr, y))
-      else Heap.make(yy, yl, Heap.merge(yr, x))
+      if (xx < yy) Heap.swap(xx, xl, Heap.merge(xr, y))
+      else Heap.swap(yy, yl, Heap.merge(yr, x))
   }
 }
