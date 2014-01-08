@@ -174,4 +174,27 @@ object Heap {
       if (xx < yy) Heap.swap(xx, xl, Heap.merge(xr, y))
       else Heap.swap(yy, yl, Heap.merge(yr, x))
   }
+
+  /**
+   * Exercise 3.3 @ PFDS.
+   *
+   * Builds a leftist heap from an unordered linked list.
+   *
+   * Time - O(n)
+   * Space - O(log n)
+   */
+  def fromList[A <% Ordered[A]](ls: List[A]): Heap[A] = {
+    def loop(hs: List[Heap[A]]): Heap[A] = hs match {
+      case hd :: Nil => hd
+      case _ => loop(pass(hs))
+    }
+
+    def pass(hs: List[Heap[A]]): List[Heap[A]] = hs match {
+      case hd :: nk :: tl => Heap.merge(hd, nk) :: pass(tl)
+      case _ => hs
+    }
+
+    if (ls.isEmpty) Heap.empty
+    else loop(ls.map(Heap.make(_)))
+  }
 }
