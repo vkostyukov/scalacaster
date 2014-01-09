@@ -138,8 +138,8 @@ object Heap {
    * Space - O(1)
    */
   def swap[A <% Ordered[A]](x: A, l: Heap[A] = Leaf, r: Heap[A] = Leaf): Heap[A] = 
-    if (l.rank < r.rank) Branch(x, r, l, l.rank + 1)
-    else Branch(x, l, r, r.rank + 1)
+    if (l.rank < r.rank) Heap.make(x, r, l)
+    else Heap.make(x, l, r)
 
   /**
    * Bubbles given value up to the heap's root.
