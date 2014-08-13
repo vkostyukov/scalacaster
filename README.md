@@ -1,12 +1,12 @@
 Why Scalacaster?
 ----------------
 
-Since Fender Stratocaster is a classic guitar, **Scalacaster** is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and chalange for researchers. Data structures in a functional setting are much elegant and witty than in an imperative setting. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
+Since Fender Stratocaster is a classic guitar, **Scalacaster** is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and challenge for researchers. Data structures in a functional setting are much elegant and witty than in an imperative setting. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
 
 How to use Scalacaster?
 -----------------------
 
-Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be launched at all. The code is not for Scala compiler and JVM. It is for human beings. For enthusiasts and researches of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments. Anyway, all the sources are ready for compilation and launching.
+Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be launched at all. The code is not for Scala compiler and JVM. It is for human beings. For enthusiasts and researchers of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments. Anyway, all the sources are ready for compilation and launching.
 
 There is also a great slides compiled as an overview the whole idea behind the Scalacaster. See ["Purely Functional Data Structures in Scala"](http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521) slides for more details.
 
@@ -51,7 +51,7 @@ How to contribute?
 ------------------
 
 * Give it a star
-* Drop the feeback to the author
+* Drop the feedback to the author
 * Send a PR with fixes of typos/bugs/etc
 
 ----
