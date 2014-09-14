@@ -80,11 +80,6 @@ object Queue {
    * Time - O(n)
    * Space - O(1)
    */
-  def apply[A](xs: A*): Queue[A] = {
-    var r: Queue[A] = Queue.empty
-    for (x <- xs) {
-      r = r.enqueue(x)
-    }
-    r
-  }
+  def apply[A](xs: A*) =
+    xs.foldLeft(Queue.empty[A]) { case (acc, x) => acc.enqueue(x) }
 }
