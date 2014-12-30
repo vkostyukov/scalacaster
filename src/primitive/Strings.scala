@@ -54,22 +54,27 @@ object Strings {
    * 
    * http://www.geeksforgeeks.org/longest-common-substring/
    *
-   * TODO: The DP approach can be used here to reduce the complexity to O(mn)
-   *
-   * Time - O(mn^2)
+   * Time - O(mn)
    * Space - O(mn)
    */
-  def longestCommonSubstring(a: String, b: String): String = {
-    def loop(i: Int, j: Int): String = 
-      if (i == -1 || j == -1) ""
-      else if (a.charAt(i) == b.charAt(j)) loop(i - 1, j - 1) + a.charAt(i)
-      else {
-        val sa = loop(i - 1, j)
-        val sb = loop(i, j - 1)
-        if (sa.length > sb.length) sa else sb
+  def longestCommonSubstring(a: String, b: String) : String = {
+    def loop(m: Map[(Int, Int), Int], bestIndices: List[Int], i: Int, j: Int) : String = {
+      if (i > a.length) {
+        b.substring(bestIndices(1) - m((bestIndices(0),bestIndices(1))), bestIndices(1))
+      } else if (i == 0 || j == 0) {
+        loop(m + ((i,j) -> 0), bestIndices, if(j == b.length) i + 1 else i, if(j == b.length) 0 else j + 1)
+      } else if (a(i-1) == b(j-1) && math.max(m((bestIndices(0),bestIndices(1))), m((i-1,j-1)) + 1) == (m((i-1,j-1)) + 1)) {
+        loop(
+          m + ((i,j) -> (m((i-1,j-1)) + 1)),
+          List(i, j),
+          if(j == b.length) i + 1 else i,
+          if(j == b.length) 0 else j + 1
+        )
+      } else {
+        loop(m + ((i,j) -> 0), bestIndices, if(j == b.length) i + 1 else i, if(j == b.length) 0 else j + 1)
       }
-
-    loop(a.length - 1, b.length - 1)
+    }
+    loop(Map[(Int, Int), Int](), List(0, 0), 0, 0)
   }
 
   /**
