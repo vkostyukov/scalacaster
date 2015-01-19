@@ -280,10 +280,10 @@ object Numbers {
    * Space - O()
    */
   def primeFactors(n: Int): List[Int] = {
-    def loop(n: Int, m: Int, as: List[Int]): List[Int] = 
-      if (m > n) as
-      else if (n % m == 0) loop(n / m, m, m :: as)
-      else loop(n, m + 1, as)
+    def loop(nn: Int, m: Int, as: List[Int]): List[Int] =
+      if (m > nn) as
+      else if (nn % m == 0) loop(nn / m, m, m :: as)
+      else loop(nn, m + 1, as)
 
     loop(n, 2, Nil)
   }

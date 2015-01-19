@@ -14,7 +14,7 @@ object Strings {
    */
   def isPalindrome(s: String): Boolean = {
     def loop(i: Int, j: Int): Boolean =
-      if (i == j) true
+      if (i >= j) true
       else if (s.charAt(i) == s.charAt(j)) loop(i + 1, j - 1)
       else false
 
