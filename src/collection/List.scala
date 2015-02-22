@@ -75,6 +75,7 @@ abstract sealed class List[+A] {
    */
   def apply(n: Int): A =
     if (isEmpty) fail("Index out of the bounds.")
+    else if (n < 0) fail("Index (< 0) out of bounds.")
     else if (n == 0) head
     else tail(n - 1)
 
