@@ -399,9 +399,28 @@ abstract sealed class List[+A] {
    * http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/
    *
    * Time - O(n^2)
-   * Space - O()
+   * Space - O(n^2)
    */
-  def longestPalindromicSubsequence: List[A] = ???
+  def longestPalindromicSubsequence: List[A] = {
+    def max(a: Int, b: Int) = if (a > b) a else b
+    def setM(m: Map[(Int, Int), Int], cl: Int, i: Int, j: Int): Map[(Int, Int), Int] = {
+      if (apply(i) == apply(j) && cl == 2) m + ((i, j) -> 2)
+      else if (apply(i) == apply(j) && m((i + 1, j - 1)) == j - i - 1) m + ((i, j) -> (m((i + 1, j - 1)) + 2))
+      else m + ((i, j) -> max(m((i + 1, j)), m((i, j - 1))))
+    }
+    def loop(m: Map[(Int, Int), Int], cl: Int, i: Int): Int = {
+      if (cl > length) m((0, length - 1))
+      else if (i >= length - cl + 1) loop(m, cl + 1, 0)
+      else loop(setM(m, cl, i, i + cl - 1), cl, i + 1)
+    }
+    def initialize(m: Map[(Int, Int), Int], i: Int, j: Int): Map[(Int, Int), Int] = {
+      if (i >= length) m
+      else if (j >= length) initialize(m, i + 1, 0)
+      else if (i == j) initialize(m + ((i, j) -> 1), i, j + 1)
+      else initialize(m + ((i, j) -> 0), i, j + 1)
+    }
+    loop(initialize(Map.empty[(Int, Int), Int], 0, 0), 2, 0)
+  }
 
   /**
    * Calculates the length of this list.
