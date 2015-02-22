@@ -74,7 +74,8 @@ abstract sealed class List[+A] {
    * Space - O(n)
    */
   def apply(n: Int): A =
-    if (isEmpty) fail("Index out of the bounds.")
+    if (isEmpty) fail("Index out of bounds.")
+    else if (n < 0) fail("Index (< 0) out of bounds.")
     else if (n == 0) head
     else tail(n - 1)
 
