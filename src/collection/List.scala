@@ -378,10 +378,45 @@ abstract sealed class List[+A] {
    *
    * http://www.geeksforgeeks.org/dynamic-programming-set-14-maximum-sum-increasing-subsequence/
    *
-   * Time - O()
-   * Space - O()
+   * Time - O(n^2)
+   * Space - O(n^2)
    */
-  def maximumSumIncreasingSubsequence: List[A] = ???
+  def maximumSumIncreasingSubsequence: List[A] = {
+    def sum(l: List[A]): A = {
+      l.foldLeft(0)((a, b) => a + b)
+    }
+    def update(l: List[List[A]], i: Int, o: List[A]): List[List[A]] = {
+      def updateHelper(h: List[List[A]], t: List[List[A]], j: Int): List[List[A]] = {
+        if (t.isEmpty) reverse(h)
+        else if (i == j) updateHelper(o :: h, t.tail, j + 1)
+        else updateHelper(t.head :: h, t.tail, j + 1)
+      }
+      def reverse(ll: List[List[A]]): List[List[A]] = {
+        def reverseHelper(h: List[List[A]], t: List[List[A]]): List[List[A]] = {
+          if (t.isEmpty) h
+          else reverseHelper(t.head :: h, t.tail)
+        }
+        reverseHelper(List.empty[List[A]], ll)
+      }
+      updateHelper(Nil, l, 0)
+    }
+    def loop(msis: List[List[A]], i: Int, j: Int): List[List[A]] = {
+      if (i >= msis.length) msis
+      else if (j >= i) loop(msis, i + 1, 0)
+      else if (apply(i) > apply(j) && sum(msis(i)) < sum(msis(j)) + apply(i) && i - j == msis(i).length) {
+        loop(update(msis, i, msis(j) ++ List(apply(i))), i, j + 1)
+      } else loop(msis, i, j + 1)
+    }
+    def maxBySum(msis: List[List[A]]): List[A] = {
+      def maxBySumHelper(b: List[A], bSum: Int, t: List[List[A]]): List[A] = {
+        if (t.isEmpty) b
+        else if (sum(t.head) > bSum) maxBySumHelper(t.head, sum(t.head), t.tail)
+        else maxBySumHelper(b, bSum, t.tail)
+      }
+      maxBySumHelper(msis.head, sum(msis.head), msis.tail)
+    }
+    maxBySum(loop(this.map(x => List[A](x)), 0, 0))
+  }
 
   /**
    * Returns an intersect nodes of two lists.
