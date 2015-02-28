@@ -105,10 +105,17 @@ abstract sealed class List[+A] {
   /**
    * Generates all the prefixes of this list.
    * 
-   * Time - O(n)
+   * Time - O(n^2)
    * Space - O(n)
    */
-  def prefixes: List[List[A]] = ???
+  def prefixes: List[List[A]] = {
+    def helper(acc: List[List[A]], r: List[A]) : List[List[A]] = {
+      if (r.isEmpty) acc
+      else helper(List(acc.head ::: List(r.head)) ::: acc, r.tail)
+    }
+    if (isEmpty) this
+    else helper(List(List(head)), tail)
+  }
 
   /**
    * Applies the 'f' function to the each element of this list.
@@ -423,10 +430,24 @@ abstract sealed class List[+A] {
    *
    * http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/
    *
-   * Time - O()
-   * Space - O()
+   * Time - O(n)
+   * Space - O(n)
    */
-  def intersect[B >: A](l: List[B]): List[B] = ???
+  def intersect[B >: A](l: List[B]) : List[B] = {
+    def jointail(a: List[B], b: List[B]) : List[B] = {
+      if (a.isEmpty || b.isEmpty) List.empty[B]
+      else if (a.head == b.head) a
+      else jointail(a.tail, b.tail)
+    }
+    def ntail(n: B, a: List[B]) : List[B] = {
+      if (n < 0 || a.isEmpty) List.empty[B]
+      else if (n == 0) a
+      else ntail(n - 1, a.tail)
+    }
+    if (isEmpty || l.isEmpty) List.empty[B]
+    else if (size < l.size) l.intersect(this)
+    else jointail(ntail(size - l.size, this), l)
+  }
 
   /**
    * Returns the longest palindromic sub-sequence of this list.
