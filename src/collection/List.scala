@@ -105,10 +105,17 @@ abstract sealed class List[+A] {
   /**
    * Generates all the prefixes of this list.
    * 
-   * Time - O(n)
+   * Time - O(n^2)
    * Space - O(n)
    */
-  def prefixes: List[List[A]] = ???
+  def prefixes: List[List[A]] = {
+    def helper(acc: List[List[A]], r: List[A]) : List[List[A]] = {
+      if (r.isEmpty) acc
+      else helper(List(acc.head ::: List(r.head)) ::: acc, r.tail)
+    }
+    if (isEmpty) this
+    else helper(List(List(head)), tail)
+  }
 
   /**
    * Applies the 'f' function to the each element of this list.
