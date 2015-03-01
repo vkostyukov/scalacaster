@@ -329,20 +329,31 @@ abstract sealed class List[+A] {
    *
    * http://www.geeksforgeeks.org/counting-inversions/
    *
-   * TODO: The Divide-And-Conquer approach can be used here to reduce the complexity to O(n log n)
-   *       due to merge sort.
-   *
-   * Time - O(n^2)
+   * Time - O(n log n)
    * Space - O(n)
    */
-  def inversions[B >: A](implicit ordering: Ordering[B]): Int = {
-    def loop(x: A, t: List[A], i: Int): Int =
-      if (t.isEmpty) i
-      else if (ordering.gt(x, t.head)) loop(x, t.tail, i + 1)
-      else loop(x, t.tail, i)
-
-    if (isEmpty) 0 
-    else tail.inversions(ordering) + loop(head, tail, 0)
+  def inversions[B >: A](implicit ordering: Ordering[B]) : Int = {
+    def enhancedmergesort(l: List[B]) : (List[B], Int) = {
+      def loop(ll: List[B], pivotIdx: Int, inv: Int) : (List[B], Int) = {
+        unpackmerge(
+          enhancedmergesort(ll.slice(0, pivotIdx)),
+          enhancedmergesort(ll.slice(pivotIdx, ll.size)),
+          inv
+        )
+      }
+      def unpackmerge(a: (List[B], Int), b: (List[B], Int), inv: Int) : (List[B], Int) = {
+        merge(List.empty[B], a._1, b._1, a._2 + b._2 + inv)
+      }
+      def merge(acc: List[B], a: List[B], b: List[B], inv: Int) : (List[B], Int) = {
+        if (a.isEmpty) (acc ::: b, inv)
+        else if (b.isEmpty) (acc ::: a, inv)
+        else if (ordering.lte(a.head, b.head)) merge(acc ::: List(a.head), a.tail, b, inv)
+        else (ordering.gt(a.head, b.head)) merge(acc ::: List(b.head), a, b.tail, inv + a.size)
+      }
+      if (l.size < 2) (l, 0)
+      else loop(l, (new scala.util.Random).nextInt(l.size), 0)
+    }
+    enhancedmergesort(this)._2
   }
 
   /**
