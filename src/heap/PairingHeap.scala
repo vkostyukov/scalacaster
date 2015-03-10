@@ -38,6 +38,15 @@ abstract sealed class Heap[+A <% Ordered[A]] {
 
   /**
    * Removes the minimum element from this heap.
+   *
+   * The min element is in the root of the tree. When the root is removed, we are left with zero or more
+   * max trees. In two pass pairing heaps, these max trees are melded into a single max tree as follows:
+   *
+   * - Make a left to right pass over the trees, melding pairs of trees.
+   * - Start with the rightmost tree and meld the remaining trees (right to left) into this tree one at a time.
+   *
+   * Time (amortized) - O(log n)
+   * Space - O(log n)
    */
   def remove: Heap[A] = Heap.pairing(childs)
 
@@ -78,7 +87,14 @@ object Heap {
     Branch(x, subs)
 
   /**
-   * Merges two given heaps. Also known as "union".
+   * Merges two given heaps. Also known as 'union' or 'meld'.
+   *
+   * Two min pairing heaps may be melded into a single min pairing heap by performing a compare-link operation.
+   * In a compare-link, the roots of the two min trees are compared and the min tree that has the bigger root
+   * is made the leftmost subtree of the other tree (ties are broken arbitrarily).
+   *
+   * Time (amortized) - O(1)
+   * Space - O(1)
    */
   def merge[A <% Ordered[A]](x: Heap[A], y: Heap[A]): Heap[A] = (x, y) match {
     case (_, Leaf) => x
@@ -88,6 +104,10 @@ object Heap {
       else Branch(x2, Branch(x2, Branch(x1, subs1) :: subs2))
   }
 
+  /**
+   * Auxiliary function to merge list of pairing heaps one-by-one starting from the head of the list.
+   * Procedure is also known as 'melding'.
+   */
   def pairing[A <% Ordered[A]](subs: Heap[A]): Heap[A] = subs match {
     case Nil => Leaf
     case hd :: Nil => hd
@@ -95,7 +115,10 @@ object Heap {
   }
   
   /**
-   * Builds a skew heap from an unordered linked list.
+   * Builds a pairing heap from an unordered linked list.
+   *
+   * Time - O(n)
+   * Space - O(log n)
    */
   def fromList[A <% Ordered[A]](ls: List[A]): Heap[A] = {
     def loop(hs: List[Heap[A]]): Heap[A] = hs match {
