@@ -26,6 +26,9 @@ What is inside?
 ##### Heaps
 * Standard Binary Heap [`src/heap/StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala)
 * Leftist Heap [`src/heap/LeftistHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/LeftistHeap.scala)
+* Pairing Heap [`src/heap/PairingHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/PairingHeap.scala)
+* Skew Heap [`src/heap/SkewHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/SkewHeap.scala)
+
 
 ##### Trees
 * Binary Search Tree [`src/tree/Tree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/Tree.scala)
