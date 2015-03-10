@@ -21,9 +21,9 @@ abstract sealed class Heap[+A <% Ordered[A]] {
   def min: A
 
   /**
-   * Subtrees (child of this heap).
+   * Subtrees (children of this heap).
    */
-  def childs: List[Heap[A]]
+  def subs: List[Heap[A]]
 
   /**
    * Whether this heap is empty or not.
@@ -48,7 +48,7 @@ abstract sealed class Heap[+A <% Ordered[A]] {
    * Time (amortized) - O(log n)
    * Space - O(log n)
    */
-  def remove: Heap[A] = Heap.pairing(childs)
+  def remove: Heap[A] = Heap.pairing(subs)
 
   /**
    * Fails with message.
@@ -62,14 +62,14 @@ abstract sealed class Heap[+A <% Ordered[A]] {
  */
 case object Leaf extends Heap[Nothing] {
   def min: Nothing = fail("An empty heap.")
-  def childs: List[Heap[Nothing]] = fail("An empty heap.")
+  def subs: List[Heap[Nothing]] = fail("An empty heap.")
   def isEmpty = true
 }
 
 /**
- * Non-empty node is an element with left and right childs (Skew Heaps)
+ * Non-empty node is an element with linked-list of subtrees (Pairing Heaps)
  */
-case class Branch[A <% Ordered[A]](min: A, childs: List[Heap[A]]) extends Heap[A] {
+case class Branch[A <% Ordered[A]](min: A, subs: List[Heap[A]]) extends Heap[A] {
   def isEmpty = false
 }
 
