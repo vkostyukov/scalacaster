@@ -15,6 +15,7 @@ Additional Resources
 * [Purely Functional Data Structures by Chris Okasaki][2]
 * [What's new in Purely Functional DS since Okasaki][3]
 * [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
+* [Combinatorial Algorithms in Scala][5]
 
 What is inside?
 ---------------
@@ -68,3 +69,4 @@ How to contribute?
 [2]: http://www.amazon.com/Purely-Functional-Structures-Chris-Okasaki/dp/0521663504
 [3]: http://cstheory.stackexchange.com/questions/1539/whats-new-in-purely-functional-data-structures-since-okasaki
 [4]: http://arxiv.org/pdf/1312.4666v1.pdf
+[5]: http://vkostyukov.ru/posts/combinatorial-algorithms-in-scala/
