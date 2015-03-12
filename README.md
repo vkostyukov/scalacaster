@@ -1,14 +1,20 @@
 Why Scalacaster?
 ----------------
 
-Since Fender Stratocaster is a classic guitar, **Scalacaster** is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and challenge for researchers. Data structures in a functional setting are much elegant and witty than in an imperative setting. And if you catch the glimpse of its beauty, Scalacaster will show you an awesome duo of breathtaking Scala syntax and amazing functional data structures.
+Since [Fender Stratocaster][0] is a classic guitar, **Scalacaster** is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and challenge for researchers, since data structures in a functional setting are much elegant and smarter than in an imperative setting.
 
 How to use Scalacaster?
 -----------------------
 
-Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be launched at all. The code is not for Scala compiler and JVM. It is for human beings. For enthusiasts and researchers of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments. Anyway, all the sources are ready for compilation and launching.
+Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be executed at all. The code is neither for Scala compiler nor JVM. It is for human beings. For enthusiasts and researchers of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments.
 
-There is also a great slides compiled as an overview the whole idea behind the Scalacaster. See ["Purely Functional Data Structures in Scala"](http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521) slides for more details.
+Additional Resources
+--------------------
+
+* [Slides about Scalacaster][1]
+* [Purely Functional Data Structures by Chris Okasaki][2]
+* [What's new in Purely Functional DS since Okasaki][3]
+* [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
 
 What is inside?
 ---------------
@@ -54,12 +60,11 @@ How to contribute?
 ------------------
 
 * Give it a star
-* Drop the feedback to the author
+* Drop the feedback to the author [@vkostyukov](https://twitter.com/vkostyukov)
 * Send a PR with fixes of typos/bugs/etc
 
-----
-by [Vladimir Kostyukov](http://vkostyukov.ru), 2013-2014
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/vkostyukov/scalacaster/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
+[0]: http://www.fender.com/guitars/stratocaster/
+[1]: http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521
+[2]: http://www.amazon.com/Purely-Functional-Structures-Chris-Okasaki/dp/0521663504
+[3]: http://cstheory.stackexchange.com/questions/1539/whats-new-in-purely-functional-data-structures-since-okasaki
+[4]: http://arxiv.org/pdf/1312.4666v1.pdf
