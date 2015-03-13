@@ -8,15 +8,6 @@ How to use Scalacaster?
 
 Scalacaster is neither a library nor framework. Moreover, Scalacaster`s code is not supposed to be executed at all. The code is neither for Scala compiler nor JVM. It is for human beings. For enthusiasts and researchers of the Scala programming language and it's application in the area of implementation of the purely functional data structures. So, the best way to use Scalacaster is to read through it's source code and comments.
 
-Additional Resources
---------------------
-
-* [Slides about Scalacaster][1]
-* [Purely Functional Data Structures by Chris Okasaki][2]
-* [What's new in Purely Functional DS since Okasaki][3]
-* [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
-* [Combinatorial Algorithms in Scala][5]
-
 What is inside?
 ---------------
 
@@ -63,6 +54,16 @@ How to contribute?
 * Give it a star
 * Drop the feedback to the author [@vkostyukov](https://twitter.com/vkostyukov)
 * Send a PR with fixes of typos/bugs/etc
+
+What to read next?
+------------------
+
+* [Slides about Scalacaster][1]
+* [Purely Functional Data Structures by Chris Okasaki][2]
+* [What's new in Purely Functional DS since Okasaki][3]
+* [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
+* [Combinatorial Algorithms in Scala][5]
+
 
 [0]: http://www.fender.com/guitars/stratocaster/
 [1]: http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521
