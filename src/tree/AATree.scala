@@ -1,3 +1,23 @@
+/**
+ * This file is part of Scalacaster project,
+ * https://github.com/vkostyukov/scalacaster and written by Amanj Sherwany,
+ * http://www.amanj.me
+ *
+ * AA tree http://en.wikipedia.org/wiki/AA_tree
+ *
+ * Performance: (From Wikipedia)
+ * The performance of an AA tree is equivalent to the performance of a
+ * red-black tree. While an AA tree makes more rotations than a red-black tree,
+ * the simpler algorithms tend to be faster, and all of this balances out to
+ * result in similar performance. A red-black tree is more consistent in its
+ * performance than an AA tree, but an AA tree tends to be flatter, which
+ * results in slightly faster search times
+ *
+ * Insert - O(log n)
+ * Lookup - O(log n)  
+ * Remove - O(log n)
+ */
+
 object AATree {
 
   sealed abstract class AATree[+T: Ordering] {
@@ -40,6 +60,7 @@ object AATree {
 
     def ++[B >: T: Ordering](tree: AATree[B]): AATree[B] = merge(tree)
 
+    // Let's make our tree an instance of functor, and monad
     def map[B: Ordering](f: T => B): AATree[B] = this match {
       case Empty            => Empty
       case Fork(v, _, l, r) =>
@@ -87,6 +108,9 @@ object AATree {
     def toList[B >: T: Ordering]: List[B] = {
       value::(left.toList ++ right.toList)      
     }
+
+
+    // some helper functions
     protected def rebalanceTree[B >: T: Ordering]: AATree[B] = skew.split
 
     protected def rebalanceAfterDelete[B >: T: Ordering]: AATree[B] = {
