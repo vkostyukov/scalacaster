@@ -78,6 +78,12 @@ object AATree {
     }
 
 
+
+    def foreach(f: T => Unit): Unit = toList.foreach(f)
+
+    def filter(p: T => Boolean): AATree[T] = Empty.insertAll(toList.filter(p))
+     
+
     def fold[B: Ordering](f: (T, B, B) => B, z: B): B = this match {
       case Empty            => z
       case Fork(v, _, l, r) =>
