@@ -22,11 +22,21 @@
 sealed abstract class AATree[+T: Ordering] {
   import AATree._
 
+  /**
+   * Every AA Tree has a value and a level, as well as left and right trees
+   */
   val value: T
   val level: Int
   val left: AATree[T]
   val right: AATree[T]
 
+  /**
+   * Checks the existence of an element in the tree. 
+   *
+   *
+   * Time - O(log n)
+   * Space - O(1)
+   */
   def member[B >: T: Ordering](a: B): Boolean = this match {
     case Empty                                                => false
     case Fork(v, _, l, r) if a == v                           => true
@@ -34,6 +44,14 @@ sealed abstract class AATree[+T: Ordering] {
     case Fork(v, _, l, r)                                     => r.member(v)
   }
 
+  /**
+   * Inserts given element 'x' into this tree. (only if the element is not already
+   * in the tree)
+   *
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def insert[B >: T: Ordering](a: B): AATree[B] = this match {
     case Empty                                                 =>
       Fork(a, 1, Empty, Empty)
@@ -45,6 +63,13 @@ sealed abstract class AATree[+T: Ordering] {
       this
   }
 
+
+  /**
+   * Merges two trees
+   *
+   * Time - O(n log n)
+   * Space - O(n log n)
+   */
   def merge[B >: T: Ordering](that: AATree[B]): AATree[B] = 
     if(this == Empty) that
     else if(that == Empty) this
@@ -54,6 +79,12 @@ sealed abstract class AATree[+T: Ordering] {
 
 
   // Let's make our tree an instance of functor, and monad
+  /**
+   * Maps a function on the tree
+   *
+   * Time - O(n log n)
+   * Space - O(n log n)
+   */
   def map[B: Ordering](f: T => B): AATree[B] = this match {
     case Empty            => Empty
     case Fork(v, _, l, r) =>
@@ -62,6 +93,12 @@ sealed abstract class AATree[+T: Ordering] {
       mappedL.merge(mappedR).insert(f(v))
   }
 
+  /**
+   * binds a function to the tree
+   *
+   * Time - O(n log n)
+   * Space - O(n log n)
+   */
   def flatMap[B: Ordering](f: T => AATree[B]): AATree[B] = this match {
     case Empty            => Empty
     case Fork(v, _, l, r) =>
@@ -70,12 +107,24 @@ sealed abstract class AATree[+T: Ordering] {
       mappedL.merge(mappedR).merge(f(v))
   }
 
+  /** 
+   * Folds up the tree
+   *
+   * Time - O(n)
+   * Space - O(n)
+   */
   def fold[B: Ordering](f: (T, B, B) => B, z: B): B = this match {
     case Empty            => z
     case Fork(v, _, l, r) =>
       f(v, l.fold(f, z), r.fold(f, z))
   }
 
+  /** 
+   * Deletes an element from the tree
+   *
+   * Time - O(log n)
+   * Space - O(log n)
+   */
   def delete[B >: T: Ordering](a: B): AATree[B] = this match {
     case Empty                                                 => 
       Empty
