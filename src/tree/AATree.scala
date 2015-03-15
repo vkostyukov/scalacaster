@@ -116,31 +116,31 @@ sealed abstract class AATree[+T: Ordering] {
   }
 
   protected def successor[B >: T: Ordering]: B = {
-    def successor2(t: AATree[B]): B = this match {
+    def loop(t: AATree[B]): B = this match {
       case Fork(v, _, Empty, _)       => v
-      case Fork(_, _, l, _)           => successor2(l)
+      case Fork(_, _, l, _)           => loop(l)
       case _                                   =>
         // Should never happen, but to silent the warning
         throw new Exception("Empty node does not have a successor")
     }
     this match {
       case Fork(_, _, _, Fork(v, _, Empty, _)) => v
-      case Fork(_, _, _, Fork(v, _, l, _))     => successor2(l)
+      case Fork(_, _, _, Fork(v, _, l, _))     => loop(l)
       case _                                   =>
         throw new Exception("Empty node does not have a successor")
     }
   }
 
   protected def predecessor[B >: T: Ordering]: B = {
-    def predecessor2(t: AATree[B]): B = this match {
+    def loop(t: AATree[B]): B = this match {
       case Fork(v, _, _, Empty)            => v
-      case Fork(v, _, _, r)                => predecessor2(r) 
+      case Fork(v, _, _, r)                => loop(r) 
       case _                                   =>
         throw new Exception("Empty node does not have a predecessor")
     }
     this match {
       case Fork(v, _, Fork(_, _, _, Empty), _) => v
-      case Fork(_, _, Fork(_, _, _, r), _)     => predecessor2(r)
+      case Fork(_, _, Fork(_, _, _, r), _)     => loop(r)
       case _                                   =>
         // Should never happen, but to silent the warning
         throw new Exception("Empty node does not have a predecessor")
