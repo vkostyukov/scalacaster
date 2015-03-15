@@ -74,7 +74,7 @@ sealed abstract class AATree[+T: Ordering] {
     if(this == Empty) that
     else if(that == Empty) this
     else {
-      left.merge(right.merge(that)).insert(value)
+      (right.merge(that)).merge(left).insert(value)
     }
 
 
