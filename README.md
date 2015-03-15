@@ -31,6 +31,8 @@ What is inside?
 ##### Trees
 * Binary Search Tree [`src/tree/Tree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/Tree.scala)
 * Red-Black Tree [`src/tree/RBTree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/RBTree.scala)
+* AA Tree [`src/tree/AATree.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/tree/AATree.scala)
+
 
 ##### Graphs
 * Graph [`src/graph/Graph.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/graph/Graph.scala)
