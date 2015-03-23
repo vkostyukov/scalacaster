@@ -1,6 +1,8 @@
 Why Scalacaster?
 ----------------
 
+[![Join the chat at https://gitter.im/vkostyukov/scalacaster](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vkostyukov/scalacaster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Since [Fender Stratocaster][0] is a classic guitar, **Scalacaster** is classic algorithms and data structures in Scala. Scalacaster includes loads of widely used implementation techniques and approaches which have been developed by best programmers and enthusiasts of functional programming. Studying purely functional data structures is always fun and challenge for researchers, since data structures in a functional setting are much elegant and smarter than in an imperative setting.
 
 How to use Scalacaster?
