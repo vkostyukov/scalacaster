@@ -67,6 +67,7 @@ What to read next?
 * [What's new in Purely Functional DS since Okasaki][3]
 * [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
 * [Combinatorial Algorithms in Scala][5]
+* [Designing a Purely Functional Data Structure][6]
 
 
 [0]: http://www.fender.com/guitars/stratocaster/
@@ -75,3 +76,4 @@ What to read next?
 [3]: http://cstheory.stackexchange.com/questions/1539/whats-new-in-purely-functional-data-structures-since-okasaki
 [4]: http://arxiv.org/pdf/1312.4666v1.pdf
 [5]: http://vkostyukov.ru/posts/combinatorial-algorithms-in-scala/
+[6]: http://vkostyukov.ru/posts/designing-a-pfds
