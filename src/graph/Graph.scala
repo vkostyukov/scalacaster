@@ -183,6 +183,60 @@ class WeightedGraph[N](n: N) extends Graph[Double, N](n) {
 
     path.reverse
   }
+  
+/**
+   * Searches for the shortest path in this graph. Unlike Dijkstra, 
+   * Bellman-Ford can be applied also when there are edges with negative
+   * values.
+   * 
+   * Bellman-Ford cannot reach a valid solution if there are negative cycles
+   * in the graph, but it can detect such cycles. If there are negative cycles
+   * this function returns None, else it returns the shortest path.
+   *
+   * Time - O(n m) where n=|vertices| and m=|edges|
+   * Space - O()
+   */
+  def bellmanFord(from: N, to: N): Option[List[N]] = {
+    
+    val graphs = graphsByDepth
+    val u = hop(from).get
+    val v = hop(to).get
+    val initDists = graphs.map((_, Double.PositiveInfinity)).toMap + (u -> 0.0)
+    var paths = graphs.map((_, List[N]())).toMap
+    
+    @annotation.tailrec
+    def expand(dists: Map[Graph[Double,N], Double], hops: Int): Map[Graph[Double,N], Double] = hops match {
+      case 0 => dists
+      case _ => 
+        
+        var newDists = dists ++ Map.empty
+        
+        def minDist(g: Graph[Double,N]): Option[(Graph[Double,N], Double)] = {
+          if(g.inEdges.isEmpty) None
+          else Some( g.inEdges.map(e => (e.source, dists(e.source) + e.value)).minBy(_._2) )
+        }
+        
+        graphs foreach { g =>
+          minDist(g) match {
+            case Some((f,d)) if(d < dists(g)) =>
+              newDists += (g -> d)
+              paths += (g -> (f.value :: paths(f)))
+            case _ =>
+          }
+        }
+        
+        // If min distances do not change in some hop then they won't
+        // change in the next ones, thus we can stop early
+        if(newDists == dists) newDists
+        else expand(newDists, hops-1)
+    }
+    
+    val dists = expand(initDists, graphs.size-1)
+    
+    // There are neg cycles iff the min distances change again
+    if(dists != expand(dists, 1)) None
+    else Some((to :: paths(v)).reverse)
+  }
 }
 
 object Graph {
