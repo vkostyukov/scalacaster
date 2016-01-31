@@ -68,6 +68,7 @@ What to read next?
 * [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
 * [Combinatorial Algorithms in Scala][5]
 * [Designing a Purely Functional Data Structure][6]
+* [Functional Data Structures in Scala by Daniel Spiewak][7]
 
 
 [0]: http://www.fender.com/guitars/stratocaster/
@@ -77,3 +78,4 @@ What to read next?
 [4]: http://arxiv.org/pdf/1312.4666v1.pdf
 [5]: http://vkostyukov.net/posts/combinatorial-algorithms-in-scala/
 [6]: http://vkostyukov.net/posts/designing-a-pfds
+[7]: https://www.youtube.com/watch?v=pNhBQJN44YQ
