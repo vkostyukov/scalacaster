@@ -59,9 +59,6 @@ object Stack {
     * Time - O(n)
     * Space - O(1)
     */
-   def apply[A](xs: A*): Stack[A] = {
-    var r: Stack[A] = Stack.empty
-    for (x <- xs) r = r.push(x)
-    r
-  }
+   def apply[A](xs: A*): Stack[A] =
+     xs.foldLeft(Stack.empty[A])((r, x) => r.push(x))
 }
