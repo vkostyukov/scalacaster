@@ -68,12 +68,16 @@ What to read next?
 * [A Functional Approach to Standard Binary Heaps][4] (see [`StandardHeap.scala`](https://github.com/vkostyukov/scalacaster/blob/master/src/heap/StandardHeap.scala))
 * [Combinatorial Algorithms in Scala][5]
 * [Designing a Purely Functional Data Structure][6]
+* [Functional Data Structures in Scala by Daniel Spiewak][7]
 
+--
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
 [0]: http://www.fender.com/guitars/stratocaster/
 [1]: http://www.slideshare.net/vkostyukov/purely-functional-data-structures-in-scala-26175521
 [2]: http://www.amazon.com/Purely-Functional-Structures-Chris-Okasaki/dp/0521663504
 [3]: http://cstheory.stackexchange.com/questions/1539/whats-new-in-purely-functional-data-structures-since-okasaki
 [4]: http://arxiv.org/pdf/1312.4666v1.pdf
-[5]: http://vkostyukov.ru/posts/combinatorial-algorithms-in-scala/
-[6]: http://vkostyukov.ru/posts/designing-a-pfds
+[5]: http://vkostyukov.net/posts/combinatorial-algorithms-in-scala/
+[6]: http://vkostyukov.net/posts/designing-a-pfds
+[7]: https://www.youtube.com/watch?v=pNhBQJN44YQ

@@ -45,11 +45,11 @@ def mergesort[A <% Ordered[A]](list: List[A]): List[A] = {
         if (ha < hb) loop(ta, ds, ha :: r)
         else loop(cs, tb, hb :: r)
       case (ha :: ta, Nil) => loop(ta, Nil, ha :: r)
-      case (Nil, hb :: tb) =>  loop(Nil, tb, hb :: r)
-      case (Nil, Nil) => Nil
+      case (Nil, hb :: tb) => loop(Nil, tb, hb :: r)
+      case (Nil, Nil) => r
     }
 
-    loop(as, bs, Nil)
+    loop(as, bs, Nil).reverse
   }
 
   def halfifyAndSort(as: List[A]) = sort(halfify(as))
