@@ -57,7 +57,11 @@ object Strings {
    * Time - O(mn)
    * Space - O(mn)
    */
-  def longestCommonSubstring(a: String, b: String) : String = {
+  def longestCommonSubstring(one: String, two: String) : String = {
+    val (a, b) =
+      if (one.length <= two.length) (one, two)
+      else (two, one)
+
     def loop(m: Map[(Int, Int), Int], bestIndices: List[Int], i: Int, j: Int) : String = {
       if (i > a.length) {
         b.substring(bestIndices(1) - m((bestIndices(0),bestIndices(1))), bestIndices(1))
