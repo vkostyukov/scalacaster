@@ -12,7 +12,7 @@
 def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): Option[A] = { // quickselect
   def search(t: (List[A], A, List[A]), m: Int): Option[A] = t match {
     case (Nil, p, Nil) if m == 0 => Some(p)
-	case (Nil, _, Nil) => None
+    case (Nil, _, Nil) => None
     case (l, p, g) => select(l, p, g, l.length, m)
   }
 
