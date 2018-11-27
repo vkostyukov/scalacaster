@@ -20,10 +20,8 @@ class Queue[+A](in: List[A] = Nil, out: List[A] = Nil) {
   /**
    * Check whether this queue is empty or not.
    */
-  def isEmpty: Boolean = (in, out) match {
-    case (Nil, Nil) => true
-    case (_, _) => false
-  }
+  def isEmpty: Boolean = in.isEmpty && out.isEmpty
+
 
   /**
    * Dequeues the first element from this queue.
@@ -62,6 +60,9 @@ class Queue[+A](in: List[A] = Nil, out: List[A] = Nil) {
    * Space - O(1)
    */
   def rear: Queue[A] = dequeue match { case (_, q) => q }
+  
+  override def toString = (out ::: in.reverse).mkString("Queue(",",",")")
+
 }
 
 object Queue {
