@@ -20,12 +20,11 @@ def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): Option[A] = { // qu
     if (m < q) partitionAndSearch(l, m)
     else if (m > q) partitionAndSearch(g, m - q - 1)
     else Some(p)
-  
-  
+
   /**
    * The same as in quicksort.
    */
-  
+
   def loop(p: A, as: List[A], l: List[A], g: List[A]): (List[A], A, List[A]) = 
     as match {
       case h :: t => if (h < p) loop(p, t, h :: l, g) else loop(p, t, l, h :: g)
