@@ -26,9 +26,6 @@ def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): Option[A] = { // qu
       case h :: t => if (h < p) loop(p, t, h :: l, g) else loop(p, t, l, h :: g)
       case Nil => (l, p, g)
     }
-  
-    loop(as.head, as.tail, Nil, Nil)
-  }
 
   def partitionAndSearch(as: List[A], m: Int): Option[A] = 
     as match {
