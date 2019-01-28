@@ -20,23 +20,21 @@ def selectionsearch[A <% Ordered[A]](list: List[A], n: Int): Option[A] = { // qu
     if (m < q) partitionAndSearch(l, m)
     else if (m > q) partitionAndSearch(g, m - q - 1)
     else Some(p)
-
-  /**
-   * The same as in quicksort.
-   */
-  def partition(as: List[A]): (List[A], A, List[A]) = {
-    def loop(p: A, as: List[A], l: List[A], g: List[A]): (List[A], A, List[A]) = 
-      as match {
-        case h :: t => if (h < p) loop(p, t, h :: l, g) else loop(p, t, l, h :: g)
-        case Nil => (l, p, g)
-      }
-
+  
+  def loop(p: A, as: List[A], l: List[A], g: List[A]): (List[A], A, List[A]) = 
+    as match {
+      case h :: t => if (h < p) loop(p, t, h :: l, g) else loop(p, t, l, h :: g)
+      case Nil => (l, p, g)
+    }
+  
     loop(as.head, as.tail, Nil, Nil)
   }
 
   def partitionAndSearch(as: List[A], m: Int): Option[A] = 
-    if (as.isEmpty) None
-    else search(partition(as), m)
+    as match {
+      case h :: t => search(loop(h, t, Nil, Nil), m)
+      case Nil => None
+    }
 
   partitionAndSearch(list, n)
 }
