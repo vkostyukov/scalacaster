@@ -109,11 +109,12 @@ object Strings {
       if (hs == hp) i - m
       else if (i == n) -1
       else {
-        val hss = (hs - d * s.charAt(i - m) % q) % q
+        val dss = (d * s.charAt(i - m)) % q
+        val hss = if (hs < dss) (hs - dss + q) else hs - dss
         loop((hss * r + s.charAt(i)) % q, hp, i + 1)
       }
 
-    loop(hash(s, m), hash(p, m), m)
+    if (m > n) -1 else loop(hash(s, m), hash(p, m), m)
   }
 
   /**
