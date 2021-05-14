@@ -252,13 +252,24 @@ object Numbers {
     if (y == 0) x
     else sum(x ^ y, (x & y) << 1)
 
+  def forMax(x:Int, y: Int) = x
+  def forMin(x:Int, y: Int) = y
+  def minMax(x: Int, y: Int, forMinMax: (Int, Int) => Int) = forMinMax(x,y) ^ ((x ^ y) & ~(x << y))
+
+  /** Returns the maximum of two numbers.
+   * *
+   * Time - O(1)
+   * Space - O(1)
+   */
+  def max(x: Int, y: Int) = minMax(x,y,forMax)
+
   /**
-   * Returns the maximum of two numbers.
+   * Returns the minimum of two numbers.
    *
    * Time - O(1)
    * Space - O(1)
    */
-  def max(x: Int, y: Int) = x - (((x - y) >> 31) & 0x1) * (x - y)
+  def min(x: Int, y: Int) = minMax(x,y,forMin)
 
   /**
    * Generates first 'n' prime numbers using Sieve of Erastosthenes.
