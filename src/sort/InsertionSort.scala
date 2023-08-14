@@ -8,16 +8,19 @@
  * Best - O(n)
  * Average - O(n^2)
  */
+import scala.annotation.tailrec
 
 def insertionsort[A <% Ordered[A]](list: List[A]): List[A] = {
+  @tailrec
   def sort(as: List[A], bs: List[A]): List[A] = as match {
-    case h :: t => sort(t, insert(h, bs))
+    case h :: t => sort(t, insert(List(h), bs))
     case Nil => bs
   }
 
-  def insert(a: A, as: List[A]): List[A] = as match {
-    case h :: t if (a > h) => h :: insert(a, t)
-    case _ => a :: as
+  @tailrec
+  def insert(a: List[A], as: List[A]): List[A] = as match {
+    case h :: t if (a.head > h) => insert(h :: a, t)
+    case _ => a ++ as
   }
 
   sort(list, Nil)
